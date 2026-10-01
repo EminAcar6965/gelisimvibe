@@ -208,7 +208,7 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2c1e4a,#3a2a5c)}
       <button type="button" class="link" id="forgotBtn" style="color:var(--mute)">Şifremi unuttum</button>
     </div>
   </form>
-  <p class="note" id="regNote" style="display:none">Kayıt olduktan sonra okul mailine doğrulama linki gelir.</p>
+  <p class="note" id="regNote" style="display:none">Kayıt olduktan sonra mailine 6 haneli doğrulama kodu gelir.</p>
   <p class="note">Bu uygulama bir öğrenci tarafından öğrenciler için geliştirilmiştir, resmi bir üniversite uygulaması değildir.</p>
   <p class="auth-footer">Designed &amp; Developed by <b>Emin Acar</b></p>
 </section>
@@ -375,7 +375,6 @@ $('#authForm').onsubmit = async e => {
   if(!email.endsWith(DOMAIN)) return say('Sadece ' + DOMAIN + ' uzantılı mail ile girebilirsin.', 1);
   say('Bekle...');
   if(reg){
-    // İsim/soyisim mailden al
     const localPart = email.split('@')[0] || '';
     const parts = localPart.split('.');
     const first_name = (parts[0] || '').replace(/[^a-zA-ZğüşıöçĞÜŞİÖÇ]/g,'') || 'Öğrenci';
@@ -387,12 +386,47 @@ $('#authForm').onsubmit = async e => {
     }
     const { data, error } = await sb.auth.signUp({ email, password, options: { data: { first_name, last_name, department } } });
     if(error) return say(error.message, 1);
-    if(!data.session) say('Kayıt tamam. Mailine gelen doğrulama linkine tıkla.');
+    showOtpScreen(email, password);
   } else {
     const { error } = await sb.auth.signInWithPassword({ email, password });
-    if(error) return say(error.message.includes('not confirmed') ? 'Önce mailindeki doğrulama linkine tıkla.' : 'Mail veya şifre hatalı.', 1);
+    if(error) return say(error.message.includes('not confirmed') ? 'Önce mailine gelen 6 haneli kodu gir.' : 'Mail veya şifre hatalı.', 1);
   }
 };
+
+/* ============ OTP DOĞRULAMA EKRANI ============ */
+function showOtpScreen(email, password){
+  const form = $('#authForm');
+  form.innerHTML = `
+    <p style="text-align:center;color:var(--mute);font-size:13.5px;line-height:1.6;margin:0 0 12px">
+      <b style="color:var(--ink)">${esc(email)}</b> adresine<br>
+      6 haneli doğrulama kodu gönderdik.<br>
+      <span style="font-size:12px">Mail kutunu ve spam klasörünü kontrol et.</span>
+    </p>
+    <input id="otpCode" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="• • • • • •" required autocomplete="one-time-code" style="text-align:center;font-size:28px;letter-spacing:14px;font-weight:800;padding:16px 12px">
+    <button type="button" class="btn" id="otpBtn">Doğrula ve Giriş Yap</button>
+    <div id="msg"></div>
+    <button type="button" class="link" id="otpBack" style="margin-top:4px">← Geri dön</button>
+  `;
+  setTimeout(() => { const el = $('#otpCode'); if(el) el.focus(); }, 150);
+  $('#otpBack').onclick = () => location.reload();
+  $('#otpBtn').onclick = async () => {
+    const token = ($('#otpCode').value || '').trim();
+    if(token.length !== 6) return say('Kod 6 haneli olmalı.', 1);
+    say('Doğrulanıyor...');
+    const { error } = await sb.auth.verifyOtp({ email, token, type: 'signup' });
+    if(error){ console.error('[OTP]', error); return say('Kod hatalı veya süresi dolmuş.', 1); }
+    say('✅ Doğrulandı! Giriş yapılıyor...');
+    const { error: signErr } = await sb.auth.signInWithPassword({ email, password });
+    if(signErr) return say(signErr.message, 1);
+  };
+  const otpEl = $('#otpCode');
+  otpEl.onkeydown = e => { if(e.key === 'Enter'){ e.preventDefault(); $('#otpBtn').click(); } };
+  otpEl.oninput = e => {
+    e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6);
+    if(e.target.value.length === 6) $('#otpBtn').click();
+  };
+}
+
 document.addEventListener('click', e => {
   if(e.target.id === 'themeToggle'){
     const cur = localStorage.getItem('theme') || 'light';
@@ -439,7 +473,7 @@ function markSeen(t){ localStorage.setItem('seen_' + t, Date.now().toString()); 
 
 function show(t, opts){
   tab = t;
-  removeFab(); // Her tab değişiminde FAB temizle
+  removeFab();
   if(opts && 'chatWith' in opts){ chatWith = opts.chatWith; chatUser = opts.chatUser; }
   if(opts && 'libTab' in opts) libTab = opts.libTab;
   $$('.nav-tabs button').forEach(b => b.classList.toggle('on', b.dataset.t === t));
@@ -553,7 +587,6 @@ async function loadList(t){
   const ids = (items||[]).map(i => i.id);
   const counts = {};
   if(ids.length){
-    // İtiraflarda public view kullan (herkes görsün)
     const cmTbl = conf ? 'confession_comments_public' : 'comments';
     const cmCol = conf ? 'confession_id' : 'post_id';
     const { data: cms } = await sb.from(cmTbl).select(cmCol).in(cmCol, ids);
@@ -641,10 +674,7 @@ async function loadList(t){
   } else if(conf){
     $('#list').innerHTML = items.map(postHtml).join('');
   } else {
-    // ASC sırada reklamları yerleştir, sonra DESC'e çevir.
-    // Kullanıcı isteği: p1,p2,p3,p4, REKLAM, p5,p6,p7,p8, REKLAM2, ...
-    // DESC gösterim: ..., REKLAM2, p8,p7,p6,p5, REKLAM, p4,p3,p2,p1
-    const asc = [...items].reverse(); // En eskiden en yeniye
+    const asc = [...items].reverse();
     const ascOut = [];
     let ai = 0;
     asc.forEach((p, i) => {
@@ -657,7 +687,7 @@ async function loadList(t){
         ascOut.push({ type:'adsense' });
       }
     });
-    ascOut.reverse(); // Tekrar DESC
+    ascOut.reverse();
     const out = ascOut;
     out.push({ type:'cta' });
     $('#list').innerHTML = out.map(x => {
@@ -1051,7 +1081,6 @@ async function loadInfo(){
   setView('about');
 }
 
-/* ============ SOHBET ============ */
 async function loadChat(){
   removeFab(); clearChatTimer();
   if(chatWith) return loadChatView();
@@ -1077,7 +1106,6 @@ async function loadChat(){
   $('#view').innerHTML = (rows || '<div class="empty">Henüz mesajın yok.</div>') + '<div class="empty" style="padding:12px;font-size:12px">💡 Bir sohbete uzun basarak silebilirsin</div>';
   $('#view').onclick = e => { const c = e.target.closest('.conv'); if(!c) return; show('chat', { chatWith: c.dataset.uid, chatUser: c.dataset.name }); };
 
-  // Uzun basma / sağ tık ile silme menüsü
   let lpTimer = null;
   const startLP = (e) => {
     const c = e.target.closest('.conv'); if(!c) return;
@@ -1153,7 +1181,6 @@ async function loadChatView(){
   }, 5000);
 }
 
-/* ============ DUYURULAR ============ */
 async function loadAnn(){
   removeFab();
   const { data, error } = await sb.from('announcements').select('*').order('created_at',{ascending:false}).limit(50);
@@ -1238,7 +1265,6 @@ async function loadAnnComments(box, annId){
   };
 }
 
-/* ============ ADMIN ============ */
 async function loadAdmin(){
   removeFab();
   const seg = '<div class="seg"><button data-at="reports" class="on">🚩 Şikayetler</button><button data-at="ads">📢 Reklamlar</button><button data-at="requests">📥 Reklam Talepleri</button></div>';
