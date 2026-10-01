@@ -12,7 +12,6 @@
 <link rel="apple-touch-icon" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7174104301389071" crossorigin="anonymous"></script>
 <style>
 :root{--bg:#EEF1F6;--card:#fff;--ink:#101B33;--mute:#66708A;--line:#DDE2EC;--ac:#2347E8;--acink:#fff;--ac2:#6A4CF5;--danger:#D42F4B;--sh:0 1px 2px rgba(16,27,51,.05),0 6px 18px rgba(16,27,51,.06);--ad:#FFB020;--g:#4285F4;--ok:#2ECC71}
 body.night{--bg:#1B1230;--card:#271A42;--ink:#F1EBFF;--mute:#A99BC8;--line:#3A2A5C;--ac:#B08CFF;--acink:#1B1230;--ac2:#E48CFF;--sh:0 6px 20px rgba(0,0,0,.35)}
@@ -187,9 +186,26 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2c1e4a,#3a2a5c)}
 .settings-item.danger .ico{background:color-mix(in srgb,#D42F4B 14%,transparent)}
 .settings-item.danger .txt b{color:var(--danger)}
 .avatar-big{width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;display:grid;place-items:center;font-weight:800;font-size:26px;margin:0 auto 12px}
+.cookie-banner{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);padding:14px;z-index:999;box-shadow:0 -4px 20px rgba(0,0,0,.12);display:none}
+.cookie-banner.show{display:block}
+.cookie-content{max-width:640px;margin:0 auto}
+.cookie-content p{margin:0 0 12px;font-size:13px;line-height:1.5;color:var(--mute)}
+.cookie-content a{color:var(--ac);font-weight:600}
+.cookie-actions{display:flex;gap:8px;align-items:center}
 </style>
 </head>
 <body>
+
+<!-- Çerez Onay Banner'ı -->
+<div id="cookie-banner" class="cookie-banner">
+  <div class="cookie-content">
+    <p>🍪 Deneyimini iyileştirmek ve reklamları kişiselleştirmek için çerezler kullanıyoruz. Detaylar için <a href="#" onclick="event.preventDefault();openLegalDoc('aydinlatma')">Aydınlatma Metni</a>'ni inceleyebilirsin.</p>
+    <div class="cookie-actions">
+      <button id="cookie-accept" class="btn sm">Kabul Et</button>
+      <button id="cookie-decline" class="link">Sadece Zorunlu</button>
+    </div>
+  </div>
+</div>
 
 <section id="auth">
   <img id="logo" src="logo.png" alt="Logo" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 192 192%27%3E%3Crect width=%27192%27 height=%27192%27 rx=%2742%27 fill=%27%232347E8%27/%3E%3Ctext x=%2796%27 y=%27130%27 font-family=%27Arial%27 font-weight=%27800%27 font-size=%27100%27 fill=%27white%27 text-anchor=%27middle%27%3EGV%3C/text%3E%3C/svg%3E'">
@@ -198,6 +214,14 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2c1e4a,#3a2a5c)}
     <div id="regFields" style="display:none;flex-direction:column;gap:10px">
       <input id="dp" placeholder="Bölüm (örn. Elektrik Elektronik mühendisliği)">
       <p style="font-size:12px;color:var(--mute);margin:0;text-align:center">Ad ve soyadın mail adresinden otomatik alınacak.</p>
+      <label style="display:flex;align-items:flex-start;gap:8px;font-size:12.5px;color:var(--mute);line-height:1.5;cursor:pointer">
+        <input type="checkbox" id="kvkkAydinlatma" style="width:auto;margin-top:2px;flex:none">
+        <span><a href="#" onclick="event.preventDefault();openLegalDoc('aydinlatma')" style="color:var(--ac);font-weight:600">Aydınlatma Metni</a>'ni okudum ve anladım.</span>
+      </label>
+      <label style="display:flex;align-items:flex-start;gap:8px;font-size:12.5px;color:var(--mute);line-height:1.5;cursor:pointer">
+        <input type="checkbox" id="kvkkRiza" style="width:auto;margin-top:2px;flex:none">
+        <span><a href="#" onclick="event.preventDefault();openLegalDoc('riza')" style="color:var(--ac);font-weight:600">Açık Rıza Metni</a>'ni okudum, kişisel verilerimin işlenmesine onay veriyorum.</span>
+      </label>
     </div>
     <input id="em" type="email" placeholder="okul mailin (isim.soyisim@ogr.gelisim.edu.tr)" autocomplete="email" required>
     <input id="pw" type="password" placeholder="Şifre (en az 6 karakter)" autocomplete="current-password" required minlength="6">
@@ -272,6 +296,67 @@ function applyTheme(){
   if(btn) btn.textContent = t === 'night' ? '☀️' : '🌙';
 }
 applyTheme();
+
+/* ============ ÇEREZ ONAY ============ */
+function loadAdSenseScript(){
+  if(document.getElementById('adsense-script')) return;
+  const s = document.createElement('script');
+  s.id = 'adsense-script';
+  s.async = true;
+  s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + ADSENSE_CLIENT;
+  s.crossOrigin = 'anonymous';
+  document.head.appendChild(s);
+}
+function hasAdConsent(){ return localStorage.getItem('cookie_consent') === 'accepted'; }
+(function initCookieBanner(){
+  const banner = document.getElementById('cookie-banner');
+  if(!banner) return;
+  const consent = localStorage.getItem('cookie_consent');
+  if(!consent) banner.classList.add('show');
+  else if(consent === 'accepted') loadAdSenseScript();
+  document.getElementById('cookie-accept').onclick = () => {
+    localStorage.setItem('cookie_consent', 'accepted');
+    banner.classList.remove('show');
+    loadAdSenseScript();
+    if(typeof initAdSense === 'function') setTimeout(initAdSense, 300);
+  };
+  document.getElementById('cookie-decline').onclick = () => {
+    localStorage.setItem('cookie_consent', 'declined');
+    banner.classList.remove('show');
+  };
+})();
+
+/* ============ HUKUKİ METİNLER ============ */
+window.openLegalDoc = function(kind){
+  const docs = {
+    aydinlatma: {
+      title: '📋 Aydınlatma Metni',
+      body: '<p style="line-height:1.7;font-size:14px;color:var(--mute)"><b style="color:var(--ink)">Veri Sorumlusu:</b> Gelişim Vibe (Emin Acar) · İletişim: ' + CONTACT_EMAIL + '</p>' +
+      '<h3 style="font-size:15px;margin:16px 0 6px">1. İşlenen Kişisel Veriler</h3><p style="margin:0;color:var(--mute);font-size:14px;line-height:1.7">Üniversite e-posta adresiniz, ad-soyad, bölüm bilgisi, paylaşım/yorum/mesaj içerikleriniz, IP adresi ve oturum bilgileri.</p>' +
+      '<h3 style="font-size:15px;margin:16px 0 6px">2. İşleme Amaçları</h3><p style="margin:0;color:var(--mute);font-size:14px;line-height:1.7">Hesap oluşturma, kimlik doğrulama, uygulama içi etkileşim, güvenlik ve yasal yükümlülüklerin yerine getirilmesi.</p>' +
+      '<h3 style="font-size:15px;margin:16px 0 6px">3. Hukuki Sebep</h3><p style="margin:0;color:var(--mute);font-size:14px;line-height:1.7">KVKK m.5/2(c) sözleşmenin kurulması, m.5/2(ç) hukuki yükümlülük, m.5/2(f) meşru menfaat.</p>' +
+      '<h3 style="font-size:15px;margin:16px 0 6px">4. Aktarım</h3><p style="margin:0;color:var(--mute);font-size:14px;line-height:1.7">Verileriniz hizmet sağlayıcılarımız Supabase (ABD/AB) ve Google (AdSense) sunucularında işlenir. Yurt dışı aktarım Standart Sözleşme Hükümleri (SCC) kapsamında yapılır.</p>' +
+      '<h3 style="font-size:15px;margin:16px 0 6px">5. Haklarınız (KVKK m.11)</h3><p style="margin:0;color:var(--mute);font-size:14px;line-height:1.7">Verilerinize erişme, düzeltme, silme, işlemeye itiraz etme ve zararın giderilmesini talep etme haklarına sahipsiniz. Başvuru: ' + CONTACT_EMAIL + '</p>'
+    },
+    riza: {
+      title: '✅ Açık Rıza Metni',
+      body: '<p style="line-height:1.7;font-size:14px;color:var(--mute)">İşbu metni onaylayarak;</p>' +
+      '<ul style="margin:10px 0 0;padding-left:20px;line-height:1.8;color:var(--mute);font-size:14px">' +
+      '<li>Üniversite e-posta adresimin, ad-soyad ve bölüm bilgimin hesap oluşturma ve kimlik doğrulama amacıyla işlenmesine,</li>' +
+      '<li>Paylaşım, yorum, mesaj ve yüklediğim medya içeriklerinin uygulama işlevleri için saklanmasına,</li>' +
+      '<li>Google AdSense aracılığıyla kişiselleştirilmiş reklam gösterimi için çerez verilerimin işlenmesine,</li>' +
+      '<li>Verilerimin yukarıda belirtilen hizmet sağlayıcılar aracılığıyla yurt dışında işlenmesine</li>' +
+      '</ul>' +
+      '<p style="margin:14px 0 0;line-height:1.7;font-size:14px;color:var(--mute)"><b style="color:var(--ink)">özgür irademle açık rıza veriyorum.</b></p>' +
+      '<p style="margin:14px 0 0;line-height:1.7;font-size:13px;color:var(--mute)">Bu rızayı dilediğiniz zaman <b>' + CONTACT_EMAIL + '</b> adresine yazarak geri çekebilirsiniz.</p>'
+    }
+  };
+  const d = docs[kind]; if(!d) return;
+  const el = document.createElement('div'); el.className = 'sheet-bg';
+  el.innerHTML = '<div class="sheet"><h4>' + d.title + '<button class="sheet-close">×</button></h4>' + d.body + '<button class="btn" style="margin-top:16px;width:100%" onclick="this.closest(\'.sheet-bg\').remove()">Anladım</button></div>';
+  document.body.appendChild(el);
+  el.onclick = e => { if(e.target === el || e.target.classList.contains('sheet-close')) el.remove(); };
+};
 
 function loadViaImg(file){
   return new Promise((res,rej)=>{
@@ -381,10 +466,12 @@ $('#authForm').onsubmit = async e => {
     const last_name = (parts.slice(1).join(' ') || '').replace(/[^a-zA-ZğüşıöçĞÜŞİÖÇ]/g,'') || '';
     const department = $('#dp').value.trim();
     if(!department) return say('Bölüm zorunlu.', 1);
+    if(!$('#kvkkAydinlatma').checked) return say('Aydınlatma metnini onaylaman gerekiyor.', 1);
+    if(!$('#kvkkRiza').checked) return say('Açık rıza metnini onaylaman gerekiyor.', 1);
     if(!last_name){
       if(!confirm('Mail adresinden soyadı okuyamadım. "' + first_name + '" olarak kaydedilsin mi?')) return;
     }
-    const { data, error } = await sb.auth.signUp({ email, password, options: { data: { first_name, last_name, department } } });
+    const { data, error } = await sb.auth.signUp({ email, password, options: { data: { first_name, last_name, department, kvkk_riza_at: new Date().toISOString() } } });
     if(error) return say(error.message, 1);
     showOtpScreen(email, password);
   } else {
@@ -423,10 +510,8 @@ function showOtpScreen(email, password){
   otpEl.onkeydown = e => { if(e.key === 'Enter'){ e.preventDefault(); $('#otpBtn').click(); } };
   otpEl.oninput = e => {
     e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
-    // 6 veya 8 hane girilirse otomatik dene (yaygın uzunluklar)
     if(e.target.value.length === 6 || e.target.value.length === 8) $('#otpBtn').click();
   };
-  // Yapıştırma desteği (uzun kodu yapıştırınca otomatik dener)
   otpEl.onpaste = () => {
     setTimeout(() => {
       const len = (otpEl.value || '').length;
@@ -463,6 +548,11 @@ async function boot(session){
   const { data } = await sb.from('profiles').select('*').eq('id', session.user.id).single();
   if(!data) return say('Profil yüklenemedi.', 1);
   me = data;
+  if(data.deleted_at){
+    await sb.from('profiles').update({ deleted_at: null }).eq('id', data.id);
+    me.deleted_at = null;
+    setTimeout(() => alert('👋 Tekrar hoş geldin!\n\nHesabın silinmekten kurtarıldı.'), 600);
+  }
   $('#auth').classList.add('hide'); $('#app').classList.remove('hide');
   $('#adminTab').classList.toggle('hide', !me.is_admin);
   applyTheme();
@@ -527,15 +617,20 @@ function renderAdCard(ad){
 }
 function renderAdSenseCard(){
   if(!ADSENSE_ENABLED) return '';
+  if(!hasAdConsent()) return '';
   return '<article class="ad-card adsense-card"><div class="ad-head"><span class="ad-tag" style="background:var(--g);color:#fff">🔷 GOOGLE</span><span style="color:var(--mute);font-size:10.5px">Sponsorlu içerik</span></div><div style="min-height:100px;margin-top:6px;overflow:hidden"><ins class="adsbygoogle" style="display:block" data-ad-client="' + ADSENSE_CLIENT + '" data-ad-slot="' + ADSENSE_SLOT + '" data-ad-format="auto" data-full-width-responsive="true"></ins></div></article>';
 }
 function initAdSense(){
   if(!ADSENSE_ENABLED) return;
-  document.querySelectorAll('.adsbygoogle').forEach(el => {
-    if(!el.dataset.adsbygoogleStatus){
-      try{ (window.adsbygoogle = window.adsbygoogle || []).push({}); el.dataset.adsbygoogleStatus = 'done'; }catch(e){}
-    }
-  });
+  if(!hasAdConsent()) return;
+  if(!document.getElementById('adsense-script')) loadAdSenseScript();
+  setTimeout(() => {
+    document.querySelectorAll('.adsbygoogle').forEach(el => {
+      if(!el.dataset.adsbygoogleStatus){
+        try{ (window.adsbygoogle = window.adsbygoogle || []).push({}); el.dataset.adsbygoogleStatus = 'done'; }catch(e){}
+      }
+    });
+  }, 400);
 }
 function renderAdvertiseCTA(){
   return '<div class="advertise-cta"><div class="info"><b>📢 İşletmen mi var?</b><div class="dep">Gelişim Vibe\'da reklam ver, İGÜ öğrencilerine ulaş.</div></div><button class="btn sm" onclick="openAdvertiseSheet()">Reklam Ver</button></div>';
@@ -1015,6 +1110,7 @@ async function loadSettings(sub){
       '<div class="settings-item" data-open="info"><div class="ico">ℹ️</div><div class="txt"><b>Bilgi</b><small>Hakkımızda, Gizlilik, İletişim</small></div><span class="arrow">›</span></div>' +
       '<div class="settings-item" data-open="feedback"><div class="ico">💡</div><div class="txt"><b>Öneri & Şikayet</b><small>Uygulamayı geliştirmemize yardımcı ol</small></div><span class="arrow">›</span></div>' +
       '<div class="settings-item" data-open="advertise"><div class="ico">📢</div><div class="txt"><b>Reklam Ver</b><small>İşletmeni İGÜ öğrencilerine tanıt</small></div><span class="arrow">›</span></div>' +
+      '<div class="settings-item danger" data-open="delete"><div class="ico">🗑️</div><div class="txt"><b>Hesabımı Sil</b><small>30 gün içinde kalıcı olarak silinir</small></div><span class="arrow">›</span></div>' +
       '<div class="settings-item danger" data-open="logout"><div class="ico">🚪</div><div class="txt"><b>Çıkış Yap</b><small>Hesabından güvenli çıkış</small></div><span class="arrow">›</span></div>' +
     '</div>' +
     '<div style="text-align:center;margin-top:22px;color:var(--mute);font-size:11px">Gelişim Vibe · v1.0<br>Designed &amp; Developed by <b style="color:var(--ac)">Emin Acar</b></div>';
@@ -1022,6 +1118,7 @@ async function loadSettings(sub){
   $('#view').onclick = async e => {
     const item = e.target.closest('[data-open]'); if(!item) return;
     const x = item.dataset.open;
+    if(x === 'delete') deleteAccount();
     if(x === 'logout'){ if(confirm('Çıkış yapmak istediğine emin misin?')) sb.auth.signOut(); }
     if(x === 'theme'){ const cur = localStorage.getItem('theme') || 'light'; localStorage.setItem('theme', cur === 'night' ? 'light' : 'night'); applyTheme(); loadSettings(); }
     if(x === 'info') loadSettings('info');
@@ -1030,6 +1127,55 @@ async function loadSettings(sub){
     if(x === 'advertise') openAdvertiseSheet();
   };
 }
+
+function deleteAccount(){
+  if(me.deleted_at){ 
+    if(confirm('Hesabın zaten silinmek üzere işaretli. İşlemi iptal etmek ister misin?')){
+      sb.from('profiles').update({ deleted_at: null }).eq('id', me.id).then(() => { alert('✅ Silme işlemi iptal edildi.'); me.deleted_at = null; loadSettings(); });
+    }
+    return;
+  }
+  const el = document.createElement('div');
+  el.className = 'sheet-bg';
+  el.innerHTML =
+    '<div class="sheet">' +
+      '<h4>⚠️ Hesabımı Sil<button class="sheet-close">×</button></h4>' +
+      '<div style="background:color-mix(in srgb,#D42F4B 10%,transparent);border:1px solid color-mix(in srgb,#D42F4B 40%,transparent);border-radius:12px;padding:14px;margin-bottom:14px">' +
+        '<p style="margin:0 0 10px;font-size:14px;line-height:1.6;color:var(--ink)"><b>Bu işlem geri alınamaz.</b></p>' +
+        '<ul style="margin:0;padding-left:20px;font-size:13.5px;line-height:1.7;color:var(--mute)">' +
+          '<li>Hesabın <b>30 gün</b> boyunca silinmek üzere işaretlenir.</li>' +
+          '<li>Bu süre içinde tekrar giriş yaparsan işlem <b>iptal olur</b>.</li>' +
+          '<li>30 gün sonunda tüm paylaşımların, mesajların, kitapların, PDF\'lerin ve fotoğrafların <b>kalıcı olarak silinir</b>.</li>' +
+          '<li>KVKK m.7 uyarınca silme talebiniz 30 gün içinde yerine getirilir.</li>' +
+        '</ul>' +
+      '</div>' +
+      '<form id="delForm">' +
+        '<label style="font-size:13px;font-weight:600;color:var(--mute);margin-bottom:4px;display:block">Onaylamak için <b style="color:var(--ink)">SİL</b> yaz:</label>' +
+        '<input id="delConfirm" maxlength="3" placeholder="SİL" autocomplete="off" style="text-align:center;font-size:20px;font-weight:800;letter-spacing:6px;text-transform:uppercase">' +
+        '<div style="display:flex;gap:8px;margin-top:12px">' +
+          '<button type="button" class="btn sheet-btn cancel" data-x="cancel" style="flex:1;margin:0">Vazgeç</button>' +
+          '<button type="submit" class="btn" style="flex:1;background:linear-gradient(135deg,#D42F4B,#a02040)">Hesabımı Sil</button>' +
+        '</div>' +
+      '</form>' +
+    '</div>';
+  document.body.appendChild(el);
+  el.onclick = e => { if(e.target === el || e.target.classList.contains('sheet-close') || e.target.dataset.x === 'cancel') el.remove(); };
+  const input = $('#delConfirm');
+  setTimeout(() => input.focus(), 150);
+  input.addEventListener('input', () => { input.value = input.value.toUpperCase(); });
+  $('#delForm').onsubmit = async e => {
+    e.preventDefault();
+    if(input.value.trim().toUpperCase() !== 'SİL') return alert('Onay için SİL yazman gerekiyor.');
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = true; btn.textContent = 'İşleniyor...';
+    const { error } = await sb.from('profiles').update({ deleted_at: new Date().toISOString() }).eq('id', me.id);
+    if(error){ btn.disabled = false; btn.textContent = 'Hesabımı Sil'; return alert('Hata: ' + error.message); }
+    alert('✅ Hesabın silinmek üzere işaretlendi.\n\n30 gün içinde tekrar giriş yapmazsan tüm verilerin kalıcı olarak silinecek.\n\nİşlemi iptal etmek için 30 gün içinde giriş yapman yeterli.');
+    await sb.auth.signOut();
+    el.remove();
+  };
+}
+
 async function loadPasswordChange(){
   removeFab();
   $('#view').innerHTML =
@@ -1066,12 +1212,16 @@ async function loadInfo(){
   $('#infoBack').onclick = () => loadSettings();
   const about = '<article class="card"><h2 style="margin:0 0 10px;font-size:20px">ℹ️ Hakkımızda</h2><p style="line-height:1.7;color:var(--mute);font-size:14.5px"><b style="color:var(--ink)">Gelişim Vibe</b>, İstanbul Gelişim Üniversitesi öğrencileri tarafından <b>öğrenciler için</b> geliştirilmiş bir topluluk uygulamasıdır.</p><p style="line-height:1.7;color:var(--mute);font-size:14.5px;margin-top:10px">Amacımız; öğrencilerin birbirleriyle iletişim kurabileceği, kampüs hayatına dair paylaşımlar yapabileceği, ikinci el kitap alışverişi yapabileceği ve ders notlarını paylaşabileceği <b>güvenli ve samimi</b> bir dijital ortam sunmaktır.</p><div style="background:var(--bg);border-radius:12px;padding:14px;margin-top:14px"><div style="font-weight:800;margin-bottom:6px">📌 Neler Yapabilirsin?</div><ul style="margin:0;padding-left:20px;line-height:1.8;color:var(--mute);font-size:14px"><li>Akışta özgürce paylaşım yapabilirsin</li><li>Anonim itiraf gönderebilirsin</li><li>2. el kitap satabilir veya takas yapabilirsin</li><li>Ders notlarını PDF olarak paylaşabilirsin</li><li>Diğer öğrencilerle birebir mesajlaşabilirsin</li></ul></div><div style="background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 10%,transparent),transparent);border-radius:12px;padding:14px;margin-top:14px;border:1px dashed var(--ac)"><div style="font-weight:800;margin-bottom:6px">📜 Yasal Uyarı</div><p style="margin:0;color:var(--mute);font-size:13px;line-height:1.6">Bu uygulama <b>resmi bir üniversite uygulaması değildir</b>. Tamamen öğrenciler tarafından gönüllü olarak geliştirilmiştir. İçeriklerden kullanıcılar sorumludur.</p></div></article>';
   const privacy = '<article class="card"><h2 style="margin:0 0 10px;font-size:20px">🔒 Gizlilik Politikası</h2><div style="line-height:1.75;font-size:14.5px">' +
-    '<h3 style="font-size:15px;margin:16px 0 6px">1. Toplanan Bilgiler</h3><p style="margin:0;color:var(--mute)">Gelişim Vibe yalnızca üniversite e-posta adresiniz, ad-soyad ve bölüm bilginizi toplar. Bu bilgiler yalnızca uygulama içi etkileşimlerinizde kimlik doğrulaması amacıyla kullanılır.</p>' +
-    '<h3 style="font-size:15px;margin:16px 0 6px">2. Çerezler</h3><p style="margin:0;color:var(--mute)">Uygulamamız oturum yönetimi için zorunlu çerezler kullanır. Google AdSense üzerinden gösterilen reklamlar için Google kendi çerezlerini kullanabilir. Detay için <a href="https://policies.google.com/technologies/ads" target="_blank" style="color:var(--ac)">Google Reklam Politikaları</a> sayfasını ziyaret edebilirsiniz.</p>' +
-    '<h3 style="font-size:15px;margin:16px 0 6px">3. KVKK</h3><p style="margin:0;color:var(--mute)">6698 sayılı KVKK kapsamında; kişisel verileriniz hiçbir şekilde üçüncü taraflarla paylaşılmaz, satılmaz veya reklam amacıyla kullanılmaz.</p>' +
-    '<h3 style="font-size:15px;margin:16px 0 6px">4. Veri Güvenliği</h3><p style="margin:0;color:var(--mute)">Verileriniz Supabase altyapısında şifreli olarak saklanır. Yetkisiz erişime karşı gerekli önlemler alınmıştır.</p>' +
-    '<h3 style="font-size:15px;margin:16px 0 6px">5. İtiraflar</h3><p style="margin:0;color:var(--mute)">İtiraf içerikleri diğer kullanıcılara anonim gösterilir. Yasal şikayet durumunda içerik sahibi yetkili makamlarla paylaşılabilir.</p>' +
-    '<h3 style="font-size:15px;margin:16px 0 6px">6. Haklarınız</h3><p style="margin:0;color:var(--mute)">Verilerinizin silinmesini talep etmek için <b>' + CONTACT_EMAIL + '</b> adresinden bize ulaşabilirsiniz.</p>' +
+    '<h3 style="font-size:15px;margin:16px 0 6px">1. Veri Sorumlusu</h3><p style="margin:0;color:var(--mute)">Gelişim Vibe · Geliştirici: Emin Acar · İletişim: <b>' + CONTACT_EMAIL + '</b>. Bu uygulama resmi bir üniversite uygulaması değildir.</p>' +
+    '<h3 style="font-size:15px;margin:16px 0 6px">2. Toplanan Veriler</h3><p style="margin:0;color:var(--mute)">Üniversite e-posta adresi, ad-soyad, bölüm, paylaşım/yorum/mesaj içerikleri, yüklediğiniz görsel ve dosyalar, IP adresi ve oturum bilgileri.</p>' +
+    '<h3 style="font-size:15px;margin:16px 0 6px">3. İşleme Amaçları</h3><p style="margin:0;color:var(--mute)">Hesap oluşturma, kimlik doğrulama, uygulama işlevlerinin sunulması, içerik moderasyonu, güvenlik ve yasal yükümlülükler.</p>' +
+    '<h3 style="font-size:15px;margin:16px 0 6px">4. Hukuki Sebep</h3><p style="margin:0;color:var(--mute)">KVKK m.5/2(c) sözleşmenin kurulması, m.5/2(ç) hukuki yükümlülük, m.5/2(f) meşru menfaat. Özel nitelikli veri işlenmez.</p>' +
+    '<h3 style="font-size:15px;margin:16px 0 6px">5. Çerezler ve Reklamlar</h3><p style="margin:0;color:var(--mute)">Zorunlu çerezler oturum yönetimi için kullanılır. Google AdSense, kişiselleştirilmiş reklam için çerez kullanır; bu çerezler yalnızca çerez onayı verildiğinde yüklenir. Detay: <a href="https://policies.google.com/technologies/ads" target="_blank" style="color:var(--ac)">Google Reklam Politikaları</a>.</p>' +
+    '<h3 style="font-size:15px;margin:16px 0 6px">6. Veri Aktarımı</h3><p style="margin:0;color:var(--mute)">Verileriniz Supabase (bulut altyapı) ve Google (reklam) ile paylaşılır. Yurt dışı aktarım Standart Sözleşme Hükümleri (SCC) kapsamında yapılır. Ticari amaçla üçüncü taraflara satılmaz.</p>' +
+    '<h3 style="font-size:15px;margin:16px 0 6px">7. Saklama Süresi</h3><p style="margin:0;color:var(--mute)">Aktif hesap verileri hesabınız açık olduğu sürece saklanır. Hesap silme talebinden sonra 30 gün içinde kalıcı olarak silinir.</p>' +
+    '<h3 style="font-size:15px;margin:16px 0 6px">8. Veri Güvenliği</h3><p style="margin:0;color:var(--mute)">Verileriniz Supabase altyapısında şifreli (SSL/TLS + AES-256) olarak saklanır. Row Level Security ile yetkisiz erişim engellenir. Supabase ISO 27001 ve SOC2 Type II sertifikalıdır.</p>' +
+    '<h3 style="font-size:15px;margin:16px 0 6px">9. İtiraflar</h3><p style="margin:0;color:var(--mute)">İtiraf içerikleri diğer kullanıcılara anonim gösterilir. Yasal talep halinde içerik sahibi bilgileri yetkili makamlarla paylaşılabilir.</p>' +
+    '<h3 style="font-size:15px;margin:16px 0 6px">10. KVKK m.11 Haklarınız</h3><p style="margin:0;color:var(--mute)">Verilerinize erişme, düzeltme, silme, işlenmesine itiraz etme ve zararın giderilmesini talep etme hakkına sahipsiniz. Başvuru: <b>' + CONTACT_EMAIL + '</b>. Talepler en geç 30 gün içinde yanıtlanır.</p>' +
     '</div></article>';
   const contact = '<article class="card"><h2 style="margin:0 0 10px;font-size:20px">📬 İletişim</h2><p style="color:var(--mute);font-size:14.5px;line-height:1.7">Soru, öneri, şikayet veya reklam iş birlikleri için bize ulaşabilirsin.</p>' +
     '<div style="display:flex;flex-direction:column;gap:10px;margin-top:16px">' +
@@ -1395,7 +1545,6 @@ async function loadAdminRequests(){
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
     try {
-      // Eski bozuk service worker'ları temizle (Lockdown Mode hatası için)
       const regs = await navigator.serviceWorker.getRegistrations();
       for (const reg of regs) {
         const url = (reg.active && reg.active.scriptURL) || (reg.installing && reg.installing.scriptURL) || (reg.waiting && reg.waiting.scriptURL) || '';
