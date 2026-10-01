@@ -211,9 +211,12 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2c1e4a,#3a2a5c)}
   <img id="logo" src="logo.png" alt="Logo" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 192 192%27%3E%3Crect width=%27192%27 height=%27192%27 rx=%2742%27 fill=%27%232347E8%27/%3E%3Ctext x=%2796%27 y=%27130%27 font-family=%27Arial%27 font-weight=%27800%27 font-size=%27100%27 fill=%27white%27 text-anchor=%27middle%27%3EGV%3C/text%3E%3C/svg%3E'">
   <h1>Gelişim Vibe</h1>
   <form id="authForm">
-    <div id="regFields" style="display:none;flex-direction:column;gap:10px">
-      <input id="dp" placeholder="Bölüm (örn. Elektrik Elektronik mühendisliği)">
-      <p style="font-size:12px;color:var(--mute);margin:0;text-align:center">Ad ve soyadın mail adresinden otomatik alınacak.</p>
+    <input id="em" type="email" placeholder="okul mailin (isim.soyisim@ogr.gelisim.edu.tr)" autocomplete="email" required>
+    <p id="nameNote" style="display:none;font-size:12px;color:var(--mute);margin:0;text-align:center">Ad ve soyadın mail adresinden otomatik alınacak.</p>
+    <input id="pw" type="password" placeholder="Şifre (en az 6 karakter)" autocomplete="off" required minlength="6">
+    <input id="pw2" type="password" placeholder="Şifreyi tekrar gir" autocomplete="off" minlength="6" style="display:none">
+    <input id="dp" placeholder="Bölüm (örn. Elektrik Elektronik Mühendisliği)" style="display:none">
+    <div id="kvkkBoxes" style="display:none;flex-direction:column;gap:10px">
       <label style="display:flex;align-items:flex-start;gap:8px;font-size:12.5px;color:var(--mute);line-height:1.5;cursor:pointer">
         <input type="checkbox" id="kvkkAydinlatma" style="width:auto;margin-top:2px;flex:none">
         <span><a href="#" onclick="event.preventDefault();openLegalDoc('aydinlatma')" style="color:var(--ac);font-weight:600">Aydınlatma Metni</a>'ni okudum ve anladım.</span>
@@ -223,8 +226,6 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2c1e4a,#3a2a5c)}
         <span><a href="#" onclick="event.preventDefault();openLegalDoc('riza')" style="color:var(--ac);font-weight:600">Açık Rıza Metni</a>'ni okudum, kişisel verilerimin işlenmesine onay veriyorum.</span>
       </label>
     </div>
-    <input id="em" type="email" placeholder="okul mailin (isim.soyisim@ogr.gelisim.edu.tr)" autocomplete="email" required>
-    <input id="pw" type="password" placeholder="Şifre (en az 6 karakter)" autocomplete="current-password" required minlength="6">
     <button class="btn" id="authBtn">Giriş yap</button>
     <div id="msg"></div>
     <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
@@ -436,7 +437,10 @@ const GHOST = '<svg viewBox="0 0 24 24"><path d="M9 10h.01M15 10h.01M12 2a8 8 0 
 
 $('#toggle').onclick = () => {
   reg = !reg;
-  $('#regFields').style.display = reg ? 'flex' : 'none';
+  $('#nameNote').style.display = reg ? 'block' : 'none';
+  $('#pw2').style.display = reg ? 'block' : 'none';
+  $('#dp').style.display = reg ? 'block' : 'none';
+  $('#kvkkBoxes').style.display = reg ? 'flex' : 'none';
   $('#regNote').style.display = reg ? 'block' : 'none';
   $('#authBtn').textContent = reg ? 'Kayıt ol' : 'Giriş yap';
   $('#toggle').textContent = reg ? 'Zaten hesabın var mı? Giriş yap' : 'Hesabın yok mu? Kayıt ol';
@@ -460,6 +464,8 @@ $('#authForm').onsubmit = async e => {
   if(!email.endsWith(DOMAIN)) return say('Sadece ' + DOMAIN + ' uzantılı mail ile girebilirsin.', 1);
   say('Bekle...');
   if(reg){
+    const pw2 = $('#pw2').value;
+    if(password !== pw2) return say('Şifreler uyuşmuyor.', 1);
     const localPart = email.split('@')[0] || '';
     const parts = localPart.split('.');
     const first_name = (parts[0] || '').replace(/[^a-zA-ZğüşıöçĞÜŞİÖÇ]/g,'') || 'Öğrenci';
