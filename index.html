@@ -152,7 +152,7 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2c1e4a,#3a2a5c)}
 .msg .mt{font-size:10.5px;opacity:.7;margin-top:3px;display:block}
 .chat-form{display:flex;gap:6px;padding-top:10px}
 .chat-form input{flex:1}
-.conv{display:flex;gap:12px;align-items:center;padding:12px;background:var(--card);border-radius:14px;margin-bottom:8px;border:1px solid var(--line);cursor:pointer;box-shadow:var(--sh)}
+.conv{display:flex;gap:12px;align-items:center;padding:12px;background:var(--card);border-radius:14px;margin-bottom:8px;border:1px solid var(--line);cursor:pointer;box-shadow:var(--sh);user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 .conv .cmid{flex:1;min-width:0}
 .conv .cn{font-weight:700}
 .conv .cl{color:var(--mute);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -196,11 +196,10 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2c1e4a,#3a2a5c)}
   <h1>Gelişim Vibe</h1>
   <form id="authForm">
     <div id="regFields" style="display:none;flex-direction:column;gap:10px">
-      <input id="fn" placeholder="Ad" autocomplete="given-name">
-      <input id="ln" placeholder="Soyad" autocomplete="family-name">
       <input id="dp" placeholder="Bölüm (örn. Bilgisayar Mühendisliği)">
+      <p style="font-size:12px;color:var(--mute);margin:0;text-align:center">Ad ve soyadın mail adresinden otomatik alınacak.</p>
     </div>
-    <input id="em" type="email" placeholder="okul mailin (@ogr.gelisim.edu.tr)" autocomplete="email" required>
+    <input id="em" type="email" placeholder="okul mailin (isim.soyisim@ogr.gelisim.edu.tr)" autocomplete="email" required>
     <input id="pw" type="password" placeholder="Şifre (en az 6 karakter)" autocomplete="current-password" required minlength="6">
     <button class="btn" id="authBtn">Giriş yap</button>
     <div id="msg"></div>
@@ -376,8 +375,16 @@ $('#authForm').onsubmit = async e => {
   if(!email.endsWith(DOMAIN)) return say('Sadece ' + DOMAIN + ' uzantılı mail ile girebilirsin.', 1);
   say('Bekle...');
   if(reg){
-    const first_name = $('#fn').value.trim(), last_name = $('#ln').value.trim(), department = $('#dp').value.trim();
-    if(!first_name || !last_name || !department) return say('Ad, soyad ve bölüm zorunlu.', 1);
+    // İsim/soyisim mailden al
+    const localPart = email.split('@')[0] || '';
+    const parts = localPart.split('.');
+    const first_name = (parts[0] || '').replace(/[^a-zA-ZğüşıöçĞÜŞİÖÇ]/g,'') || 'Öğrenci';
+    const last_name = (parts.slice(1).join(' ') || '').replace(/[^a-zA-ZğüşıöçĞÜŞİÖÇ]/g,'') || '';
+    const department = $('#dp').value.trim();
+    if(!department) return say('Bölüm zorunlu.', 1);
+    if(!last_name){
+      if(!confirm('Mail adresinden soyadı okuyamadım. "' + first_name + '" olarak kaydedilsin mi?')) return;
+    }
     const { data, error } = await sb.auth.signUp({ email, password, options: { data: { first_name, last_name, department } } });
     if(error) return say(error.message, 1);
     if(!data.session) say('Kayıt tamam. Mailine gelen doğrulama linkine tıkla.');
@@ -429,8 +436,10 @@ $$('.nav-tabs button').forEach(b => b.onclick = () => {
 });
 function clearChatTimer(){ if(chatTimer){ clearInterval(chatTimer); chatTimer = null; } }
 function markSeen(t){ localStorage.setItem('seen_' + t, Date.now().toString()); const btn = document.querySelector('.nav-tabs button[data-t="' + t + '"]'); if(btn) btn.classList.remove('has-new'); }
+
 function show(t, opts){
   tab = t;
+  removeFab(); // Her tab değişiminde FAB temizle
   if(opts && 'chatWith' in opts){ chatWith = opts.chatWith; chatUser = opts.chatUser; }
   if(opts && 'libTab' in opts) libTab = opts.libTab;
   $$('.nav-tabs button').forEach(b => b.classList.toggle('on', b.dataset.t === t));
@@ -544,7 +553,8 @@ async function loadList(t){
   const ids = (items||[]).map(i => i.id);
   const counts = {};
   if(ids.length){
-    const cmTbl = conf ? 'confession_comments' : 'comments';
+    // İtiraflarda public view kullan (herkes görsün)
+    const cmTbl = conf ? 'confession_comments_public' : 'comments';
     const cmCol = conf ? 'confession_id' : 'post_id';
     const { data: cms } = await sb.from(cmTbl).select(cmCol).in(cmCol, ids);
     (cms||[]).forEach(c => { counts[c[cmCol]] = (counts[c[cmCol]]||0) + 1; });
@@ -631,14 +641,24 @@ async function loadList(t){
   } else if(conf){
     $('#list').innerHTML = items.map(postHtml).join('');
   } else {
-    const out = [];
+    // ASC sırada reklamları yerleştir, sonra DESC'e çevir.
+    // Kullanıcı isteği: p1,p2,p3,p4, REKLAM, p5,p6,p7,p8, REKLAM2, ...
+    // DESC gösterim: ..., REKLAM2, p8,p7,p6,p5, REKLAM, p4,p3,p2,p1
+    const asc = [...items].reverse(); // En eskiden en yeniye
+    const ascOut = [];
     let ai = 0;
-    items.forEach((p, i) => {
-      out.push({ type:'post', data:p });
+    asc.forEach((p, i) => {
+      ascOut.push({ type:'post', data:p });
       const idx = i + 1;
-      if(idx % 4 === 0 && ads.length){ out.push({ type:'ad', data: ads[ai % ads.length] }); ai++; }
-      else if(ADSENSE_ENABLED && idx % ADSENSE_EVERY === 0){ out.push({ type:'adsense' }); }
+      if(idx % 4 === 0 && ads.length){
+        ascOut.push({ type:'ad', data: ads[ai % ads.length] });
+        ai++;
+      } else if(ADSENSE_ENABLED && idx % ADSENSE_EVERY === 0){
+        ascOut.push({ type:'adsense' });
+      }
     });
+    ascOut.reverse(); // Tekrar DESC
+    const out = ascOut;
     out.push({ type:'cta' });
     $('#list').innerHTML = out.map(x => {
       if(x.type === 'ad') return renderAdCard(x.data);
@@ -773,6 +793,7 @@ async function loadLibrary(){
   if(libTab === 'books') loadBooks(); else loadPdfs();
 }
 async function loadBooks(){
+  removeFab();
   let items, error;
   ({data: items, error} = await sb.from('books').select('*,profiles(first_name,last_name,department)').order('created_at',{ascending:false}).limit(80));
   if(error){
@@ -790,7 +811,7 @@ async function loadBooks(){
     const price = b.price != null && b.price !== '' ? Number(b.price) + ' ₺' : 'Takas / Ücretsiz';
     const canDel = b.user_id === me.id || me.is_admin;
     const prof = b.profiles || {first_name:'?',last_name:'',department:''};
-    return '<article class="bcard" data-id="' + b.id + '">' + img + '<div class="info"><div class="bt">' + esc(b.title) + '</div>' + (b.author ? '<div class="ba">' + esc(b.author) + '</div>' : '') + '<div class="bp">' + price + '</div><div class="bseller" data-uid="' + b.user_id + '" data-name="' + esc(prof.first_name + ' ' + prof.last_name) + '"><span class="dot">' + esc(initials(prof.first_name, prof.last_name)).toUpperCase() + '</span><span>' + esc(prof.first_name) + ' ' + esc(prof.last_name) + '</span></div>' + (canDel ? '<div style="margin-top:8px"><button class="link" data-bdel="' + b.id + '" style="padding:0;font-size:12px;color:var(--danger)">Sil</button></div>' : '') + '</div></article>';
+    return '<article class="bcard" data-id="' + b.id + '">' + img + '<div class="info"><div class="bt">' + esc(b.title) + '</div>' + (b.author ? '<div class="ba">' + esc(b.author) + '</div>' : '') + (b.description ? '<div class="ba" style="margin-top:4px;line-height:1.4">' + esc(b.description) + '</div>' : '') + '<div class="bp">' + price + '</div><div class="bseller" data-uid="' + b.user_id + '" data-name="' + esc(prof.first_name + ' ' + prof.last_name) + '"><span class="dot">' + esc(initials(prof.first_name, prof.last_name)).toUpperCase() + '</span><span>' + esc(prof.first_name) + ' ' + esc(prof.last_name) + '</span></div>' + (canDel ? '<div style="margin-top:8px"><button class="link" data-bdel="' + b.id + '" style="padding:0;font-size:12px;color:var(--danger)">Sil</button></div>' : '') + '</div></article>';
   }).join('');
   $('#libView').innerHTML = search + (list ? '<div class="bgrid">' + list + '</div>' : (q ? '<div class="empty">Arama sonucu bulunamadı.</div>' : '<div class="empty">Henüz kitap yok.</div>'));
   const sb_ = document.getElementById('bsearch'); if(sb_) sb_.oninput = () => { bookSearch = sb_.value; const v = bookSearch; loadBooks().then(() => { const i = document.getElementById('bsearch'); if(i){ i.focus(); i.setSelectionRange(v.length, v.length); } }); };
@@ -829,6 +850,7 @@ function openBookForm(){
   };
 }
 async function loadPdfs(){
+  removeFab();
   let items, error;
   ({data: items, error} = await sb.from('pdfs').select('*,profiles(first_name,last_name,department)').order('created_at',{ascending:false}).limit(80));
   if(error){
@@ -1029,6 +1051,7 @@ async function loadInfo(){
   setView('about');
 }
 
+/* ============ SOHBET ============ */
 async function loadChat(){
   removeFab(); clearChatTimer();
   if(chatWith) return loadChatView();
@@ -1051,9 +1074,52 @@ async function loadChat(){
     const txt = (last.sender_id === me.id ? 'Sen: ' : '') + last.content;
     return '<div class="conv" data-uid="' + id + '" data-name="' + esc(p.first_name + ' ' + p.last_name) + '"><span class="av">' + esc(ini) + '</span><div class="cmid"><div class="cn">' + esc(p.first_name) + ' ' + esc(p.last_name) + '</div><div class="cl">' + esc(txt).slice(0,60) + '</div></div>' + (info.unread ? '<span class="cb">' + info.unread + '</span>' : '') + '</div>';
   }).join('');
-  $('#view').innerHTML = rows || '<div class="empty">Henüz mesajın yok.</div>';
+  $('#view').innerHTML = (rows || '<div class="empty">Henüz mesajın yok.</div>') + '<div class="empty" style="padding:12px;font-size:12px">💡 Bir sohbete uzun basarak silebilirsin</div>';
   $('#view').onclick = e => { const c = e.target.closest('.conv'); if(!c) return; show('chat', { chatWith: c.dataset.uid, chatUser: c.dataset.name }); };
+
+  // Uzun basma / sağ tık ile silme menüsü
+  let lpTimer = null;
+  const startLP = (e) => {
+    const c = e.target.closest('.conv'); if(!c) return;
+    clearTimeout(lpTimer);
+    lpTimer = setTimeout(() => { openConvMenu(c.dataset.uid, c.dataset.name); }, 500);
+  };
+  const cancelLP = () => { clearTimeout(lpTimer); lpTimer = null; };
+  const view = $('#view');
+  view.addEventListener('touchstart', startLP, { passive: true });
+  view.addEventListener('touchend', cancelLP);
+  view.addEventListener('touchmove', cancelLP);
+  view.addEventListener('mousedown', startLP);
+  view.addEventListener('mouseup', cancelLP);
+  view.addEventListener('mouseleave', cancelLP);
+  view.addEventListener('contextmenu', e => {
+    const c = e.target.closest('.conv'); if(!c) return;
+    e.preventDefault();
+    openConvMenu(c.dataset.uid, c.dataset.name);
+  });
 }
+
+function openConvMenu(otherId, otherName){
+  const el = document.createElement('div'); el.className = 'sheet-bg';
+  el.innerHTML = '<div class="sheet"><h4>Sohbet<button class="sheet-close">×</button></h4>' +
+    '<button class="sheet-btn danger" data-x="del">🗑️ Bu sohbeti sil</button>' +
+    '<button class="sheet-btn cancel" data-x="cancel">Vazgeç</button></div>';
+  document.body.appendChild(el);
+  el.onclick = async e => {
+    if(e.target === el || e.target.classList.contains('sheet-close') || e.target.dataset.x === 'cancel') return el.remove();
+    const b = e.target.closest('button[data-x]'); if(!b) return;
+    if(b.dataset.x === 'del'){
+      el.remove();
+      if(!confirm(otherName + ' ile olan tüm mesajlar silinsin mi?')) return;
+      const { error } = await sb.from('messages').delete()
+        .or('and(sender_id.eq.' + me.id + ',receiver_id.eq.' + otherId + '),and(sender_id.eq.' + otherId + ',receiver_id.eq.' + me.id + ')');
+      if(error) return alert('Silinemedi: ' + error.message);
+      alert('✅ Sohbet silindi.');
+      loadChat();
+    }
+  };
+}
+
 async function loadChatView(){
   if(!chatUser){ const {data:p} = await sb.from('profiles').select('first_name,last_name').eq('id', chatWith).single(); if(p) chatUser = p.first_name + ' ' + p.last_name; }
   const other = chatWith;
@@ -1087,6 +1153,7 @@ async function loadChatView(){
   }, 5000);
 }
 
+/* ============ DUYURULAR ============ */
 async function loadAnn(){
   removeFab();
   const { data, error } = await sb.from('announcements').select('*').order('created_at',{ascending:false}).limit(50);
@@ -1097,17 +1164,40 @@ async function loadAnn(){
     const { data: cms } = await sb.from('announcement_comments').select('announcement_id').in('announcement_id', ids);
     (cms||[]).forEach(c => { counts[c.announcement_id] = (counts[c.announcement_id]||0) + 1; });
   }
-  const form = me.is_admin ? '<form class="card composer" id="af"><input id="at" maxlength="100" placeholder="Duyuru başlığı" required><textarea id="ac" maxlength="1500" placeholder="Duyuru metni" required></textarea><div class="row"><span class="dep">Yönetici olarak yayınlanır</span><button class="btn sm">Yayınla</button></div></form>' : '';
+  const form = me.is_admin ? '<form class="card composer" id="af"><input id="at" maxlength="100" placeholder="Duyuru başlığı" required><textarea id="ac" maxlength="1500" placeholder="Duyuru metni" required></textarea><div id="apv" class="pv hide"></div><div class="prog-wrap hide" id="aProg"><div class="prog-bar"><div class="prog-fill" id="aFill"></div></div><div class="prog-text" id="aText">Yükleniyor... %0</div></div><div class="row"><span class="rt"><label class="pick" title="Fotoğraf ekle"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><input type="file" id="aimg" accept="image/*" hidden></label><label class="pick" title="Video ekle"><svg viewBox="0 0 24 24"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg><input type="file" id="avid" accept="video/*" hidden></label><button class="btn sm">Yayınla</button></span></div></form>' : '';
   const list = (data||[]).map(a => {
     const cc = counts[a.id] || 0;
-    return '<article class="card ann" data-id="' + a.id + '"><span class="badge">DUYURU</span> <span class="time">· ' + ago(a.created_at) + '</span><h3>' + esc(a.title) + '</h3><div class="body">' + esc(a.content) + '</div><div class="acts"><button data-a="acm">💬 Yorumlar · ' + cc + '</button>' + (me.is_admin ? '<button data-del>Sil</button>' : '') + '</div><div class="cm hide"></div></article>';
+    const media = (a.image_path ? '<a href="' + imgUrl(a.image_path) + '" target="_blank" rel="noopener"><img class="pimg" loading="lazy" src="' + imgUrl(a.image_path) + '" alt=""></a>' : '') + (a.video_path ? '<video class="pvid" controls playsinline preload="metadata" src="' + videoUrl(a.video_path) + '"></video>' : '');
+    return '<article class="card ann" data-id="' + a.id + '"><span class="badge">DUYURU</span> <span class="time">· ' + ago(a.created_at) + '</span><h3>' + esc(a.title) + '</h3><div class="body">' + esc(a.content) + '</div>' + media + '<div class="acts"><button data-a="acm">💬 Yorumlar · ' + cc + '</button>' + (me.is_admin ? '<button data-del>Sil</button>' : '') + '</div><div class="cm hide"></div></article>';
   }).join('') || '<div class="empty">Henüz duyuru yok.</div>';
   $('#view').innerHTML = form + list + renderAdvertiseCTA();
+
+  let annMedia = null;
+  const renderAnnPv = () => {
+    const pv = $('#apv');
+    if(!annMedia){ pv.classList.add('hide'); pv.innerHTML=''; return; }
+    if(annMedia.type === 'image') pv.innerHTML = '<img src="' + URL.createObjectURL(annMedia.file) + '" alt=""><button type="button">×</button>';
+    else pv.innerHTML = '<video src="' + URL.createObjectURL(annMedia.file) + '" controls playsinline></video><button type="button">×</button>';
+    pv.classList.remove('hide');
+    pv.querySelector('button').onclick = () => { annMedia = null; const i=$('#aimg'); if(i)i.value=''; const v=$('#avid'); if(v)v.value=''; renderAnnPv(); };
+  };
   if(me.is_admin){
+    $('#aimg').onchange = () => { const f = $('#aimg').files[0]; if(!f) return; const v=$('#avid'); if(v)v.value=''; if(f.type.startsWith('image/')){ annMedia={type:'image',file:f}; renderAnnPv(); } };
+    const av = $('#avid'); if(av) av.onchange = () => { const f = av.files[0]; if(!f) return; $('#aimg').value=''; if(f.type.startsWith('video/')){ annMedia={type:'video',file:f}; renderAnnPv(); } };
+    const setAP = p => { $('#aProg').classList.remove('hide'); $('#aFill').style.width = Math.round(p*100) + '%'; $('#aText').textContent = 'Yükleniyor... %' + Math.round(p*100); };
     $('#af').onsubmit = async e => {
       e.preventDefault();
-      const { error } = await sb.from('announcements').insert({ title: $('#at').value.trim(), content: $('#ac').value.trim() });
-      if(error) return alert(error.message);
+      const btn = $('#af .btn'); btn.disabled = true;
+      let image_path = null, video_path = null;
+      try{
+        if(annMedia?.type === 'image'){ setAP(0); image_path = await uploadImg(annMedia.file, 'images', p => setAP(p)); }
+        else if(annMedia?.type === 'video'){ setAP(0); video_path = await uploadVideo(annMedia.file, p => setAP(p)); }
+      }catch(err){ btn.disabled = false; $('#aProg').classList.add('hide'); return alert('Yükleme: ' + err.message); }
+      const row = { title: $('#at').value.trim(), content: $('#ac').value.trim() };
+      if(image_path) row.image_path = image_path;
+      if(video_path) row.video_path = video_path;
+      const { error } = await sb.from('announcements').insert(row);
+      if(error){ btn.disabled = false; return alert(error.message); }
       loadAnn();
     };
   }
@@ -1148,6 +1238,7 @@ async function loadAnnComments(box, annId){
   };
 }
 
+/* ============ ADMIN ============ */
 async function loadAdmin(){
   removeFab();
   const seg = '<div class="seg"><button data-at="reports" class="on">🚩 Şikayetler</button><button data-at="ads">📢 Reklamlar</button><button data-at="requests">📥 Reklam Talepleri</button></div>';
