@@ -548,11 +548,6 @@ async function boot(session){
   const { data } = await sb.from('profiles').select('*').eq('id', session.user.id).single();
   if(!data) return say('Profil yüklenemedi.', 1);
   me = data;
-  if(data.deleted_at){
-    await sb.from('profiles').update({ deleted_at: null }).eq('id', data.id);
-    me.deleted_at = null;
-    setTimeout(() => alert('👋 Tekrar hoş geldin!\n\nHesabın silinmekten kurtarıldı.'), 600);
-  }
   $('#auth').classList.add('hide'); $('#app').classList.remove('hide');
   $('#adminTab').classList.toggle('hide', !me.is_admin);
   applyTheme();
@@ -1110,7 +1105,7 @@ async function loadSettings(sub){
       '<div class="settings-item" data-open="info"><div class="ico">ℹ️</div><div class="txt"><b>Bilgi</b><small>Hakkımızda, Gizlilik, İletişim</small></div><span class="arrow">›</span></div>' +
       '<div class="settings-item" data-open="feedback"><div class="ico">💡</div><div class="txt"><b>Öneri & Şikayet</b><small>Uygulamayı geliştirmemize yardımcı ol</small></div><span class="arrow">›</span></div>' +
       '<div class="settings-item" data-open="advertise"><div class="ico">📢</div><div class="txt"><b>Reklam Ver</b><small>İşletmeni İGÜ öğrencilerine tanıt</small></div><span class="arrow">›</span></div>' +
-      '<div class="settings-item danger" data-open="delete"><div class="ico">🗑️</div><div class="txt"><b>Hesabımı Sil</b><small>30 gün içinde kalıcı olarak silinir</small></div><span class="arrow">›</span></div>' +
+      '<div class="settings-item danger" data-open="delete"><div class="ico">🗑️</div><div class="txt"><b>Hesabımı Sil</b><small>Anında ve kalıcı olarak silinir</small></div><span class="arrow">›</span></div>' +
       '<div class="settings-item danger" data-open="logout"><div class="ico">🚪</div><div class="txt"><b>Çıkış Yap</b><small>Hesabından güvenli çıkış</small></div><span class="arrow">›</span></div>' +
     '</div>' +
     '<div style="text-align:center;margin-top:22px;color:var(--mute);font-size:11px">Gelişim Vibe · v1.0<br>Designed &amp; Developed by <b style="color:var(--ac)">Emin Acar</b></div>';
@@ -1129,12 +1124,6 @@ async function loadSettings(sub){
 }
 
 function deleteAccount(){
-  if(me.deleted_at){ 
-    if(confirm('Hesabın zaten silinmek üzere işaretli. İşlemi iptal etmek ister misin?')){
-      sb.from('profiles').update({ deleted_at: null }).eq('id', me.id).then(() => { alert('✅ Silme işlemi iptal edildi.'); me.deleted_at = null; loadSettings(); });
-    }
-    return;
-  }
   const el = document.createElement('div');
   el.className = 'sheet-bg';
   el.innerHTML =
@@ -1143,10 +1132,10 @@ function deleteAccount(){
       '<div style="background:color-mix(in srgb,#D42F4B 10%,transparent);border:1px solid color-mix(in srgb,#D42F4B 40%,transparent);border-radius:12px;padding:14px;margin-bottom:14px">' +
         '<p style="margin:0 0 10px;font-size:14px;line-height:1.6;color:var(--ink)"><b>Bu işlem geri alınamaz.</b></p>' +
         '<ul style="margin:0;padding-left:20px;font-size:13.5px;line-height:1.7;color:var(--mute)">' +
-          '<li>Hesabın <b>30 gün</b> boyunca silinmek üzere işaretlenir.</li>' +
-          '<li>Bu süre içinde tekrar giriş yaparsan işlem <b>iptal olur</b>.</li>' +
-          '<li>30 gün sonunda tüm paylaşımların, mesajların, kitapların, PDF\'lerin ve fotoğrafların <b>kalıcı olarak silinir</b>.</li>' +
-          '<li>KVKK m.7 uyarınca silme talebiniz 30 gün içinde yerine getirilir.</li>' +
+          '<li>Hesabın <b>anında</b> silinir.</li>' +
+          '<li>Tüm paylaşımların, yorumların, mesajların, kitapların, PDF\'lerin ve fotoğrafların <b>kalıcı olarak silinir</b>.</li>' +
+          '<li>Bu işlem <b>geri alınamaz</b>.</li>' +
+          '<li>KVKK m.7 uyarınca silme talebiniz derhal yerine getirilir.</li>' +
         '</ul>' +
       '</div>' +
       '<form id="delForm">' +
@@ -1163,16 +1152,40 @@ function deleteAccount(){
   const input = $('#delConfirm');
   setTimeout(() => input.focus(), 150);
   input.addEventListener('input', () => { input.value = input.value.toUpperCase(); });
+
   $('#delForm').onsubmit = async e => {
     e.preventDefault();
     if(input.value.trim().toUpperCase() !== 'SİL') return alert('Onay için SİL yazman gerekiyor.');
+
     const btn = e.target.querySelector('button[type="submit"]');
-    btn.disabled = true; btn.textContent = 'İşleniyor...';
-    const { error } = await sb.from('profiles').update({ deleted_at: new Date().toISOString() }).eq('id', me.id);
-    if(error){ btn.disabled = false; btn.textContent = 'Hesabımı Sil'; return alert('Hata: ' + error.message); }
-    alert('✅ Hesabın silinmek üzere işaretlendi.\n\n30 gün içinde tekrar giriş yapmazsan tüm verilerin kalıcı olarak silinecek.\n\nİşlemi iptal etmek için 30 gün içinde giriş yapman yeterli.');
-    await sb.auth.signOut();
-    el.remove();
+    btn.disabled = true; btn.textContent = 'Siliniyor...';
+
+    try {
+      const { data: { session } } = await sb.auth.getSession();
+      if(!session) throw new Error('Oturum bulunamadı.');
+
+      const res = await fetch(SB_URL + '/functions/v1/clever-responder', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + session.access_token,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const json = await res.json().catch(() => ({}));
+      if(!res.ok) throw new Error(json.error || 'Silme başarısız');
+
+      localStorage.removeItem('cookie_consent');
+      localStorage.removeItem('theme');
+      Object.keys(localStorage).forEach(k => { if(k.startsWith('seen_')) localStorage.removeItem(k); });
+
+      alert('✅ Hesabın ve tüm verilerin kalıcı olarak silindi.\n\nBizi tercih ettiğin için teşekkürler. Görüşmek üzere 👋');
+      await sb.auth.signOut();
+      location.reload();
+    } catch(err){
+      btn.disabled = false; btn.textContent = 'Hesabımı Sil';
+      alert('Hata: ' + err.message);
+    }
   };
 }
 
@@ -1218,7 +1231,7 @@ async function loadInfo(){
     '<h3 style="font-size:15px;margin:16px 0 6px">4. Hukuki Sebep</h3><p style="margin:0;color:var(--mute)">KVKK m.5/2(c) sözleşmenin kurulması, m.5/2(ç) hukuki yükümlülük, m.5/2(f) meşru menfaat. Özel nitelikli veri işlenmez.</p>' +
     '<h3 style="font-size:15px;margin:16px 0 6px">5. Çerezler ve Reklamlar</h3><p style="margin:0;color:var(--mute)">Zorunlu çerezler oturum yönetimi için kullanılır. Google AdSense, kişiselleştirilmiş reklam için çerez kullanır; bu çerezler yalnızca çerez onayı verildiğinde yüklenir. Detay: <a href="https://policies.google.com/technologies/ads" target="_blank" style="color:var(--ac)">Google Reklam Politikaları</a>.</p>' +
     '<h3 style="font-size:15px;margin:16px 0 6px">6. Veri Aktarımı</h3><p style="margin:0;color:var(--mute)">Verileriniz Supabase (bulut altyapı) ve Google (reklam) ile paylaşılır. Yurt dışı aktarım Standart Sözleşme Hükümleri (SCC) kapsamında yapılır. Ticari amaçla üçüncü taraflara satılmaz.</p>' +
-    '<h3 style="font-size:15px;margin:16px 0 6px">7. Saklama Süresi</h3><p style="margin:0;color:var(--mute)">Aktif hesap verileri hesabınız açık olduğu sürece saklanır. Hesap silme talebinden sonra 30 gün içinde kalıcı olarak silinir.</p>' +
+    '<h3 style="font-size:15px;margin:16px 0 6px">7. Saklama Süresi</h3><p style="margin:0;color:var(--mute)">Verileriniz, siz hesabınızı silene kadar saklanır. Hesap silme talebinizde tüm verileriniz <b>anında</b> kalıcı olarak silinir.</p>' +
     '<h3 style="font-size:15px;margin:16px 0 6px">8. Veri Güvenliği</h3><p style="margin:0;color:var(--mute)">Verileriniz Supabase altyapısında şifreli (SSL/TLS + AES-256) olarak saklanır. Row Level Security ile yetkisiz erişim engellenir. Supabase ISO 27001 ve SOC2 Type II sertifikalıdır.</p>' +
     '<h3 style="font-size:15px;margin:16px 0 6px">9. İtiraflar</h3><p style="margin:0;color:var(--mute)">İtiraf içerikleri diğer kullanıcılara anonim gösterilir. Yasal talep halinde içerik sahibi bilgileri yetkili makamlarla paylaşılabilir.</p>' +
     '<h3 style="font-size:15px;margin:16px 0 6px">10. KVKK m.11 Haklarınız</h3><p style="margin:0;color:var(--mute)">Verilerinize erişme, düzeltme, silme, işlenmesine itiraz etme ve zararın giderilmesini talep etme hakkına sahipsiniz. Başvuru: <b>' + CONTACT_EMAIL + '</b>. Talepler en geç 30 gün içinde yanıtlanır.</p>' +
