@@ -208,7 +208,7 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2c1e4a,#3a2a5c)}
       <button type="button" class="link" id="forgotBtn" style="color:var(--mute)">Şifremi unuttum</button>
     </div>
   </form>
-  <p class="note" id="regNote" style="display:none">Kayıt olduktan sonra mailine 6 haneli doğrulama kodu gelir.</p>
+  <p class="note" id="regNote" style="display:none">Kayıt olduktan sonra mailine doğrulama kodu gelir.</p>
   <p class="note">Bu uygulama bir öğrenci tarafından öğrenciler için geliştirilmiştir, resmi bir üniversite uygulaması değildir.</p>
   <p class="auth-footer">Designed &amp; Developed by <b>Emin Acar</b></p>
 </section>
@@ -389,7 +389,7 @@ $('#authForm').onsubmit = async e => {
     showOtpScreen(email, password);
   } else {
     const { error } = await sb.auth.signInWithPassword({ email, password });
-    if(error) return say(error.message.includes('not confirmed') ? 'Önce mailine gelen 6 haneli kodu gir.' : 'Mail veya şifre hatalı.', 1);
+    if(error) return say(error.message.includes('not confirmed') ? 'Önce mailine gelen doğrulama kodunu gir.' : 'Mail veya şifre hatalı.', 1);
   }
 };
 
@@ -399,10 +399,10 @@ function showOtpScreen(email, password){
   form.innerHTML = `
     <p style="text-align:center;color:var(--mute);font-size:13.5px;line-height:1.6;margin:0 0 12px">
       <b style="color:var(--ink)">${esc(email)}</b> adresine<br>
-      6 haneli doğrulama kodu gönderdik.<br>
+      doğrulama kodu gönderdik.<br>
       <span style="font-size:12px">Mail kutunu ve spam klasörünü kontrol et.</span>
     </p>
-    <input id="otpCode" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="• • • • • •" required autocomplete="one-time-code" style="text-align:center;font-size:28px;letter-spacing:14px;font-weight:800;padding:16px 12px">
+    <input id="otpCode" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="10" placeholder="Doğrulama kodu" required autocomplete="one-time-code" style="text-align:center;font-size:24px;letter-spacing:6px;font-weight:800;padding:16px 12px">
     <button type="button" class="btn" id="otpBtn">Doğrula ve Giriş Yap</button>
     <div id="msg"></div>
     <button type="button" class="link" id="otpBack" style="margin-top:4px">← Geri dön</button>
@@ -411,7 +411,7 @@ function showOtpScreen(email, password){
   $('#otpBack').onclick = () => location.reload();
   $('#otpBtn').onclick = async () => {
     const token = ($('#otpCode').value || '').trim();
-    if(token.length !== 6) return say('Kod 6 haneli olmalı.', 1);
+    if(token.length < 4) return say('Kod en az 4 haneli olmalı.', 1);
     say('Doğrulanıyor...');
     const { error } = await sb.auth.verifyOtp({ email, token, type: 'signup' });
     if(error){ console.error('[OTP]', error); return say('Kod hatalı veya süresi dolmuş.', 1); }
@@ -422,8 +422,16 @@ function showOtpScreen(email, password){
   const otpEl = $('#otpCode');
   otpEl.onkeydown = e => { if(e.key === 'Enter'){ e.preventDefault(); $('#otpBtn').click(); } };
   otpEl.oninput = e => {
-    e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6);
-    if(e.target.value.length === 6) $('#otpBtn').click();
+    e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
+    // 6 veya 8 hane girilirse otomatik dene (yaygın uzunluklar)
+    if(e.target.value.length === 6 || e.target.value.length === 8) $('#otpBtn').click();
+  };
+  // Yapıştırma desteği (uzun kodu yapıştırınca otomatik dener)
+  otpEl.onpaste = () => {
+    setTimeout(() => {
+      const len = (otpEl.value || '').length;
+      if(len >= 6) $('#otpBtn').click();
+    }, 50);
   };
 }
 
