@@ -1451,7 +1451,7 @@ async function loadAnnComments(box, annId){
 
 async function loadAdmin(){
   removeFab();
-  const seg = '<div class="seg"><button data-at="reports" class="on">🚩 Şikayetler</button><button data-at="ads">📢 Reklamlar</button><button data-at="requests">📥 Reklam Talepleri</button><button data-at="users">👥 Kullanıcılar</button><button data-at="banned">🚫 Banlı Mailler</button></div>';
+  const seg = '<div class="seg"><button data-at="reports" class="on">🚩 Şikayetler</button><button data-at="ads">📢 Reklamlar</button><button data-at="requests">📥 Reklam Talepleri</button><button data-at="users">👥 Kullanıcılar</button></div>';
   $('#view').innerHTML = seg + '<div id="adminView"><div class="empty">Yükleniyor...</div></div>';
   $('#view').querySelector('.seg').onclick = e => {
     const b = e.target.closest('button[data-at]'); if(!b) return;
@@ -1460,7 +1460,6 @@ async function loadAdmin(){
     else if(b.dataset.at === 'ads') loadAdminAds();
     else if(b.dataset.at === 'requests') loadAdminRequests();
     else if(b.dataset.at === 'users') loadAdminUsers();
-    else if(b.dataset.at === 'banned') loadAdminBannedEmails();
   };
   loadAdminReports();
 }
@@ -1634,7 +1633,7 @@ async function loadAdminReports(){
         await sb.from('banned_emails').delete().eq('email', email);
         alert('✅ Ban kaldırıldı. Mail artık kayıt olabilir.');
       } else {
-        alert('⚠️ Bu eski bir ban kaydı, mail bilgisi yok.\n\n"🚫 Banlı Mailler" sekmesinden manuel kaldırabilirsin.');
+        alert('⚠️ Bu eski bir ban kaydı, mail bilgisi yok.\n\n"👥 Kullanıcılar" sekmesinden manuel kaldırabilirsin.');
       }
 
       await sb.from('reports').delete().eq('id', rid);
@@ -1646,13 +1645,16 @@ async function loadAdminReports(){
 
 async function loadAdminUsers(){
   const box = $('#adminView');
-  const { data, error } = await sb.from('profiles')
+
+  const { data: profiles, error: pErr } = await sb.from('profiles')
     .select('id, first_name, last_name, department, is_banned, is_restricted')
     .or('is_banned.eq.true,is_restricted.eq.true')
     .order('first_name');
-  if(error){ box.innerHTML = '<div class="empty">' + esc(error.message) + '</div>'; return; }
-  if(!data || !data.length){ box.innerHTML = '<div class="empty">✅ Şu an banlı veya kısıtlı kullanıcı yok.</div>'; return; }
-  const rows = data.map(u => {
+  if(pErr){ box.innerHTML = '<div class="empty">' + esc(pErr.message) + '</div>'; return; }
+
+  const { data: bannedEmails } = await sb.from('banned_emails').select('*').order('banned_at', { ascending: false });
+
+  const rowsProfile = (profiles||[]).map(u => {
     const status = u.is_banned
       ? '<span class="tag" style="background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger)">🚫 BANLI</span>'
       : '<span class="tag" style="background:color-mix(in srgb,#FF9900 14%,transparent);color:#ff9900">⚠️ KISITLI</span>';
@@ -1669,22 +1671,47 @@ async function loadAdminUsers(){
       status + '</div>' +
       '<div class="acts">' + btn + '</div></article>';
   }).join('');
-  box.innerHTML = '<h3 style="margin:8px 6px;font-size:14px;color:var(--mute);font-weight:700">👥 BANLI / KISITLI KULLANICILAR (' + data.length + ')</h3>' + rows;
+
+  const rowsEmail = (bannedEmails||[]).map(b => {
+    const date = new Date(b.banned_at).toLocaleString('tr-TR');
+    return '<article class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">' +
+      '<div style="min-width:0;flex:1"><b style="font-size:14.5px;word-break:break-all">' + esc(b.email) + '</b>' +
+      '<div class="dep">📅 ' + esc(date) + ' · ' + esc(b.reason||'') + '</div></div>' +
+      '<span class="tag" style="background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger);flex:none">🚫 BANLI</span>' +
+      '</div>' +
+      '<div class="acts"><button data-email="' + esc(b.email) + '" data-act="unbanEmail" style="color:#2ecc71">✅ Banı Kaldır</button></div></article>';
+  }).join('');
+
+  const total = (profiles||[]).length + (bannedEmails||[]).length;
+  if(!total){ box.innerHTML = '<div class="empty">✅ Şu an banlı veya kısıtlı kullanıcı yok.</div>'; return; }
+
+  box.innerHTML = '<h3 style="margin:8px 6px;font-size:14px;color:var(--mute);font-weight:700">👥 BANLI / KISITLI (' + total + ')</h3>' + rowsProfile + rowsEmail;
+
   box.onclick = async e => {
-    const b = e.target.closest('button[data-uid]'); if(!b) return;
-    const uid = b.dataset.uid;
+    const b = e.target.closest('button[data-act]'); if(!b) return;
     const act = b.dataset.act;
 
     if(act === 'unrestrict'){
       if(!confirm('✅ Kısıtlama kaldırılsın mı?')) return;
-      await sb.from('profiles').update({ is_restricted: false }).eq('id', uid);
+      await sb.from('profiles').update({ is_restricted: false }).eq('id', b.dataset.uid);
       loadAdminUsers();
+      return;
     }
+
     if(act === 'unban'){
-      if(!confirm('✅ Ban kaldırılsın mı?\n\nKullanıcı aynı mail ile yeniden kayıt olabilir.')) return;
-      alert('ℹ️ "🚫 Banlı Mailler" sekmesinden ilgili maili silerek banı kaldırabilirsin.');
+      if(!confirm('✅ Ban kaldırılsın mı?')) return;
+      await sb.from('profiles').update({ is_banned: false, is_restricted: false }).eq('id', b.dataset.uid);
       loadAdminUsers();
+      return;
     }
+
+    if(act === 'unbanEmail'){
+      if(!confirm('✅ ' + b.dataset.email + ' için ban kaldırılsın mı?')) return;
+      await sb.from('banned_emails').delete().eq('email', b.dataset.email);
+      loadAdminUsers();
+      return;
+    }
+
     if(act === 'ban'){
       if(!confirm('🚫 KALICI BAN?\n\n⚠️ Hesabı silinecek ve bir daha kayıt olamayacak!')) return;
       if(!confirm('Son onay: Emin misin?')) return;
@@ -1695,37 +1722,13 @@ async function loadAdminUsers(){
         const res = await fetch(SB_URL + '/functions/v1/clever-responder', {
           method: 'POST',
           headers: { 'Authorization': 'Bearer ' + session.access_token, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ targetUserId: uid, ban: true, reason: 'Admin kararı' })
+          body: JSON.stringify({ targetUserId: b.dataset.uid, ban: true, reason: 'Admin kararı' })
         });
         const j = await res.json().catch(()=>({}));
         if(!res.ok) throw new Error(j.error || 'Ban başarısız');
-        alert('✅ Kullanıcı kalıcı olarak banlandı.');
         loadAdminUsers();
       } catch(err){ btn.disabled = false; btn.textContent = '🚫 Banla'; alert('Hata: ' + err.message); }
     }
-  };
-}
-
-async function loadAdminBannedEmails(){
-  const box = $('#adminView');
-  const { data, error } = await sb.from('banned_emails').select('*').order('banned_at', { ascending: false });
-  if(error){ box.innerHTML = '<div class="empty">' + esc(error.message) + '</div>'; return; }
-  if(!data || !data.length){ box.innerHTML = '<div class="empty">✅ Şu an banlı mail yok.</div>'; return; }
-  const rows = data.map(b => {
-    const date = new Date(b.banned_at).toLocaleString('tr-TR');
-    return '<article class="card"><div style="font-weight:700;font-size:14.5px;word-break:break-all">' + esc(b.email) + '</div>' +
-      '<div class="dep">📅 ' + esc(date) + '</div>' +
-      '<div class="dep">📝 ' + esc(b.reason || '-') + '</div>' +
-      '<div class="acts"><button data-unban="' + esc(b.email) + '" style="color:#2ecc71">✅ Banı Kaldır</button></div>' +
-    '</article>';
-  }).join('');
-  box.innerHTML = '<h3 style="margin:8px 6px;font-size:14px;color:var(--mute);font-weight:700">🚫 BANLI MAİLLER (' + data.length + ')</h3>' + rows;
-  box.onclick = async e => {
-    const b = e.target.closest('button[data-unban]'); if(!b) return;
-    const email = b.dataset.unban;
-    if(!confirm('⚠️ ' + email + ' için ban kaldırılsın mı?\n\nBu mail ile yeniden kayıt olunabilir. (Eski hesap geri gelmez)')) return;
-    await sb.from('banned_emails').delete().eq('email', email);
-    loadAdminBannedEmails();
   };
 }
 
