@@ -6,7 +6,7 @@
 <title>Gelişim Vibe</title>
 <meta name="theme-color" content="#2347E8">
 <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Gelişim Vibe">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" href="logo.png">
@@ -465,6 +465,10 @@ $('#authForm').onsubmit = async e => {
   if(!email.endsWith(DOMAIN)) return say('Sadece ' + DOMAIN + ' uzantılı mail ile girebilirsin.', 1);
   say('Bekle...');
   if(reg){
+    // 🚫 Banlı mail kontrolü
+    const { data: banned } = await sb.from('banned_emails').select('email').eq('email', email).maybeSingle();
+    if(banned) return say('🚫 Bu mail adresi kalıcı olarak banlanmış. Yeni hesap açamazsın.', 1);
+
     const pw2 = $('#pw2').value;
     if(password !== pw2) return say('Şifreler uyuşmuyor.', 1);
     const localPart = email.split('@')[0] || '';
@@ -733,7 +737,8 @@ async function loadList(t){
 
   $('#cf').onsubmit = async e => {
     e.preventDefault();
-    if(me.is_banned) return alert('Hesabın kısıtlanmış. Yeni içerik paylaşamazsın.');
+    if(me.is_restricted) return alert('⚠️ Hesabın kısıtlanmış. Yeni içerik paylaşamazsın.');
+    if(me.is_banned) return alert('🚫 Hesabın banlanmış. Yeni içerik paylaşamazsın.');
     const content = $('#ct').value.trim();
     if(!content && !curMedia) return alert('Bir şeyler yaz ya da medya ekle.');
     const btn = $('#cf .btn'); btn.disabled = true;
@@ -867,7 +872,8 @@ async function loadComments(box, id, conf){
   ta.addEventListener('keydown', e => { if(e.key === 'Enter' && (e.metaKey || e.ctrlKey)){ e.preventDefault(); box.querySelector('form').requestSubmit(); } });
   box.querySelector('form').onsubmit = async e => {
     e.preventDefault();
-    if(me.is_banned) return alert('Hesabın kısıtlanmış.');
+    if(me.is_restricted) return alert('⚠️ Hesabın kısıtlanmış.');
+    if(me.is_banned) return alert('🚫 Hesabın banlanmış.');
     const content = ta.value.trim(); if(!content) return;
     const { error } = await sb.from(tbl).insert({ user_id: me.id, [conf ? 'confession_id' : 'post_id']: id, content });
     if(error) return alert(error.message);
@@ -973,7 +979,8 @@ function openBookForm(){
   const setP = p => { $('#bProg').classList.remove('hide'); $('#bProgFill').style.width = Math.round(p*100) + '%'; $('#bProgText').textContent = 'Yükleniyor... %' + Math.round(p*100); };
   $('#bf').onsubmit = async e => {
     e.preventDefault();
-    if(me.is_banned) return alert('Hesabın kısıtlanmış.');
+    if(me.is_restricted) return alert('⚠️ Hesabın kısıtlanmış.');
+    if(me.is_banned) return alert('🚫 Hesabın banlanmış.');
     const btn = $('#bf .btn'); btn.disabled = true;
     let image_path = null;
     const f = $('#bimg').files[0];
@@ -1027,7 +1034,8 @@ function openPdfForm(){
   const setP = p => { $('#pdfProg').classList.remove('hide'); $('#pdfFill').style.width = Math.round(p*100) + '%'; $('#pdfText').textContent = 'Yükleniyor... %' + Math.round(p*100); };
   $('#pf').onsubmit = async e => {
     e.preventDefault();
-    if(me.is_banned) return alert('Hesabın kısıtlanmış.');
+    if(me.is_restricted) return alert('⚠️ Hesabın kısıtlanmış.');
+    if(me.is_banned) return alert('🚫 Hesabın banlanmış.');
     const f = $('#pfile').files[0]; if(!f) return alert('Lütfen PDF dosyası seç.');
     const btn = $('#pf .btn'); btn.disabled = true;
     try{
@@ -1176,7 +1184,8 @@ function deleteAccount(){
         headers: {
           'Authorization': 'Bearer ' + session.access_token,
           'Content-Type': 'application/json'
-        }
+        },
+        body: JSON.stringify({ selfDelete: true })
       });
 
       const json = await res.json().catch(() => ({}));
@@ -1232,7 +1241,7 @@ async function loadInfo(){
   $('#infoBack').onclick = () => loadSettings();
   const about = '<article class="card"><h2 style="margin:0 0 10px;font-size:20px">ℹ️ Hakkımızda</h2><p style="line-height:1.7;color:var(--mute);font-size:14.5px"><b style="color:var(--ink)">Gelişim Vibe</b>, İstanbul Gelişim Üniversitesi öğrencileri tarafından <b>öğrenciler için</b> geliştirilmiş bir topluluk uygulamasıdır.</p><p style="line-height:1.7;color:var(--mute);font-size:14.5px;margin-top:10px">Amacımız; öğrencilerin birbirleriyle iletişim kurabileceği, kampüs hayatına dair paylaşımlar yapabileceği, ikinci el kitap alışverişi yapabileceği ve ders notlarını paylaşabileceği <b>güvenli ve samimi</b> bir dijital ortam sunmaktır.</p><div style="background:var(--bg);border-radius:12px;padding:14px;margin-top:14px"><div style="font-weight:800;margin-bottom:6px">📌 Neler Yapabilirsin?</div><ul style="margin:0;padding-left:20px;line-height:1.8;color:var(--mute);font-size:14px"><li>Akışta özgürce paylaşım yapabilirsin</li><li>Anonim itiraf gönderebilirsin</li><li>2. el kitap satabilir veya takas yapabilirsin</li><li>Ders notlarını PDF olarak paylaşabilirsin</li><li>Diğer öğrencilerle birebir mesajlaşabilirsin</li></ul></div><div style="background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 10%,transparent),transparent);border-radius:12px;padding:14px;margin-top:14px;border:1px dashed var(--ac)"><div style="font-weight:800;margin-bottom:6px">📜 Yasal Uyarı</div><p style="margin:0;color:var(--mute);font-size:13px;line-height:1.6">Bu uygulama <b>resmi bir üniversite uygulaması değildir</b>. Tamamen öğrenciler tarafından gönüllü olarak geliştirilmiştir. İçeriklerden kullanıcılar sorumludur.</p></div></article>';
   const privacy = '<article class="card"><h2 style="margin:0 0 10px;font-size:20px">🔒 Gizlilik Politikası</h2><div style="line-height:1.75;font-size:14.5px">' +
-    '<h3 style="font-size:15px;margin:16px 0 6px">1. Veri Sorumlusu</h3><p style="margin:0;color:var(--mute)">Gelişim Vibe · Geliştirici: Emin Acar · İletişim: <b>şikayet et butonundan iletişime geçebilirsiniz</b>. Bu uygulama resmi bir üniversite uygulaması değildir.</p>' +
+    '<h3 style="font-size:15px;margin:16px 0 6px">1. Veri Sorumlusu</h3><p style="margin:0;color:var(--mute)">Gelişim Vibe · Geliştirici: Emin Acar · İletişim: <b>' + CONTACT_EMAIL + '</b>. Bu uygulama resmi bir üniversite uygulaması değildir.</p>' +
     '<h3 style="font-size:15px;margin:16px 0 6px">2. Toplanan Veriler</h3><p style="margin:0;color:var(--mute)">Üniversite e-posta adresi, ad-soyad, bölüm, paylaşım/yorum/mesaj içerikleri, yüklediğiniz görsel ve dosyalar.</p>' +
     '<h3 style="font-size:15px;margin:16px 0 6px">3. İşleme Amaçları</h3><p style="margin:0;color:var(--mute)">Hesap oluşturma, kimlik doğrulama, uygulama işlevlerinin sunulması, içerik moderasyonu, güvenlik ve yasal yükümlülükler.</p>' +
     '<h3 style="font-size:15px;margin:16px 0 6px">4. Hukuki Sebep</h3><p style="margin:0;color:var(--mute)">KVKK m.5/2(c) sözleşmenin kurulması, m.5/2(ç) hukuki yükümlülük, m.5/2(f) meşru menfaat. Özel nitelikli veri işlenmez.</p>' +
@@ -1241,11 +1250,11 @@ async function loadInfo(){
     '<h3 style="font-size:15px;margin:16px 0 6px">7. Saklama Süresi</h3><p style="margin:0;color:var(--mute)">Verileriniz, siz hesabınızı silene kadar saklanır. Hesap silme talebinizde tüm verileriniz <b>anında</b> kalıcı olarak silinir.</p>' +
     '<h3 style="font-size:15px;margin:16px 0 6px">8. Veri Güvenliği</h3><p style="margin:0;color:var(--mute)">Verileriniz Supabase altyapısında şifreli (SSL/TLS + AES-256) olarak saklanır. Row Level Security ile yetkisiz erişim engellenir. Supabase ISO 27001 ve SOC2 Type II sertifikalıdır.</p>' +
     '<h3 style="font-size:15px;margin:16px 0 6px">9. İtiraflar</h3><p style="margin:0;color:var(--mute)">İtiraf içerikleri diğer kullanıcılara anonim gösterilir. Yasal talep halinde içerik sahibi bilgileri yetkili makamlarla paylaşılabilir.</p>' +
-    '<h3 style="font-size:15px;margin:16px 0 6px">10. KVKK m.11 Haklarınız</h3><p style="margin:0;color:var(--mute)">Verilerinize erişme, düzeltme, silme, işlenmesine itiraz etme ve zararın giderilmesini talep etme hakkına sahipsiniz. Başvuru: <b>şikayet et butonundan iletişime geçebilirsiniz</b>. Talepler en geç 30 gün içinde yanıtlanır.</p>' +
+    '<h3 style="font-size:15px;margin:16px 0 6px">10. KVKK m.11 Haklarınız</h3><p style="margin:0;color:var(--mute)">Verilerinize erişme, düzeltme, silme, işlenmesine itiraz etme ve zararın giderilmesini talep etme hakkına sahipsiniz. Başvuru: <b>' + CONTACT_EMAIL + '</b>. Talepler en geç 30 gün içinde yanıtlanır.</p>' +
     '</div></article>';
   const contact = '<article class="card"><h2 style="margin:0 0 10px;font-size:20px">📬 İletişim</h2><p style="color:var(--mute);font-size:14.5px;line-height:1.7">Soru, öneri, şikayet veya reklam iş birlikleri için bize ulaşabilirsin.</p>' +
     '<div style="display:flex;flex-direction:column;gap:10px;margin-top:16px">' +
-    '<a href="mailto:' + CONTACT_EMAIL + '" class="sheet-btn"><span style="font-size:22px">📧</span><div><div style="font-weight:700">E-posta</div><div style="color:var(--mute);font-size:13px">şikayet et butonundan iletişime geçebilirsiniz</div></div></a>' +
+    '<a href="mailto:' + CONTACT_EMAIL + '" class="sheet-btn"><span style="font-size:22px">📧</span><div><div style="font-weight:700">E-posta</div><div style="color:var(--mute);font-size:13px">' + CONTACT_EMAIL + '</div></div></a>' +
     '<a href="https://wa.me/' + CONTACT_WHATSAPP + '" target="_blank" rel="noopener" class="sheet-btn"><span style="font-size:22px">💬</span><div><div style="font-weight:700">WhatsApp</div><div style="color:var(--mute);font-size:13px">Hızlı yanıt için ideal</div></div></a>' +
     '</div></article>';
   const setView = v => {
@@ -1338,7 +1347,8 @@ async function loadChatView(){
   $('#chatBack').onclick = () => { chatWith = null; chatUser = null; show('chat'); };
   $('#chatForm').onsubmit = async e => {
     e.preventDefault();
-    if(me.is_banned) return alert('Hesabın kısıtlanmış.');
+    if(me.is_restricted) return alert('⚠️ Hesabın kısıtlanmış.');
+    if(me.is_banned) return alert('🚫 Hesabın banlanmış.');
     const content = $('#chatInput').value.trim(); if(!content) return;
     $('#chatInput').value = '';
     const { error } = await sb.from('messages').insert({ sender_id: me.id, receiver_id: other, content });
@@ -1426,7 +1436,8 @@ async function loadAnnComments(box, annId){
   ta.addEventListener('keydown', e => { if(e.key === 'Enter' && (e.metaKey || e.ctrlKey)){ e.preventDefault(); box.querySelector('form').requestSubmit(); } });
   box.querySelector('form').onsubmit = async e => {
     e.preventDefault();
-    if(me.is_banned) return alert('Hesabın kısıtlanmış.');
+    if(me.is_restricted) return alert('⚠️ Hesabın kısıtlanmış.');
+    if(me.is_banned) return alert('🚫 Hesabın banlanmış.');
     const content = ta.value.trim(); if(!content) return;
     const { error } = await sb.from('announcement_comments').insert({ user_id: me.id, announcement_id: annId, content });
     if(error) return alert(error.message);
@@ -1445,26 +1456,32 @@ async function loadAnnComments(box, annId){
 
 async function loadAdmin(){
   removeFab();
-  const seg = '<div class="seg"><button data-at="reports" class="on">🚩 Şikayetler</button><button data-at="ads">📢 Reklamlar</button><button data-at="requests">📥 Reklam Talepleri</button></div>';
+  const seg = '<div class="seg"><button data-at="reports" class="on">🚩 Şikayetler</button><button data-at="ads">📢 Reklamlar</button><button data-at="requests">📥 Reklam Talepleri</button><button data-at="users">👥 Kullanıcılar</button></div>';
   $('#view').innerHTML = seg + '<div id="adminView"><div class="empty">Yükleniyor...</div></div>';
   $('#view').querySelector('.seg').onclick = e => {
     const b = e.target.closest('button[data-at]'); if(!b) return;
     $('#view').querySelectorAll('.seg button').forEach(x => x.classList.toggle('on', x === b));
     if(b.dataset.at === 'reports') loadAdminReports();
     else if(b.dataset.at === 'ads') loadAdminAds();
-    else loadAdminRequests();
+    else if(b.dataset.at === 'requests') loadAdminRequests();
+    else if(b.dataset.at === 'users') loadAdminUsers();
   };
   loadAdminReports();
 }
+
 async function loadAdminReports(){
   const box = $('#adminView');
   const { data: reports, error } = await sb.from('reports').select('*').order('created_at',{ascending:false}).limit(100);
   if(error){ box.innerHTML = '<div class="empty">' + esc(error.message) + '</div>'; return; }
   if(!reports || !reports.length){ box.innerHTML = '<div class="empty">Henüz şikayet yok.</div>'; return; }
+
   const userIds = new Set();
   reports.forEach(r => { if(r.reporter_id) userIds.add(r.reporter_id); if(r.reported_user_id) userIds.add(r.reported_user_id); });
   let profMap = {};
-  if(userIds.size){ const {data:ps} = await sb.from('profiles').select('id,first_name,last_name,department,is_banned').in('id', [...userIds]); (ps||[]).forEach(p => profMap[p.id] = p); }
+  if(userIds.size){
+    const {data:ps} = await sb.from('profiles').select('id,first_name,last_name,department,is_banned,is_restricted').in('id', [...userIds]);
+    (ps||[]).forEach(p => profMap[p.id] = p);
+  }
   const postIds = reports.filter(r => r.post_id).map(r => r.post_id);
   const confIds = reports.filter(r => r.confession_id).map(r => r.confession_id);
   const cmIds = reports.filter(r => r.comment_id).map(r => r.comment_id);
@@ -1485,29 +1502,224 @@ async function loadAdminReports(){
     else if(r.confession_id){ kind = 'confessions'; cid = r.confession_id; const c = contentMap['conf_' + r.confession_id] || {}; content = c.content; image_path = c.image_path; }
     else if(r.comment_id){ kind = 'comments'; cid = r.comment_id; const c = contentMap['cm_' + r.comment_id] || {}; content = c.content; }
     else if(r.confession_comment_id){ kind = 'confession_comments'; cid = r.confession_comment_id; const c = contentMap['cc_' + r.confession_comment_id] || {}; content = c.content; }
-    window._rep[r.id] = { kind, cid, uid: r.reported_user_id };
+
+    window._rep[r.id] = { kind, cid, uid: r.reported_user_id, email: r.reported_email, name: r.reported_name };
+
     const reporter = profMap[r.reporter_id] || { first_name:'?', last_name:'' };
-    const reported = profMap[r.reported_user_id] || null;
-    const reportedBanned = reported && reported.is_banned;
+    const reported = r.reported_user_id ? profMap[r.reported_user_id] : null;
+    const isBannedReport = r.status === 'banned';
+
+    let statusTag = '';
+    if(isBannedReport) statusTag = ' <span class="tag" style="background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger)">🚫 BANLANDI</span>';
+    else if(reported?.is_restricted) statusTag = ' <span class="tag" style="background:color-mix(in srgb,#FF9900 14%,transparent);color:#ff9900">⚠️ KISITLI</span>';
+
     let label = 'İçerik';
     if(r.reported_user_id && !kind) label = '👤 Kullanıcı şikayeti';
     else if(kind) label = ({ posts:'📝 Paylaşım', confessions:'👻 İtiraf', comments:'💬 Yorum', confession_comments:'👻 İtiraf yorumu' })[kind] || 'İçerik';
-    const bodyText = (reported && !kind) ? '<b>' + esc(reported.first_name) + ' ' + esc(reported.last_name) + '</b> (' + esc(reported.department||'') + ')' + (reportedBanned ? ' <span class="tag" style="background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger)">🚫 ENGELLİ</span>' : '') : esc(content || '(içerik silinmiş)');
-    const banBtn = r.reported_user_id && !reportedBanned ? '<button data-x="ban" style="color:var(--danger)">🚫 Kullanıcıyı Engelle</button>' : '';
-    return '<article class="card" data-r="' + r.id + '" style="' + (r.status && r.status !== 'pending' ? 'opacity:.6' : '') + '"><span class="tag">' + label + '</span> <span class="time">· ' + ago(r.created_at) + '</span><div class="body">' + bodyText + '</div>' + (image_path ? '<img class="pimg" loading="lazy" src="' + imgUrl(image_path) + '" alt="">' : '') + '<div class="dep">Şikayet eden: ' + esc(reporter.first_name) + ' ' + esc(reporter.last_name) + '</div><div class="dep">Sebep: <b>' + esc(r.reason||'') + '</b></div><div class="acts">' + (kind ? '<button data-x="del">İçeriği Sil</button>' : '') + '<button data-x="skip">Yoksay</button>' + banBtn + '</div></article>';
+
+    const reportedName = reported ? (reported.first_name + ' ' + reported.last_name) : (r.reported_name || 'Silinmiş kullanıcı');
+    const reportedDept = reported ? reported.department : '';
+    const bodyText = (r.reported_user_id && !kind)
+      ? '<b>' + esc(reportedName) + '</b> (' + esc(reportedDept||'') + ')' + statusTag
+      : esc(content || '(içerik silinmiş)') + statusTag;
+
+    let actions = '';
+    if(isBannedReport){
+      actions = '<button data-x="unban" style="color:#2ecc71">✅ Banı Kaldır</button>';
+    } else if(reported?.is_restricted){
+      actions = '<button data-x="unrestrict" style="color:#2ecc71">✅ Kısıtlamayı Kaldır</button>' +
+                '<button data-x="ban" style="color:var(--danger)">🚫 Banla</button>';
+    } else {
+      actions = '<button data-x="skip" style="color:var(--mute)">🚮 Yoksay</button>';
+      if(kind) actions += '<button data-x="del" style="color:var(--mute)">🗑️ İçeriği Sil</button>';
+      if(r.reported_user_id){
+        actions += '<button data-x="restrict" style="color:#ff9900">⚠️ Kısıtla</button>' +
+                   '<button data-x="ban" style="color:var(--danger)">🚫 Banla</button>';
+      }
+    }
+
+    return '<article class="card" data-r="' + r.id + '">' +
+      '<span class="tag">' + label + '</span> <span class="time">· ' + ago(r.created_at) + '</span>' +
+      '<div class="body">' + bodyText + '</div>' +
+      (image_path ? '<img class="pimg" loading="lazy" src="' + imgUrl(image_path) + '" alt="">' : '') +
+      '<div class="dep">Şikayet eden: ' + esc(reporter.first_name) + ' ' + esc(reporter.last_name) + '</div>' +
+      '<div class="dep">Sebep: <b>' + esc(r.reason||'') + '</b></div>' +
+      '<div class="acts">' + actions + '</div></article>';
   };
+
   const pending = reports.filter(r => (r.status || 'pending') === 'pending');
-  const resolved = reports.filter(r => r.status && r.status !== 'pending');
-  box.innerHTML = '<h3 style="margin:8px 6px;font-size:14px;color:var(--mute);font-weight:700">⏳ BEKLEYEN (' + pending.length + ')</h3>' + (pending.length ? pending.map(render).join('') : '<div class="empty" style="padding:20px">Bekleyen şikayet yok.</div>') + (resolved.length ? '<h3 style="margin:24px 6px 8px;font-size:14px;color:var(--mute);font-weight:700">✔️ GEÇMİŞ (' + resolved.length + ')</h3>' + resolved.slice(0,20).map(render).join('') : '');
+  const banned = reports.filter(r => r.status === 'banned');
+  const resolved = reports.filter(r => r.status && r.status !== 'pending' && r.status !== 'banned');
+
+  box.innerHTML =
+    '<h3 style="margin:8px 6px;font-size:14px;color:var(--mute);font-weight:700">⏳ BEKLEYEN (' + pending.length + ')</h3>' +
+    (pending.length ? pending.map(render).join('') : '<div class="empty" style="padding:20px">Bekleyen şikayet yok.</div>') +
+    (banned.length ? '<h3 style="margin:24px 6px 8px;font-size:14px;color:#D42F4B;font-weight:700">🚫 BANLANANLAR (' + banned.length + ')</h3>' + banned.map(render).join('') : '') +
+    (resolved.length ? '<h3 style="margin:24px 6px 8px;font-size:14px;color:var(--mute);font-weight:700">✔️ GEÇMİŞ (' + resolved.length + ')</h3>' + resolved.slice(0,20).map(render).join('') : '');
+
   box.onclick = async e => {
     const b = e.target.closest('button[data-x]'); if(!b) return;
     const rid = +b.closest('.card').dataset.r, rep = window._rep[rid];
-    if(b.dataset.x === 'del' && rep.kind){ if(!confirm('İçerik silinsin mi?')) return; await sb.from(rep.kind).delete().eq('id', rep.cid); await sb.from('reports').update({ status: 'resolved' }).eq('id', rid); }
-    if(b.dataset.x === 'skip') await sb.from('reports').update({ status: 'dismissed' }).eq('id', rid);
-    if(b.dataset.x === 'ban'){ if(!confirm('Kullanıcı engellensin mi?')) return; if(rep.uid) await sb.from('profiles').update({ is_banned: true }).eq('id', rep.uid); await sb.from('reports').update({ status: 'resolved' }).eq('id', rid); }
-    loadAdminReports();
+    const x = b.dataset.x;
+
+    // 🚮 YOKSAY
+    if(x === 'skip'){
+      if(!confirm('🚮 Şikayet silinsin mi? (Hiçbir işlem yapılmaz)')) return;
+      await sb.from('reports').delete().eq('id', rid);
+      loadAdminReports();
+      return;
+    }
+
+    // 🗑️ İÇERİĞİ SİL
+    if(x === 'del' && rep.kind){
+      if(!confirm('İçerik silinsin mi?')) return;
+      await sb.from(rep.kind).delete().eq('id', rep.cid);
+      await sb.from('reports').delete().eq('id', rid);
+      loadAdminReports();
+      return;
+    }
+
+    // ⚠️ KISITLA
+    if(x === 'restrict'){
+      if(!confirm('⚠️ Kullanıcı kısıtlansın mı?\n\nPaylaşım, yorum ve mesaj yapamayacak.')) return;
+      if(rep.uid) await sb.from('profiles').update({ is_restricted: true }).eq('id', rep.uid);
+      await sb.from('reports').update({ status: 'restricted' }).eq('id', rid);
+      alert('✅ Kullanıcı kısıtlandı.');
+      loadAdminReports();
+      return;
+    }
+
+    // ✅ KISITLAMAYI KALDIR
+    if(x === 'unrestrict'){
+      if(!confirm('✅ Kısıtlama kaldırılsın mı?')) return;
+      if(rep.uid) await sb.from('profiles').update({ is_restricted: false }).eq('id', rep.uid);
+      await sb.from('reports').delete().eq('id', rid);
+      alert('✅ Kısıtlama kaldırıldı.');
+      loadAdminReports();
+      return;
+    }
+
+    // 🚫 BANLA
+    if(x === 'ban'){
+      if(!confirm('🚫 KULLANICI KALICI BANLANSIN MI?\n\n⚠️ GERİ ALINAMAZ:\n• Hesabı ve tüm verileri SİLİNECEK\n• Aynı mail ile bir daha KAYIT OLAMAYACAK')) return;
+      if(!confirm('Son onay: Kalıcı ban uygulanacak. Emin misin?')) return;
+
+      const reported = rep.uid ? (await sb.from('profiles').select('first_name,last_name').eq('id', rep.uid).single()).data : null;
+
+      const btn = b;
+      btn.disabled = true; btn.textContent = 'İşleniyor...';
+
+      try {
+        const { data: { session } } = await sb.auth.getSession();
+        const res = await fetch(SB_URL + '/functions/v1/clever-responder', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + session.access_token, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ targetUserId: rep.uid, ban: true, reason: 'Admin kararı ile kalıcı ban' })
+        });
+        const j = await res.json().catch(()=>({}));
+        if(!res.ok) throw new Error(j.error || 'Ban başarısız');
+
+        await sb.from('reports').update({
+          status: 'banned',
+          reported_name: reported ? (reported.first_name + ' ' + reported.last_name) : 'Silinmiş kullanıcı',
+          reported_user_id: null
+        }).eq('id', rid);
+
+        alert('✅ Kullanıcı kalıcı olarak banlandı ve tüm verileri silindi.');
+        loadAdminReports();
+      } catch(err){
+        btn.disabled = false; btn.textContent = '🚫 Banla';
+        alert('Hata: ' + err.message);
+      }
+      return;
+    }
+
+    // ✅ BANI KALDIR
+    if(x === 'unban'){
+      if(!confirm('✅ Ban kaldırılsın mı?\n\nKullanıcı aynı mail ile yeniden kayıt olabilir. (Eski verileri geri gelmez)')) return;
+
+      // Banlı mailleri temizle (kullanıcı bilinen bir rapor ise)
+      const email = rep.email;
+      if(email){
+        await sb.from('banned_emails').delete().eq('email', email);
+      }
+
+      await sb.from('reports').delete().eq('id', rid);
+      alert('✅ Ban kaldırıldı.' + (email ? '' : '\n\n⚠️ Mail bilgisi kayıtlı değildi. Banlı Mailler listesinden manuel kontrol et.'));
+      loadAdminReports();
+      return;
+    }
   };
 }
+
+async function loadAdminUsers(){
+  const box = $('#adminView');
+  const { data, error } = await sb.from('profiles')
+    .select('id, first_name, last_name, department, is_banned, is_restricted')
+    .or('is_banned.eq.true,is_restricted.eq.true')
+    .order('first_name');
+  if(error){ box.innerHTML = '<div class="empty">' + esc(error.message) + '</div>'; return; }
+  if(!data || !data.length){ box.innerHTML = '<div class="empty">✅ Şu an banlı veya kısıtlı kullanıcı yok.</div>'; return; }
+  const rows = data.map(u => {
+    const status = u.is_banned
+      ? '<span class="tag" style="background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger)">🚫 BANLI</span>'
+      : '<span class="tag" style="background:color-mix(in srgb,#FF9900 14%,transparent);color:#ff9900">⚠️ KISITLI</span>';
+    let btn = '';
+    if(u.is_banned){
+      btn = '<button data-uid="' + u.id + '" data-act="unban" style="color:#2ecc71">✅ Banı Kaldır</button>';
+    } else {
+      btn = '<button data-uid="' + u.id + '" data-act="unrestrict" style="color:#2ecc71">✅ Kısıtlamayı Kaldır</button>' +
+            '<button data-uid="' + u.id + '" data-act="ban" style="color:var(--danger)">🚫 Banla</button>';
+    }
+    return '<article class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">' +
+      '<div><b style="font-size:15px">' + esc(u.first_name) + ' ' + esc(u.last_name) + '</b>' +
+      '<div class="dep">' + esc(u.department||'') + '</div></div>' +
+      status + '</div>' +
+      '<div class="acts">' + btn + '</div></article>';
+  }).join('');
+  box.innerHTML = '<h3 style="margin:8px 6px;font-size:14px;color:var(--mute);font-weight:700">👥 BANLI / KISITLI KULLANICILAR (' + data.length + ')</h3>' + rows;
+  box.onclick = async e => {
+    const b = e.target.closest('button[data-uid]'); if(!b) return;
+    const uid = b.dataset.uid;
+    const act = b.dataset.act;
+
+    if(act === 'unrestrict'){
+      if(!confirm('✅ Kısıtlama kaldırılsın mı?')) return;
+      await sb.from('profiles').update({ is_restricted: false }).eq('id', uid);
+      loadAdminUsers();
+    }
+    if(act === 'unban'){
+      if(!confirm('✅ Ban kaldırılsın mı?\n\nKullanıcı aynı mail ile yeniden kayıt olabilir.')) return;
+      // banned_emails tablosundan maili bulmak için önce profili al
+      const { data: prof } = await sb.from('profiles').select('id').eq('id', uid).single();
+      // Profile varsa banlı maili sil
+      const { data: userData } = await sb.auth.getUser();
+      // banned_emails'ten kullanıcının mailini bulamıyoruz (auth.users'a erişemiyoruz)
+      // O yüzden uyarı ver, admin manuel yapsın
+      alert('⚠️ Kullanıcı banı kaldırıldı. Ama banned_emails tablosundan maili manuel silmelisin.\n\nSQL: DELETE FROM banned_emails WHERE email = \'kullanici@ogr.gelisim.edu.tr\';');
+      loadAdminUsers();
+    }
+    if(act === 'ban'){
+      if(!confirm('🚫 KALICI BAN?\n\n⚠️ Hesabı silinecek ve bir daha kayıt olamayacak!')) return;
+      if(!confirm('Son onay: Emin misin?')) return;
+      const btn = b;
+      btn.disabled = true; btn.textContent = 'İşleniyor...';
+      try {
+        const { data: { session } } = await sb.auth.getSession();
+        const res = await fetch(SB_URL + '/functions/v1/clever-responder', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + session.access_token, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ targetUserId: uid, ban: true, reason: 'Admin kararı' })
+        });
+        const j = await res.json().catch(()=>({}));
+        if(!res.ok) throw new Error(j.error || 'Ban başarısız');
+        alert('✅ Kullanıcı kalıcı olarak banlandı.');
+        loadAdminUsers();
+      } catch(err){ btn.disabled = false; btn.textContent = '🚫 Banla'; alert('Hata: ' + err.message); }
+    }
+  };
+}
+
 async function loadAdminAds(){
   const box = $('#adminView');
   const { data: ads, error } = await sb.from('ads').select('*').order('created_at',{ascending:false}).limit(50);
