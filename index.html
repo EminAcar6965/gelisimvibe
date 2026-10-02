@@ -400,18 +400,7 @@ window.openLegalDoc = function(kind){
   document.body.appendChild(el);
   el.onclick = e => { if(e.target === el || e.target.classList.contains('sheet-close')) el.remove(); };
 };
-  const d = docs[kind]; if(!d) return;
-  const el = document.createElement('div'); el.className = 'sheet-bg';
-  el.innerHTML = '<div class="sheet"><h4>' + d.title + '<button class="sheet-close">×</button></h4>' + d.body + '<button class="btn" style="margin-top:16px;width:100%" onclick="this.closest(\'.sheet-bg\').remove()">Anladım</button></div>';
-  document.body.appendChild(el);
-  el.onclick = e => { if(e.target === el || e.target.classList.contains('sheet-close')) el.remove(); };
-};
-  const d = docs[kind]; if(!d) return;
-  const el = document.createElement('div'); el.className = 'sheet-bg';
-  el.innerHTML = '<div class="sheet"><h4>' + d.title + '<button class="sheet-close">×</button></h4>' + d.body + '<button class="btn" style="margin-top:16px;width:100%" onclick="this.closest(\'.sheet-bg\').remove()">Anladım</button></div>';
-  document.body.appendChild(el);
-  el.onclick = e => { if(e.target === el || e.target.classList.contains('sheet-close')) el.remove(); };
-};
+
 
 function loadViaImg(file){
   return new Promise((res,rej)=>{
