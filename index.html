@@ -1092,9 +1092,15 @@ function show(t, opts){
     const fns = { feed: loadList, ann: loadAnn, conf: loadList, admin: loadAdmin, library: loadLibrary, chat: loadChat, settings: loadSettings, hashtag: loadHashtag };
     (fns[t] || loadList)(t);
   };
-  if(document.startViewTransition){
-    try{ document.startViewTransition(doShow); }catch(_){ doShow(); }
-  } else doShow();
+  if(document.startViewTransition && !window._vtBusy){
+  try{
+    window._vtBusy = true;
+    const vt = document.startViewTransition(doShow);
+    if(vt && vt.finished) vt.finished.finally(() => { window._vtBusy = false; });
+    else setTimeout(() => { window._vtBusy = false; }, 400);
+  }catch(_){ window._vtBusy = false; doShow(); }
+} else {
+  doShow();
 }
 
 async function checkNotifications(){
