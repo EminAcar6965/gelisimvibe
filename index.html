@@ -625,7 +625,17 @@ const sb = supabase.createClient(SB_URL, SB_KEY);
 const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const ago = d => { const m = (Date.now() - new Date(d)) / 6e4; return m < 1 ? 'az önce' : m < 60 ? Math.floor(m) + ' dk' : m < 1440 ? Math.floor(m / 60) + ' sa' : m < 10080 ? Math.floor(m / 1440) + ' g' : new Date(d).toLocaleDateString('tr-TR',{day:'numeric',month:'short'}); };
+
+/* FIX #3: ago() negatif/sıfır/geçersiz değerlerde "az önce" döndürsün */
+const ago = d => {
+  const m = (Date.now() - new Date(d)) / 6e4;
+  if(!isFinite(m) || m < 1) return 'az önce';
+  return m < 60 ? Math.floor(m) + ' dk'
+       : m < 1440 ? Math.floor(m / 60) + ' sa'
+       : m < 10080 ? Math.floor(m / 1440) + ' g'
+       : new Date(d).toLocaleDateString('tr-TR',{day:'numeric',month:'short'});
+};
+
 const initials = (f,l) => ((f||'')[0]||'') + ((l||'')[0]||'');
 const capFirst = s => { s = String(s||'').trim(); if(!s) return ''; return s.charAt(0).toLocaleUpperCase('tr-TR') + s.slice(1).toLocaleLowerCase('tr-TR'); };
 const fmtNum = n => { n = Number(n)||0; if(n<1000) return String(n); if(n<1e6) return (n/1000).toFixed(n<10000?1:0).replace('.0','') + 'B'; return (n/1e6).toFixed(1).replace('.0','') + 'M'; };
@@ -661,7 +671,6 @@ function toast(msg, type){
 
 /* ============== ERROR BOUNDARY (filtreli) ============== */
 window.addEventListener('error', e => {
-  // Supabase'in kendi RUM hatalarını ve cross-origin script hatalarını yoksay
   const msg = e.error?.message || e.message || '';
   if(msg === 'Script error.' || msg.includes('int64')) return;
   console.error('[GV]', e.error || e.message);
@@ -744,7 +753,6 @@ function applyTheme(){
   document.body.classList.toggle('night', t === 'night');
   const btn = $('#themeToggle');
   if(btn) btn.textContent = t === 'night' ? '☀️' : '🌙';
-  // accent
   const accent = localStorage.getItem('accent') || 'auto';
   if(accent && accent !== 'auto'){
     document.body.dataset.accent = accent;
@@ -1068,10 +1076,18 @@ $$('.nav-tabs button').forEach(b => b.onclick = () => {
 function clearChatTimer(){ if(chatTimer){ clearInterval(chatTimer); chatTimer = null; } }
 function markSeen(t){ localStorage.setItem('seen_' + t, Date.now().toString()); const btn = document.querySelector('.nav-tabs button[data-t="' + t + '"]'); if(btn) btn.classList.remove('has-new'); }
 
-const SEC_MAP = { feed:'', library:'library', ann:'ann', conf:'conf', chat:'chat', settings:'settings', admin:'admin', hashtag:'' };
+/* FIX #1: feedback sekmesi SEC_MAP'e eklendi */
+const SEC_MAP = { feed:'', library:'library', ann:'ann', conf:'conf', chat:'chat', settings:'settings', admin:'admin', hashtag:'', feedback:'' };
 
 function show(t, opts){
   const doShow = () => {
+    /* FIX #2: Önceki IntersectionObserver'ı temizle (bellek sızıntısı) */
+    if(feedUnsub){ try{ feedUnsub(); }catch(_){} feedUnsub = null; }
+
+    /* FIX #4: Açık emoji panellerini temizle (state sızıntısı) */
+    document.querySelectorAll('.emoji-picker').forEach(el => el.remove());
+    document.querySelectorAll('.hashtag-suggest').forEach(el => el.remove());
+
     tab = t;
     currentHashtag = null;
     try { sessionStorage.setItem('gv_tab', t); } catch(_){}
@@ -1081,7 +1097,9 @@ function show(t, opts){
     if(opts && 'libTab' in opts) libTab = opts.libTab;
     if(opts && 'hashtag' in opts){ currentHashtag = opts.hashtag; }
     $$('.nav-tabs button').forEach(b => b.classList.toggle('on', b.dataset.t === t));
-    const titles = { feed:'Gelişim Vibe', library:'Kitaplık', ann:'Duyurular', conf:'İtiraflar', chat:'Mesajlar', admin:'Yönetici Paneli', settings:'Ayarlar', hashtag:'#' + (currentHashtag||'') };
+
+    /* FIX #1: feedback başlığı eklendi */
+    const titles = { feed:'Gelişim Vibe', library:'Kitaplık', ann:'Duyurular', conf:'İtiraflar', chat:'Mesajlar', admin:'Yönetici Paneli', settings:'Ayarlar', hashtag:'#' + (currentHashtag||''), feedback:'Öneri & Şikayet' };
     const title = document.querySelector('header .brand b'); if(title) title.textContent = titles[t] || 'Gelişim Vibe';
     if(t !== 'admin' && t !== 'chat' && t !== 'settings') markSeen(t);
     if(t === 'feed' || t === 'conf'){
@@ -1089,10 +1107,11 @@ function show(t, opts){
     } else {
       $('#view').innerHTML = '<div class="empty">Yükleniyor...</div>';
     }
-    const fns = { feed: loadList, ann: loadAnn, conf: loadList, admin: loadAdmin, library: loadLibrary, chat: loadChat, settings: loadSettings, hashtag: loadHashtag };
+    /* FIX #1: feedback fonksiyonu tanımlandı */
+    const fns = { feed: loadList, ann: loadAnn, conf: loadList, admin: loadAdmin, library: loadLibrary, chat: loadChat, settings: loadSettings, hashtag: loadHashtag, feedback: loadFeedback };
     (fns[t] || loadList)(t);
   };
-   if(document.startViewTransition && !window._vtBusy){
+  if(document.startViewTransition && !window._vtBusy){
     try{
       window._vtBusy = true;
       const vt = document.startViewTransition(doShow);
@@ -1102,11 +1121,23 @@ function show(t, opts){
   } else {
     doShow();
   }
-}     
+}
 
 async function checkNotifications(){
   if(Date.now() - lastNotifCheck < 60000) return;
   lastNotifCheck = Date.now();
+
+  /* FIX #5: 7 günden eski seen_* kayıtlarını temizle */
+  try{
+    const now = Date.now();
+    Object.keys(localStorage).forEach(k => {
+      if(k.startsWith('seen_')){
+        const ts = Number(localStorage.getItem(k));
+        if(!ts || now - ts > 7 * 24 * 60 * 60 * 1000) localStorage.removeItem(k);
+      }
+    });
+  }catch(_){}
+
   try{
     const seenAnn = +(localStorage.getItem('seen_ann')||0), seenFeed = +(localStorage.getItem('seen_feed')||0);
     const seenLib = +(localStorage.getItem('seen_library')||0), seenConf = +(localStorage.getItem('seen_conf')||0);
@@ -1290,7 +1321,11 @@ async function loadList(t, append=false){
   if(!append){
     $('#view').innerHTML = adminToggle + composer + '<div id="list"></div><div id="feedEnd" style="height:40px"></div>';
     const tr = $('#toggleReal');
-    if(tr) tr.onclick = () => { adminShowRealConf = !adminShowRealConf; localStorage.setItem('adminShowRealConf', adminShowRealConf ? '1' : '0'); loadList(t); };
+    if(tr) tr.onclick = () => {
+      adminShowRealConf = !adminShowRealConf;
+      localStorage.setItem('adminShowRealConf', adminShowRealConf ? '1' : '0');
+      loadList(t);
+    };
 
     const ct = $('#ct');
     const updateCounter = () => {
@@ -1427,7 +1462,6 @@ async function loadList(t, append=false){
   }
 
   listEl.onclick = e => {
-    // hashtag/mention link tıklaması
     const hTag = e.target.closest('[data-hashtag]');
     if(hTag){ e.preventDefault(); e.stopPropagation(); show('hashtag', {hashtag: hTag.dataset.hashtag}); return; }
     const mTag = e.target.closest('[data-mention]');
@@ -1439,7 +1473,6 @@ async function loadList(t, append=false){
     act(b.dataset.a, id, card, conf, col, t);
   };
 
-  // infinite scroll
   if(!conf && !feedExhausted){
     const endEl = document.getElementById('feedEnd');
     if(endEl){
@@ -1880,6 +1913,7 @@ async function loadSettings(sub){
     if(x === 'notif'){ const ok = await requestPushPermission(); toast(ok ? 'Bildirimler açık' : 'İzin verilmedi', ok ? 'ok' : 'warn'); loadSettings(); }
     if(x === 'info') loadSettings('info');
     if(x === 'password') loadSettings('password');
+    /* FIX #1: feedback sekmesine geçiş artık show() üzerinden çalışır */
     if(x === 'feedback') show('feedback');
     if(x === 'advertise') openAdvertiseSheet();
   };
@@ -2195,7 +2229,6 @@ async function loadChatView(){
     }
   };
 
-  // Uzun bas → mesaj aksiyonları
   const onMsgLongPress = (e) => {
     const msgEl = e.target.closest('.msg'); if(!msgEl) return;
     const mid = +msgEl.dataset.mid;
@@ -2209,7 +2242,6 @@ async function loadChatView(){
   body.addEventListener('mouseup', () => clearTimeout(msgLpTimer));
   body.addEventListener('mouseleave', () => clearTimeout(msgLpTimer));
 
-  // Fotoğrafa tık → tam ekran
   body.addEventListener('click', e => {
     const img = e.target.closest('[data-img]');
     if(img){
@@ -2222,7 +2254,6 @@ async function loadChatView(){
     }
   });
 
-  // Reactions
   body.addEventListener('click', e => {
     const r = e.target.closest('.msg-reaction');
     if(r){
@@ -2238,7 +2269,6 @@ async function loadChatView(){
     }
   });
 
-  // Scroll: yeni mesaj gelince aşağıda kal
   const nearBottom = () => body.scrollHeight - body.scrollTop - body.clientHeight < 120;
 
   chatTimer = setInterval(async () => {
@@ -2251,7 +2281,6 @@ async function loadChatView(){
       body.innerHTML = renderMessages(data);
       if(wasNear) body.scrollTop = body.scrollHeight;
       await sb.from('messages').update({ read_at: new Date().toISOString() }).eq('receiver_id', me.id).eq('sender_id', other).is('read_at', null);
-      // if not near bottom and new from them, show system notification
       if(!wasNear){
         const lastMsg = data[data.length - 1];
         if(lastMsg && lastMsg.sender_id !== me.id) showSystemNotification('💬 ' + chatUser, lastMsg.content || '📷 Fotoğraf');
@@ -2325,7 +2354,6 @@ async function loadAnn(){
   const viewData = {};
   (viewsRes.data||[]).forEach(v => { viewData[v.announcement_id] = (viewData[v.announcement_id]||0) + 1; });
 
-  // Auto-view tracking (upsert) for each announcement
   if(ids.length){
     sb.from('announcement_views').upsert(ids.map(id => ({ announcement_id: id, user_id: me.id })), { onConflict: 'announcement_id,user_id' }).then(()=>{}, ()=>{});
   }
