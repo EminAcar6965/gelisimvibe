@@ -659,9 +659,18 @@ function toast(msg, type){
   setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 3400);
 }
 
-/* ============== ERROR BOUNDARY ============== */
-window.addEventListener('error', e => { console.error('[GV]', e.error || e.message); });
-window.addEventListener('unhandledrejection', e => { console.error('[GV]', e.reason); });
+/* ============== ERROR BOUNDARY (filtreli) ============== */
+window.addEventListener('error', e => {
+  // Supabase'in kendi RUM hatalarını ve cross-origin script hatalarını yoksay
+  const msg = e.error?.message || e.message || '';
+  if(msg === 'Script error.' || msg.includes('int64')) return;
+  console.error('[GV]', e.error || e.message);
+});
+window.addEventListener('unhandledrejection', e => {
+  const msg = e.reason?.message || String(e.reason || '');
+  if(msg.includes('int64')) return;
+  console.error('[GV]', e.reason);
+});
 
 /* ============== DEBOUNCE / THROTTLE ============== */
 const debounce = (fn, ms=300) => { let t; return function(){ const a = arguments, ctx = this; clearTimeout(t); t = setTimeout(() => fn.apply(ctx, a), ms); }; };
