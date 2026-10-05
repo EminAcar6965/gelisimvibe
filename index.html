@@ -306,6 +306,13 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2c1e4a,#3a2a5c)}
   display:inline-flex;align-items:center;gap:4px;background:color-mix(in srgb,#FF9900 14%,transparent);
   color:#ff9900;font-size:11px;font-weight:800;padding:3px 9px;border-radius:999px;margin-top:4px;
 }
+.restrict-badge.ban{
+  background:color-mix(in srgb,#D42F4B 14%,transparent);
+  color:var(--danger);
+}
+.restrict-badge.hist{
+  background:var(--bg);color:var(--mute);
+}
 </style>
 </head>
 <body>
@@ -613,14 +620,14 @@ $('#authForm').onsubmit = async e => {
   if(!email.endsWith(DOMAIN)) return say('Sadece ' + DOMAIN + ' uzantılı mail ile girebilirsin.', 1);
   say('Bekle...');
   if(reg){
-    const { data: banned } = await sb.from('banned_emails').select('email').eq('email', email).maybeSingle();
-    if(banned) return say('🚫 Bu mail adresi kalıcı olarak banlanmış. Yeni hesap açamazsın.', 1);
+    const { data: banned } = await sb.from('banned_emails').select('email,status').eq('email', email).maybeSingle();
+    if(banned && (!banned.status || banned.status === 'active'))
+      return say('🚫 Bu mail adresi kalıcı olarak banlanmış. Yeni hesap açamazsın.', 1);
 
     const pw2 = $('#pw2').value;
     if(password !== pw2) return say('Şifreler uyuşmuyor.', 1);
     const localPart = email.split('@')[0] || '';
     const parts = localPart.split('.');
-    // ✅ İsim ve soyisim baş harfleri büyük
     const first_name = capFirst((parts[0] || '').replace(/[^a-zA-ZğüşıöçĞÜŞİÖÇ]/g,'')) || 'Öğrenci';
     const last_name = parts.slice(1).map(p => capFirst(p.replace(/[^a-zA-ZğüşıöçĞÜŞİÖÇ]/g,''))).filter(Boolean).join(' ');
     const department = $('#dp').value.trim();
@@ -707,7 +714,7 @@ async function boot(session){
   $('#adminTab').classList.toggle('hide', !me.is_admin);
   applyTheme();
   show(tab);
-  checkNotifications(); // ⚡ artık bekletilmiyor
+  checkNotifications();
 }
 sb.auth.getSession().then(({ data }) => boot(data.session));
 sb.auth.onAuthStateChange((ev, s) => { if(ev === 'SIGNED_IN' || ev === 'SIGNED_OUT') boot(s); });
@@ -830,7 +837,6 @@ async function loadList(t){
     ? (useRealConf ? 'id,content,created_at,user_id,image_path,profiles(first_name,last_name,department)' : '*')
     : 'id,content,created_at,user_id,image_path,video_path,profiles(first_name,last_name,department)';
 
-  // ⚡ Tüm sorgular paralel
   const queries = [
     sb.from(table).select(selectCols).order('created_at',{ascending:false}).limit(30),
     sb.from('likes').select('user_id,' + col).not(col, 'is', null),
@@ -849,7 +855,6 @@ async function loadList(t){
     ? '<div class="admin-toggle"><div><b>🔒 Admin modu</b> ' + (adminShowRealConf ? '· Gerçek isimler' : '· Anonim görünüm') + '</div><button id="toggleReal">' + (adminShowRealConf ? 'Anonime çevir' : 'Gerçek isimleri gör') + '</button></div>'
     : '';
 
-  // ✨ YENİ TASARIM — modern composer
   const composerAvatar = conf
     ? '<div class="cav" style="background:linear-gradient(135deg,#8e7cff,#4a35b8)">👻</div>'
     : '<div class="cav">' + esc(initials(me.first_name, me.last_name).toUpperCase() || '?') + '</div>';
@@ -880,7 +885,6 @@ async function loadList(t){
   const tr = $('#toggleReal');
   if(tr) tr.onclick = () => { adminShowRealConf = !adminShowRealConf; localStorage.setItem('adminShowRealConf', adminShowRealConf ? '1' : '0'); loadList(t); };
 
-  // Karakter sayacı + auto-resize
   const ct = $('#ct');
   const updateCounter = () => {
     const len = ct.value.length;
@@ -984,7 +988,6 @@ async function loadList(t){
     setTimeout(initAdSense, 200);
   }
 
-  // ⚡ Yorum sayıları arka planda yükleniyor (render'ı bloklamıyor)
   if(ids.length){
     const cmTbl = conf ? 'confession_comments_public' : 'comments';
     const cmCol = conf ? 'confession_id' : 'post_id';
@@ -1026,13 +1029,81 @@ async function act(a, id, card, conf, col, t){
   if(a === 'rep') return report({ [col]: id });
   if(a === 'cm'){ const box = card.querySelector('.cm'); box.classList.toggle('hide'); if(!box.classList.contains('hide')) loadComments(box, id, conf); }
 }
+
 async function report(target){
-  const reason = prompt('Şikayet sebebin nedir?');
-  if(!reason) return;
-  const { error } = await sb.from('reports').insert({ reporter_id: me.id, reason: reason.slice(0, 300), ...target });
-  if(error){ console.error(error); return alert('Şikayet gönderilemedi:\n\n' + error.message); }
-  alert('✅ Şikayetin admine iletildi.');
+  const el = document.createElement('div');
+  el.className = 'sheet-bg';
+  el.innerHTML =
+    '<div class="sheet"><h4>🚩 Şikayet Et<button class="sheet-close">×</button></h4>' +
+    '<p style="color:var(--mute);font-size:13px;line-height:1.55;margin:0 0 14px">Şikayet sebebini detaylı yaz. Gerekirse ekran görüntüsü de ekleyebilirsin.</p>' +
+    '<form id="repForm" style="display:flex;flex-direction:column;gap:10px">' +
+      '<textarea id="repReason" maxlength="500" placeholder="Şikayet sebebin nedir?" required style="min-height:100px"></textarea>' +
+      '<div id="repPv" class="pv hide"></div>' +
+      '<div class="prog-wrap hide" id="repProg">' +
+        '<div class="prog-bar"><div class="prog-fill" id="repFill"></div></div>' +
+        '<div class="prog-text" id="repText">Yükleniyor... %0</div>' +
+      '</div>' +
+      '<label style="display:flex;align-items:center;gap:10px;padding:12px;border:1px dashed var(--line);border-radius:12px;color:var(--ac);font-weight:600;cursor:pointer;background:var(--bg)">' +
+        '<svg viewBox="0 0 24 24" style="width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>' +
+        '<span style="font-size:14px">📷 Fotoğraf ekle (opsiyonel)</span>' +
+        '<input type="file" id="repImg" accept="image/*" hidden>' +
+      '</label>' +
+      '<div style="display:flex;gap:8px;margin-top:4px">' +
+        '<button type="button" class="btn sheet-btn cancel" data-x="cancel" style="flex:1;margin:0">Vazgeç</button>' +
+        '<button type="submit" class="btn" style="flex:1">🚩 Şikayeti Gönder</button>' +
+      '</div>' +
+    '</form></div>';
+  document.body.appendChild(el);
+  el.onclick = e => { if(e.target === el || e.target.classList.contains('sheet-close') || e.target.dataset.x === 'cancel') el.remove(); };
+
+  let imgFile = null;
+  const imgInput = el.querySelector('#repImg');
+  const pv = el.querySelector('#repPv');
+  imgInput.onchange = () => {
+    const f = imgInput.files[0];
+    if(!f){ pv.classList.add('hide'); pv.innerHTML = ''; imgFile = null; return; }
+    imgFile = f;
+    pv.innerHTML = '<img src="' + URL.createObjectURL(f) + '" alt=""><button type="button">×</button>';
+    pv.classList.remove('hide');
+    pv.querySelector('button').onclick = () => { imgInput.value = ''; imgFile = null; pv.classList.add('hide'); pv.innerHTML = ''; };
+  };
+
+  const setP = p => {
+    el.querySelector('#repProg').classList.remove('hide');
+    el.querySelector('#repFill').style.width = Math.round(p*100) + '%';
+    el.querySelector('#repText').textContent = 'Yükleniyor... %' + Math.round(p*100);
+  };
+
+  el.querySelector('#repForm').onsubmit = async e => {
+    e.preventDefault();
+    if(me.is_restricted) return alert('⚠️ Hesabın kısıtlanmış.');
+    if(me.is_banned) return alert('🚫 Hesabın banlanmış.');
+    const reason = el.querySelector('#repReason').value.trim();
+    if(!reason) return;
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = true; btn.textContent = 'Gönderiliyor...';
+
+    let image_path = null;
+    if(imgFile){
+      try{ image_path = await uploadImg(imgFile, 'images', setP); }
+      catch(err){ btn.disabled = false; btn.textContent = '🚩 Şikayeti Gönder'; return alert('Fotoğraf yüklenemedi: ' + err.message); }
+    }
+
+    const row = { reporter_id: me.id, reason: reason.slice(0, 500), ...target };
+    if(image_path) row.image_path = image_path;
+    const { error } = await sb.from('reports').insert(row);
+    if(error){
+      btn.disabled = false; btn.textContent = '🚩 Şikayeti Gönder';
+      console.error(error);
+      return alert('Şikayet gönderilemedi:\n\n' + error.message);
+    }
+    el.querySelector('.sheet').innerHTML =
+      '<div class="success-box"><div class="ic">✓</div><h3>Şikayetin Alındı</h3>' +
+      '<p>Yönetici ekibimiz en kısa sürede inceleyecek.<br>Katkın için teşekkürler 💙</p>' +
+      '<button class="btn" style="margin-top:18px;width:100%" onclick="this.closest(\'.sheet-bg\').remove()">Tamam</button></div>';
+  };
 }
+
 async function loadComments(box, id, conf){
   const useRealConf = conf && me.is_admin && adminShowRealConf;
   let rows = [];
@@ -1097,10 +1168,7 @@ function openUserMenu(userId, userName){
     if(b.dataset.x === 'msg'){ el.remove(); show('chat', { chatWith: userId, chatUser: userName }); }
     if(b.dataset.x === 'rep'){
       el.remove();
-      const reason = prompt('Şikayet sebebin?'); if(!reason) return;
-      const { error } = await sb.from('reports').insert({ reporter_id: me.id, reported_user_id: userId, reason: reason.slice(0, 300) });
-      if(error){ console.error(error); alert('Şikayet gönderilemedi: ' + error.message); }
-      else alert('✅ Kullanıcı şikayetin admine iletildi.');
+      report({ reported_user_id: userId });
     }
     if(b.dataset.x === 'ban'){
       el.remove();
@@ -1568,7 +1636,6 @@ async function loadAnn(){
   if(error) return $('#view').innerHTML = '<div class="empty">Yüklenemedi: ' + esc(error.message) + '</div>';
 
   const ids = (data||[]).map(a => a.id);
-  // Yorum + oy verileri paralel
   const [cmsRes, votesRes] = await Promise.all([
     ids.length ? sb.from('announcement_comments').select('announcement_id').in('announcement_id', ids) : Promise.resolve({data:[]}),
     ids.length ? sb.from('poll_votes').select('announcement_id,user_id,option_index').in('announcement_id', ids) : Promise.resolve({data:[]})
@@ -1594,7 +1661,6 @@ async function loadAnn(){
 
   $('#view').innerHTML = form + list + renderAdvertiseCTA();
 
-  // Admin form handlers
   if(me.is_admin){
     let annMedia = null;
     const renderAnnPv = () => {
@@ -1608,7 +1674,6 @@ async function loadAnn(){
     $('#aimg').onchange = () => { const f = $('#aimg').files[0]; if(!f) return; const v=$('#avid'); if(v)v.value=''; if(f.type.startsWith('image/')){ annMedia={type:'image',file:f}; renderAnnPv(); } };
     const av = $('#avid'); if(av) av.onchange = () => { const f = av.files[0]; if(!f) return; $('#aimg').value=''; if(f.type.startsWith('video/')){ annMedia={type:'video',file:f}; renderAnnPv(); } };
 
-    // Poll toggle
     const pollOn = $('#apollOn');
     const pollBox = $('#apollBox');
     pollOn.onchange = () => { pollBox.classList.toggle('hide', !pollOn.checked); };
@@ -1658,7 +1723,6 @@ async function loadAnn(){
   }
 
   $('#view').onclick = async e => {
-    // Oylama
     const optBtn = e.target.closest('.poll-opt.poll-choice');
     if(optBtn){
       const poll = optBtn.closest('.poll');
@@ -1840,7 +1904,8 @@ async function loadAdminReports(){
     return '<article class="card" data-r="' + r.id + '">' +
       '<span class="tag">' + label + '</span> <span class="time">· ' + ago(r.created_at) + '</span>' +
       '<div class="body">' + bodyText + '</div>' +
-      (image_path ? '<img class="pimg" loading="lazy" src="' + imgUrl(image_path) + '" alt="">' : '') +
+      (image_path ? '<img class="pimg" loading="lazy" src="' + imgUrl(image_path) + '" alt="İçerik görseli">' : '') +
+      (r.image_path ? '<div style="margin-top:8px"><div class="dep" style="margin-bottom:4px">📎 Şikayet edenin eklediği görsel:</div><img class="pimg" loading="lazy" src="' + imgUrl(r.image_path) + '" alt="Şikayet görseli" style="max-height:240px"></div>' : '') +
       '<div class="dep">Şikayet eden: ' + esc(reporter.first_name) + ' ' + esc(reporter.last_name) + '</div>' +
       '<div class="dep">Sebep: <b>' + esc(r.reason||'') + '</b></div>' +
       '<div class="acts">' + actions + '</div></article>';
@@ -1888,6 +1953,12 @@ async function loadAdminReports(){
       const btn = b;
       btn.disabled = true; btn.textContent = 'İşleniyor...';
 
+      let userInfo = null;
+      try {
+        const { data: p } = await sb.from('profiles').select('first_name,last_name,department').eq('id', rep.uid).maybeSingle();
+        userInfo = p;
+      } catch(_){}
+
       try {
         const { data: { session } } = await sb.auth.getSession();
         const res = await fetch(SB_URL + '/functions/v1/clever-responder', {
@@ -1897,6 +1968,21 @@ async function loadAdminReports(){
         });
         const j = await res.json().catch(()=>({}));
         if(!res.ok) throw new Error(j.error || 'Ban başarısız');
+
+        if(userInfo){
+          try {
+            const { data: latest } = await sb.from('banned_emails')
+              .select('*').order('banned_at', { ascending: false }).limit(1).maybeSingle();
+            if(latest){
+              await sb.from('banned_emails').update({
+                full_name: ((userInfo.first_name||'') + ' ' + (userInfo.last_name||'')).trim(),
+                department: userInfo.department || '',
+                status: 'active',
+                ban_count: (latest.ban_count || 0) + 1 || 1
+              }).eq('id', latest.id);
+            }
+          } catch(e){ console.warn('banned_emails güncellenemedi:', e); }
+        }
 
         await sb.from('reports').delete().eq('id', rid);
         alert('✅ Kullanıcı kalıcı olarak banlandı ve tüm verileri silindi.');
@@ -1913,70 +1999,125 @@ async function loadAdminReports(){
 /* ---- YASAKLILAR ---- */
 async function loadAdminBanned(){
   const box = $('#adminView');
-  const { data: profiles, error: pErr } = await sb.from('profiles')
-    .select('id, first_name, last_name, department, is_banned, is_restricted, restrict_count')
-    .or('is_banned.eq.true,is_restricted.eq.true')
-    .order('first_name');
-  if(pErr){ box.innerHTML = '<div class="empty">' + esc(pErr.message) + '</div>'; return; }
 
-  const { data: bannedEmails } = await sb.from('banned_emails').select('*').order('banned_at', { ascending: false });
+  let profiles = [];
+  try {
+    const r = await sb.from('profiles')
+      .select('*')
+      .or('is_restricted.eq.true,restrict_count.gt.0,is_banned.eq.true')
+      .order('first_name');
+    profiles = r.data || [];
+  } catch(e) { console.warn(e); }
 
-  const rowsProfile = (profiles||[]).map(u => {
-    const status = u.is_banned
-      ? '<span class="tag" style="background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger)">🚫 BANLI</span>'
-      : '<span class="tag" style="background:color-mix(in srgb,#FF9900 14%,transparent);color:#ff9900">⚠️ KISITLI</span>';
+  let bannedEmails = [];
+  try {
+    const r = await sb.from('banned_emails').select('*').order('banned_at', { ascending: false });
+    bannedEmails = r.data || [];
+  } catch(e) { console.warn(e); }
+
+  const isEmailActive = b => !b.status || b.status === 'active';
+
+  const rowsProfiles = (profiles||[]).map(u => {
+    const isBanned = !!u.is_banned;
+    const isRestricted = !!u.is_restricted;
     const rc = u.restrict_count || 0;
-    const rcBadge = rc > 0 ? '<div class="restrict-badge">⚠️ ' + rc + ' kez kısıtlandı</div>' : '';
+    const bc = u.ban_count || 0;
+
+    let statusHtml;
+    if(isBanned)      statusHtml = '<span class="tag" style="background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger)">🚫 BANLI</span>';
+    else if(isRestricted) statusHtml = '<span class="tag" style="background:color-mix(in srgb,#FF9900 14%,transparent);color:#ff9900">⚠️ KISITLI</span>';
+    else              statusHtml = '<span class="tag" style="background:var(--bg);color:var(--mute)">📜 GEÇMİŞ</span>';
+
+    const badges =
+      (rc > 0 ? '<span class="restrict-badge">⚠️ ' + rc + ' kez kısıtlandı</span>' : '') +
+      (bc > 0 ? ' <span class="restrict-badge ban">🚫 ' + bc + ' kez banlandı</span>' : '');
+
     let btn = '';
-    if(u.is_banned){
+    if(isBanned){
       btn = '<button data-uid="' + u.id + '" data-act="unban" style="color:#2ecc71">✅ Banı Kaldır</button>';
-    } else {
+    } else if(isRestricted){
       btn = '<button data-uid="' + u.id + '" data-act="unrestrict" style="color:#2ecc71">✅ Kısıtlamayı Kaldır</button>' +
             '<button data-uid="' + u.id + '" data-act="ban" style="color:var(--danger)">🚫 Banla</button>';
+    } else {
+      btn = '<button data-uid="' + u.id + '" data-act="ban" style="color:var(--danger)">🚫 Banla</button>';
     }
+
     return '<article class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap">' +
       '<div style="flex:1;min-width:0"><b style="font-size:15px">' + esc(u.first_name) + ' ' + esc(u.last_name) + '</b>' +
-      '<div class="dep">' + esc(u.department||'') + '</div>' + rcBadge + '</div>' +
-      status + '</div>' +
+      '<div class="dep">' + esc(u.department||'') + '</div>' +
+      '<div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:4px">' + badges + '</div></div>' +
+      statusHtml + '</div>' +
       '<div class="acts">' + btn + '</div></article>';
   }).join('');
 
-  const rowsEmail = (bannedEmails||[]).map(b => {
+  const rowsEmails = (bannedEmails||[]).map(b => {
     const date = new Date(b.banned_at).toLocaleString('tr-TR');
-    return '<article class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">' +
-      '<div style="min-width:0;flex:1"><b style="font-size:14.5px;word-break:break-all">' + esc(b.email) + '</b>' +
-      '<div class="dep">📅 ' + esc(date) + ' · ' + esc(b.reason||'') + '</div></div>' +
-      '<span class="tag" style="background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger);flex:none">🚫 BANLI</span>' +
-      '</div>' +
-      '<div class="acts"><button data-email="' + esc(b.email) + '" data-act="unbanEmail" style="color:#2ecc71">✅ Banı Kaldır</button></div></article>';
+    const active = isEmailActive(b);
+    const statusHtml = active
+      ? '<span class="tag" style="background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger)">🚫 BANLI</span>'
+      : '<span class="tag" style="background:var(--bg);color:var(--mute)">✅ KALDIRILDI</span>';
+
+    const nameHtml = b.full_name ? '<b style="font-size:14.5px">' + esc(b.full_name) + '</b><br>' : '';
+    const deptHtml = b.department ? '<div class="dep">' + esc(b.department) + '</div>' : '';
+    const banCount = b.ban_count || 1;
+    const countBadge = '<span class="restrict-badge ban">🚫 ' + banCount + ' kez banlandı</span>';
+
+    const btn = active
+      ? '<button data-email="' + esc(b.email) + '" data-act="unbanEmail" style="color:#2ecc71">✅ Banı Kaldır</button>'
+      : '';
+
+    return '<article class="card">' +
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap">' +
+      '<div style="min-width:0;flex:1">' + nameHtml +
+      '<b style="font-size:13px;word-break:break-all;color:var(--mute)">' + esc(b.email) + '</b>' +
+      deptHtml +
+      '<div class="dep">📅 ' + esc(date) + ' · ' + esc(b.reason||'') + '</div>' +
+      '<div style="margin-top:4px">' + countBadge + '</div>' +
+      '</div>' + statusHtml + '</div>' +
+      (btn ? '<div class="acts">' + btn + '</div>' : '') + '</article>';
   }).join('');
 
   const total = (profiles||[]).length + (bannedEmails||[]).length;
   if(!total){ box.innerHTML = '<div class="empty">✅ Şu an banlı veya kısıtlı kullanıcı yok.</div>'; return; }
 
-  box.innerHTML = '<h3 style="margin:8px 6px;font-size:14px;color:var(--mute);font-weight:700">🚫 YASAKLILAR (' + total + ')</h3>' + rowsProfile + rowsEmail;
+  const activeProf  = (profiles||[]).filter(u => u.is_banned || u.is_restricted).length;
+  const activeEmail = (bannedEmails||[]).filter(isEmailActive).length;
+  const activeCount = activeProf + activeEmail;
+  const histCount   = total - activeCount;
+
+  box.innerHTML =
+    '<h3 style="margin:8px 6px;font-size:14px;color:var(--mute);font-weight:700">' +
+    '🚫 YASAKLILAR (' + total + ' · ' + activeCount + ' aktif · ' + histCount + ' geçmiş)' +
+    '</h3>' + rowsProfiles + rowsEmails;
 
   box.onclick = async e => {
     const b = e.target.closest('button[data-act]'); if(!b) return;
     const act = b.dataset.act;
 
     if(act === 'unrestrict'){
-      if(!confirm('✅ Kısıtlama kaldırılsın mı?\n\n(Kısıtlanma sayacı silinmez, geçmiş olarak kalır)')) return;
+      if(!confirm('✅ Kısıtlama kaldırılsın mı?\n\n(Kısıtlanma sayacı geçmiş olarak korunur)')) return;
       await sb.from('profiles').update({ is_restricted: false }).eq('id', b.dataset.uid);
       loadAdminBanned();
       return;
     }
 
     if(act === 'unban'){
-      if(!confirm('✅ Ban kaldırılsın mı?')) return;
+      if(!confirm('✅ Ban kaldırılsın mı?\n\n(Ban geçmişi listede kalacak)')) return;
       await sb.from('profiles').update({ is_banned: false, is_restricted: false }).eq('id', b.dataset.uid);
       loadAdminBanned();
       return;
     }
 
     if(act === 'unbanEmail'){
-      if(!confirm('✅ ' + b.dataset.email + ' için ban kaldırılsın mı?')) return;
-      await sb.from('banned_emails').delete().eq('email', b.dataset.email);
+      if(!confirm('✅ ' + b.dataset.email + ' için ban kaldırılsın mı?\n\n(Kayıt geçmişte kalacak, listeden silinmeyecek)')) return;
+      try {
+        await sb.from('banned_emails').update({
+          status: 'lifted',
+          unbanned_at: new Date().toISOString()
+        }).eq('email', b.dataset.email);
+      } catch(err) {
+        await sb.from('banned_emails').delete().eq('email', b.dataset.email);
+      }
       loadAdminBanned();
       return;
     }
@@ -1986,6 +2127,13 @@ async function loadAdminBanned(){
       if(!confirm('Son onay: Emin misin?')) return;
       const btn = b;
       btn.disabled = true; btn.textContent = 'İşleniyor...';
+
+      let userInfo = null;
+      try {
+        const { data: p } = await sb.from('profiles').select('first_name,last_name,department').eq('id', b.dataset.uid).maybeSingle();
+        userInfo = p;
+      } catch(_){}
+
       try {
         const { data: { session } } = await sb.auth.getSession();
         const res = await fetch(SB_URL + '/functions/v1/clever-responder', {
@@ -1995,8 +2143,27 @@ async function loadAdminBanned(){
         });
         const j = await res.json().catch(()=>({}));
         if(!res.ok) throw new Error(j.error || 'Ban başarısız');
+
+        if(userInfo){
+          try {
+            const { data: latest } = await sb.from('banned_emails')
+              .select('*').order('banned_at', { ascending: false }).limit(1).maybeSingle();
+            if(latest){
+              await sb.from('banned_emails').update({
+                full_name: ((userInfo.first_name||'') + ' ' + (userInfo.last_name||'')).trim(),
+                department: userInfo.department || '',
+                status: 'active',
+                ban_count: (latest.ban_count || 0) + 1 || 1
+              }).eq('id', latest.id);
+            }
+          } catch(e){ console.warn(e); }
+        }
+
         loadAdminBanned();
-      } catch(err){ btn.disabled = false; btn.textContent = '🚫 Banla'; alert('Hata: ' + err.message); }
+      } catch(err){
+        btn.disabled = false; btn.textContent = '🚫 Banla';
+        alert('Hata: ' + err.message);
+      }
     }
   };
 }
