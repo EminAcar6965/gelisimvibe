@@ -2538,16 +2538,9 @@ function openMsgActions(mid, preview, mine, other){
 }
 
 async function toggleReaction(mid, emoji){
-  // Basit optimistic yaklaşım - fetch/modify/update
-  const { data } = await sb.from('messages').select('reactions').eq('id', mid).maybeSingle();
-  const reactions = (data && data.reactions) || {};
-  const arr = reactions[emoji] ? [...reactions[emoji]] : [];
-  const idx = arr.indexOf(me.id);
-  if(idx >= 0) arr.splice(idx, 1); else arr.push(me.id);
-  if(arr.length) reactions[emoji] = arr; else delete reactions[emoji];
-  await sb.from('messages').update({ reactions }).eq('id', mid);
+  const { error } = await sb.rpc('toggle_message_reaction', { p_msg_id: mid, p_emoji: emoji });
+  if(error) toast('Tepki eklenemedi: ' + error.message, 'err');
 }
-
 /* =========================================================
    ANNOUNCEMENTS + POLLS + VIEW COUNT
    ========================================================= */
