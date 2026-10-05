@@ -68,8 +68,113 @@ header{position:sticky;top:0;z-index:15;background:color-mix(in srgb,var(--bg) 8
 .cm-acts button{background:none;border:0;color:var(--mute);font-size:11.5px;padding:3px 8px;border-radius:999px;cursor:pointer}
 .cm form{display:flex;gap:6px;margin-top:6px;align-items:flex-end}
 .cm form textarea{min-height:42px;max-height:150px;padding:9px 12px;font-size:14px;line-height:1.4;resize:none;flex:1}
-.composer textarea{border:0;background:transparent;padding:0;min-height:64px}
-.composer .row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+
+/* ============ COMPOSER (NEW) ============ */
+.composer-new{
+  background:var(--card);border-radius:20px;padding:16px 16px 12px;
+  margin-bottom:12px;border:1px solid var(--line);box-shadow:var(--sh);
+  animation:up .3s ease both;position:relative;overflow:hidden;
+}
+.composer-new::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--ac),var(--ac2));
+  opacity:.9;
+}
+.composer-head{display:flex;gap:12px;align-items:flex-start;margin-top:4px}
+.composer-head .cav{
+  width:42px;height:42px;border-radius:50%;flex:none;
+  background:linear-gradient(135deg,var(--ac),var(--ac2));
+  color:#fff;display:grid;place-items:center;font-weight:800;font-size:15px;
+  box-shadow:0 4px 12px color-mix(in srgb,var(--ac) 35%,transparent);
+}
+.composer-head textarea{
+  flex:1;border:0;background:transparent;padding:10px 0;min-height:64px;
+  resize:none;font-size:15.5px;line-height:1.5;font-family:inherit;
+  overflow:hidden;
+}
+.composer-head textarea::placeholder{color:var(--mute)}
+.composer-head textarea:focus{outline:0;box-shadow:none;border:0}
+.composer-preview{margin:10px 0 0}
+.composer-preview img,.composer-preview video{
+  width:100%;max-height:320px;object-fit:cover;border-radius:14px;display:block;background:#000;
+}
+.composer-preview{position:relative}
+.composer-preview button{
+  position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;
+  border:0;background:rgba(0,0,0,.65);color:#fff;font-size:16px;z-index:2;
+}
+.composer-foot{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding-top:12px;border-top:1px solid var(--line);margin-top:10px;flex-wrap:wrap;
+}
+.composer-tools{display:flex;gap:6px;align-items:center}
+.composer-tool{
+  width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
+  cursor:pointer;color:var(--ac);background:color-mix(in srgb,var(--ac) 10%,var(--bg));
+  transition:background .15s,transform .1s;border:0;
+}
+.composer-tool:hover{background:color-mix(in srgb,var(--ac) 20%,var(--bg))}
+.composer-tool:active{transform:scale(.94)}
+.composer-tool svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.composer-right{display:flex;align-items:center;gap:10px;margin-left:auto}
+.composer-counter{font-size:12px;color:var(--mute);font-weight:700;font-variant-numeric:tabular-nums}
+.composer-counter.warn{color:#ff9900}
+.composer-counter.over{color:var(--danger)}
+.composer-submit{
+  background:linear-gradient(135deg,var(--ac),var(--ac2));color:var(--acink);
+  border:0;border-radius:999px;padding:9px 22px;font-weight:700;font-size:14px;
+  transition:transform .1s,opacity .15s,box-shadow .15s;
+  box-shadow:0 4px 14px color-mix(in srgb,var(--ac) 35%,transparent);
+}
+.composer-submit:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+.composer-submit:not(:disabled):active{transform:scale(.96)}
+.composer-anon-badge{
+  display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#8e7cff,#4a35b8);
+  color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;
+  margin-bottom:8px;
+}
+
+/* ============ POLL ============ */
+.poll{
+  background:var(--bg);border-radius:16px;padding:14px;margin:10px 0;
+  border:1px solid var(--line);
+}
+.poll-q{font-weight:800;font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px;line-height:1.35}
+.poll-q::before{content:"📊";font-size:18px;flex:none}
+.poll-opt{
+  display:block;width:100%;text-align:left;background:var(--card);
+  border:2px solid var(--line);border-radius:12px;padding:12px 14px;
+  margin-bottom:8px;font-weight:600;font-size:14px;cursor:pointer;
+  transition:border-color .15s,background .15s,transform .1s;
+  position:relative;overflow:hidden;color:var(--ink);
+}
+.poll-opt.poll-choice:hover{border-color:var(--ac);transform:translateY(-1px)}
+.poll-opt.poll-choice:active{transform:scale(.985)}
+.poll-opt.voted{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 6%,var(--card));cursor:default}
+.poll-opt[disabled]{cursor:default;opacity:1}
+.poll-opt .bar{
+  position:absolute;left:0;top:0;bottom:0;
+  background:linear-gradient(90deg,color-mix(in srgb,var(--ac) 22%,transparent),color-mix(in srgb,var(--ac2) 18%,transparent));
+  transition:width .5s cubic-bezier(.4,0,.2,1);z-index:0;border-radius:10px;
+}
+.poll-opt .txt{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.poll-opt .pct{font-weight:800;color:var(--ac);font-size:13px;font-variant-numeric:tabular-nums;flex:none}
+.poll-opt.voted .pct{color:var(--ac)}
+.poll-total{text-align:center;font-size:12px;color:var(--mute);margin-top:6px;font-weight:600}
+.poll-total .vote-ok{color:#2ecc71;font-weight:800}
+
+/* Admin poll form */
+.poll-form-box{
+  background:var(--bg);border:1px dashed var(--line);border-radius:12px;
+  padding:12px;margin-top:8px;
+}
+.poll-form-box h5{margin:0 0 10px;font-size:13px;font-weight:800;color:var(--mute);letter-spacing:.4px}
+.poll-opt-row{display:flex;gap:6px;margin-bottom:6px;align-items:center}
+.poll-opt-row input{flex:1;padding:9px 12px;font-size:13.5px}
+.poll-opt-row button{background:none;border:0;color:var(--danger);font-size:18px;padding:4px 8px;border-radius:8px;cursor:pointer}
+.poll-toggle{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;cursor:pointer;margin-top:6px;color:var(--ac)}
+.poll-toggle input{width:auto}
+
 .empty{text-align:center;color:var(--mute);padding:40px 10px}
 .skeleton{background:linear-gradient(90deg,var(--bg) 25%,color-mix(in srgb,var(--line) 60%,var(--bg)) 50%,var(--bg) 75%);background-size:200% 100%;animation:shine 1.4s infinite;border-radius:14px;height:100px;margin-bottom:10px}
 @keyframes shine{0%{background-position:200% 0}100%{background-position:-200% 0}}
@@ -193,6 +298,14 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2c1e4a,#3a2a5c)}
 .cookie-content p{margin:0 0 12px;font-size:13px;line-height:1.5;color:var(--mute)}
 .cookie-content a{color:var(--ac);font-weight:600}
 .cookie-actions{display:flex;gap:8px;align-items:center}
+
+/* ============ USER CARD (admin) ============ */
+.user-card{padding:12px 14px}
+.user-card-row{display:flex;gap:12px;align-items:center}
+.restrict-badge{
+  display:inline-flex;align-items:center;gap:4px;background:color-mix(in srgb,#FF9900 14%,transparent);
+  color:#ff9900;font-size:11px;font-weight:800;padding:3px 9px;border-radius:999px;margin-top:4px;
+}
 </style>
 </head>
 <body>
@@ -281,6 +394,7 @@ const $$ = s => document.querySelectorAll(s);
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const ago = d => { const m = (Date.now() - new Date(d)) / 6e4; return m < 1 ? 'şimdi' : m < 60 ? Math.floor(m) + ' dk' : m < 1440 ? Math.floor(m / 60) + ' sa' : Math.floor(m / 1440) + ' g'; };
 const initials = (f,l) => ((f||'')[0]||'') + ((l||'')[0]||'');
+const capFirst = s => { s = String(s||'').trim(); if(!s) return ''; return s.charAt(0).toLocaleUpperCase('tr-TR') + s.slice(1).toLocaleLowerCase('tr-TR'); };
 let me = null, tab = 'feed', reg = false, libTab = 'books', chatWith = null, chatUser = null, chatTimer = null, pdfSearch = '', bookSearch = '';
 let adminShowRealConf = localStorage.getItem('adminShowRealConf') === '1';
 let lastNotifCheck = 0;
@@ -370,23 +484,16 @@ window.openLegalDoc = function(kind){
 </div>
       `
     },
-
     riza: {
       title: `✅ Açık Rıza Metni`,
       body: `
 <div style="line-height:1.85;font-size:14px;color:var(--mute);text-align:justify">
 <p style="margin:0 0 16px">İşbu Açık Rıza Metni, 6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") m.5 ve m.9 uyarınca, özel nitelik taşımayan kişisel verilerimin işlenmesine ve yurt dışına aktarılmasına ilişkin olarak, hiçbir etki altında kalmadan, özgür irademle vereceğim onayı düzenlemek amacıyla hazırlanmıştır. Gelişim Vibe uygulamasına kayıt olmadan ve uygulamayı kullanmaya başlamadan önce bu metni dikkatlice okuduğumu ve anladığımı beyan ederim.</p>
-
 <p style="margin:0 0 16px">Bu kapsamda, Gelişim Vibe tarafından hazırlanan Aydınlatma Metnini okuduğumu, kişisel verilerimin hangi amaçlarla ve nasıl işlendiği konusunda yeterince bilgilendirildiğimi, veri sorumlusunun kimliği, işleme amacı, hukuki sebebi, aktarım yapılabilecek taraflar ve KVKK m.11 kapsamındaki haklarım konusunda tam olarak aydınlatıldığımı kabul ederim.</p>
-
 <p style="margin:0 0 16px">Bu bilgilendirme çerçevesinde, üniversite e-posta adresimin, ad ve soyadımın, bölüm bilgimin kimlik doğrulama, hesap oluşturma ve platform güvenliği amacıyla işlenmesine; kendi isteğimle paylaştığım anonim itiraf, mesaj, ilan, yorum ve medya içeriklerimin uygulamanın teknik olarak çalışabilmesi, içeriklerin görüntülenebilmesi ve gerektiğinde moderasyon işlemlerinin yürütülebilmesi için saklanmasına; Google AdSense ve iş ortakları aracılığıyla tarafıma kişiselleştirilmiş reklamlar gösterilebilmesi için çerez (cookie) verilerimin ve kullanım verilerimin işlenmesine; ve nihayet uygulamanın altyapısında kullanılan sunucu, bulut depolama ve reklam servisleri nedeniyle kişisel verilerimin yurt dışındaki hizmet sağlayıcılara (Supabase Inc., Google LLC, Cloudflare Inc. ve hosting sağlayıcıları) aktarılmasına, hiçbir etki altında kalmadan, özgür irademle açık rıza veriyorum.</p>
-
 <p style="margin:0 0 16px">Bu rızanın, kayıt sırasında verdiğim bilgilerin doğruluğunu ve güncelliğini garanti etmediğini; rıza verirken herhangi bir baskı, tehdit veya yönlendirme altında kalmadığımı; rızamı geri çekmemin, geri çekme tarihine kadar yapılan veri işleme faaliyetlerinin hukuki geçerliliğini etkilemeyeceğini biliyorum.</p>
-
 <p style="margin:0 0 16px">Bu açık rızamı dilediğim zaman ${CONTACT_EMAIL} adresine e-posta göndererek geri çekebileceğimi; rızamı geri çekmem hâlinde uygulamanın bazı özelliklerinin (özellikle kişiselleştirilmiş reklam gösterimi) çalışmayabileceğini ve hesabımı tamamen silmek istediğimde uygulama içindeki "Hesabımı Sil" özelliğini kullanabileceğimi kabul ederim.</p>
-
 <p style="margin:0 0 16px">Verdiğim bu açık rıza, yalnızca bu metinde belirtilen amaçlarla sınırlı olup, başka hiçbir amaç için genişletilemez. Rıza kapsamı dışındaki yeni bir veri işleme faaliyeti için tarafımdan yeniden açık rıza alınması gerektiğini bilmekteyim.</p>
-
 <div style="background:var(--bg);border-radius:12px;padding:14px 16px;margin-top:20px;border-left:3px solid var(--ac)">
 <p style="margin:0;font-size:13px;line-height:1.7"><b style="color:var(--ink)">📌 Bilgilendirme:</b> Bu rızayı dilediğiniz zaman <b>${CONTACT_EMAIL}</b> adresine yazarak geri çekebilirsiniz. Rızanın geri çekilmesi, o tarihe kadar yapılan işlemlerin hukuki geçerliliğini etkilemez.</p>
 </div>
@@ -400,7 +507,6 @@ window.openLegalDoc = function(kind){
   document.body.appendChild(el);
   el.onclick = e => { if(e.target === el || e.target.classList.contains('sheet-close')) el.remove(); };
 };
-
 
 function loadViaImg(file){
   return new Promise((res,rej)=>{
@@ -514,8 +620,9 @@ $('#authForm').onsubmit = async e => {
     if(password !== pw2) return say('Şifreler uyuşmuyor.', 1);
     const localPart = email.split('@')[0] || '';
     const parts = localPart.split('.');
-    const first_name = (parts[0] || '').replace(/[^a-zA-ZğüşıöçĞÜŞİÖÇ]/g,'') || 'Öğrenci';
-    const last_name = (parts.slice(1).join(' ') || '').replace(/[^a-zA-ZğüşıöçĞÜŞİÖÇ]/g,'') || '';
+    // ✅ İsim ve soyisim baş harfleri büyük
+    const first_name = capFirst((parts[0] || '').replace(/[^a-zA-ZğüşıöçĞÜŞİÖÇ]/g,'')) || 'Öğrenci';
+    const last_name = parts.slice(1).map(p => capFirst(p.replace(/[^a-zA-ZğüşıöçĞÜŞİÖÇ]/g,''))).filter(Boolean).join(' ');
     const department = $('#dp').value.trim();
     if(!department) return say('Bölüm zorunlu.', 1);
     if(!$('#kvkkAydinlatma').checked) return say('Aydınlatma metnini onaylaman gerekiyor.', 1);
@@ -564,10 +671,7 @@ function showOtpScreen(email, password){
     if(e.target.value.length === 6 || e.target.value.length === 8) $('#otpBtn').click();
   };
   otpEl.onpaste = () => {
-    setTimeout(() => {
-      const len = (otpEl.value || '').length;
-      if(len >= 6) $('#otpBtn').click();
-    }, 50);
+    setTimeout(() => { const len = (otpEl.value || '').length; if(len >= 6) $('#otpBtn').click(); }, 50);
   };
 }
 
@@ -602,8 +706,8 @@ async function boot(session){
   $('#auth').classList.add('hide'); $('#app').classList.remove('hide');
   $('#adminTab').classList.toggle('hide', !me.is_admin);
   applyTheme();
-  checkNotifications();
   show(tab);
+  checkNotifications(); // ⚡ artık bekletilmiyor
 }
 sb.auth.getSession().then(({ data }) => boot(data.session));
 sb.auth.onAuthStateChange((ev, s) => { if(ev === 'SIGNED_IN' || ev === 'SIGNED_OUT') boot(s); });
@@ -714,6 +818,9 @@ window.openAdvertiseSheet = function(){
   };
 };
 
+/* =========================================================
+   FEED / CONFESSIONS
+   ========================================================= */
 async function loadList(t){
   const conf = t === 'conf';
   const col = conf ? 'confession_id' : 'post_id';
@@ -722,6 +829,8 @@ async function loadList(t){
   const selectCols = conf
     ? (useRealConf ? 'id,content,created_at,user_id,image_path,profiles(first_name,last_name,department)' : '*')
     : 'id,content,created_at,user_id,image_path,video_path,profiles(first_name,last_name,department)';
+
+  // ⚡ Tüm sorgular paralel
   const queries = [
     sb.from(table).select(selectCols).order('created_at',{ascending:false}).limit(30),
     sb.from('likes').select('user_id,' + col).not(col, 'is', null),
@@ -732,33 +841,60 @@ async function loadList(t){
   const likes = results[1].data;
   const ads = !conf ? (results[2].data || []) : [];
   if(error) return $('#view').innerHTML = '<div class="empty">Yüklenemedi: ' + esc(error.message) + '</div>';
+
   const L = {}; (likes||[]).forEach(l => { const k = l[col]; (L[k] = L[k] || []).push(l.user_id); });
   const ids = (items||[]).map(i => i.id);
-  const counts = {};
-  if(ids.length){
-    const cmTbl = conf ? 'confession_comments_public' : 'comments';
-    const cmCol = conf ? 'confession_id' : 'post_id';
-    const { data: cms } = await sb.from(cmTbl).select(cmCol).in(cmCol, ids);
-    (cms||[]).forEach(c => { counts[c[cmCol]] = (counts[c[cmCol]]||0) + 1; });
-  }
   const max = conf ? 800 : 500;
   const adminToggle = (conf && me.is_admin)
     ? '<div class="admin-toggle"><div><b>🔒 Admin modu</b> ' + (adminShowRealConf ? '· Gerçek isimler' : '· Anonim görünüm') + '</div><button id="toggleReal">' + (adminShowRealConf ? 'Anonime çevir' : 'Gerçek isimleri gör') + '</button></div>'
     : '';
 
-  $('#view').innerHTML = adminToggle +
-    '<form class="card composer" id="cf">' +
-      '<textarea id="ct" maxlength="' + max + '" placeholder="' + (conf ? 'İtirafını yaz. Adın kimseye görünmez.' : 'Ne düşünüyorsun?') + '"></textarea>' +
-      '<div id="pv" class="pv hide"></div>' +
+  // ✨ YENİ TASARIM — modern composer
+  const composerAvatar = conf
+    ? '<div class="cav" style="background:linear-gradient(135deg,#8e7cff,#4a35b8)">👻</div>'
+    : '<div class="cav">' + esc(initials(me.first_name, me.last_name).toUpperCase() || '?') + '</div>';
+
+  const composer =
+    '<form class="composer-new" id="cf">' +
+      (conf ? '<div class="composer-anon-badge">👻 Anonim paylaşım</div>' : '') +
+      '<div class="composer-head">' +
+        composerAvatar +
+        '<textarea id="ct" maxlength="' + max + '" placeholder="' + (conf ? 'İtirafını buraya yaz... Kimse kim olduğunu görmeyecek.' : 'Ne düşünüyorsun, ' + esc(me.first_name) + '?') + '"></textarea>' +
+      '</div>' +
+      '<div id="pv" class="composer-preview hide"></div>' +
       '<div class="prog-wrap hide" id="uploadProg"><div class="prog-bar"><div class="prog-fill" id="progFill"></div></div><div class="prog-text" id="progText">Yükleniyor... %0</div></div>' +
-      '<div class="row"><span class="dep">' + (conf ? '👻 Anonim paylaşılır' : esc(me.first_name + ' ' + me.last_name)) + '</span>' +
-      '<span class="rt">' +
-      '<label class="pick" title="Fotoğraf ekle"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><input type="file" id="cimg" accept="image/*" hidden></label>' +
-      (conf ? '' : '<label class="pick" title="Video ekle"><svg viewBox="0 0 24 24"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg><input type="file" id="cvid" accept="video/*" hidden></label>') +
-      '<button class="btn sm">Paylaş</button></span></div></form><div id="list"></div>';
+      '<div class="composer-foot">' +
+        '<div class="composer-tools">' +
+          '<label class="composer-tool" title="Fotoğraf ekle"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><input type="file" id="cimg" accept="image/*" hidden></label>' +
+          (conf ? '' : '<label class="composer-tool" title="Video ekle"><svg viewBox="0 0 24 24"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg><input type="file" id="cvid" accept="video/*" hidden></label>') +
+        '</div>' +
+        '<div class="composer-right">' +
+          '<span class="composer-counter" id="cCount">0/' + max + '</span>' +
+          '<button type="submit" class="composer-submit">Paylaş</button>' +
+        '</div>' +
+      '</div>' +
+    '</form>';
+
+  $('#view').innerHTML = adminToggle + composer + '<div id="list"></div>';
 
   const tr = $('#toggleReal');
   if(tr) tr.onclick = () => { adminShowRealConf = !adminShowRealConf; localStorage.setItem('adminShowRealConf', adminShowRealConf ? '1' : '0'); loadList(t); };
+
+  // Karakter sayacı + auto-resize
+  const ct = $('#ct');
+  const updateCounter = () => {
+    const len = ct.value.length;
+    const c = $('#cCount');
+    c.textContent = len + '/' + max;
+    c.classList.toggle('warn', len > max * 0.85 && len < max);
+    c.classList.toggle('over', len >= max);
+    ct.style.height = 'auto';
+    ct.style.height = Math.min(220, Math.max(64, ct.scrollHeight)) + 'px';
+  };
+  ct.addEventListener('input', updateCounter);
+  ct.addEventListener('keydown', e => {
+    if((e.metaKey || e.ctrlKey) && e.key === 'Enter'){ e.preventDefault(); $('#cf').requestSubmit(); }
+  });
 
   let curMedia = null;
   const renderPv = () => {
@@ -781,26 +917,25 @@ async function loadList(t){
     if(me.is_banned) return alert('🚫 Hesabın banlanmış. Yeni içerik paylaşamazsın.');
     const content = $('#ct').value.trim();
     if(!content && !curMedia) return alert('Bir şeyler yaz ya da medya ekle.');
-    const btn = $('#cf .btn'); btn.disabled = true;
+    const btn = $('#cf .composer-submit'); btn.disabled = true; btn.textContent = 'Yükleniyor...';
     let image_path = null, video_path = null;
     try{
       if(curMedia && curMedia.type === 'image'){ setProg(0); image_path = await uploadImg(curMedia.file, 'images', p => setProg(p)); }
       else if(curMedia && curMedia.type === 'video'){ setProg(0); video_path = await uploadVideo(curMedia.file, p => setProg(p)); }
       else { setProg(0.4); }
-    }catch(err){ btn.disabled = false; hideProg(); return alert('Yükleme: ' + err.message); }
+    }catch(err){ btn.disabled = false; btn.textContent = 'Paylaş'; hideProg(); return alert('Yükleme: ' + err.message); }
     setProg(0.95);
     const row = { user_id: me.id, content: content || '' };
     if(image_path) row.image_path = image_path;
     if(video_path) row.video_path = video_path;
     const { error } = await sb.from(conf ? 'confessions' : 'posts').insert(row);
-    if(error){ btn.disabled = false; hideProg(); return alert(me.is_banned ? 'Hesabın kısıtlandı.' : error.message); }
+    if(error){ btn.disabled = false; btn.textContent = 'Paylaş'; hideProg(); return alert(me.is_banned ? 'Hesabın kısıtlandı.' : error.message); }
     show(t);
   };
 
   const postHtml = i => {
     const ls = L[i.id] || [];
     const mine = conf ? (i.user_id ? i.user_id === me.id : i.is_mine) : i.user_id === me.id;
-    const cc = counts[i.id] || 0;
     let head;
     if(conf){
       if(useRealConf && i.profiles){
@@ -815,7 +950,7 @@ async function loadList(t){
     return '<article class="card" data-id="' + i.id + '"><div class="hd">' + head + '</div>' +
       (i.content ? '<div class="body">' + esc(i.content) + '</div>' : '') + media +
       '<div class="acts"><button data-a="like" class="' + (ls.includes(me.id) ? 'on' : '') + '">' + (ls.includes(me.id) ? '♥' : '♡') + ' ' + ls.length + '</button>' +
-      '<button data-a="cm">💬 Yorumlar · ' + cc + '</button><button data-a="rep">Şikayet et</button>' + ((mine || me.is_admin) ? '<button data-a="del">Sil</button>' : '') + '</div>' +
+      '<button data-a="cm">💬 Yorumlar</button><button data-a="rep">Şikayet et</button>' + ((mine || me.is_admin) ? '<button data-a="del">Sil</button>' : '') + '</div>' +
       '<div class="cm hide"></div></article>';
   };
 
@@ -847,6 +982,20 @@ async function loadList(t){
       return postHtml(x.data);
     }).join('');
     setTimeout(initAdSense, 200);
+  }
+
+  // ⚡ Yorum sayıları arka planda yükleniyor (render'ı bloklamıyor)
+  if(ids.length){
+    const cmTbl = conf ? 'confession_comments_public' : 'comments';
+    const cmCol = conf ? 'confession_id' : 'post_id';
+    sb.from(cmTbl).select(cmCol).in(cmCol, ids).then(({data: cms}) => {
+      const counts = {};
+      (cms||[]).forEach(c => { counts[c[cmCol]] = (counts[c[cmCol]]||0) + 1; });
+      Object.keys(counts).forEach(pid => {
+        const btn = document.querySelector('article[data-id="' + pid + '"] button[data-a="cm"]');
+        if(btn) btn.textContent = '💬 Yorumlar · ' + counts[pid];
+      });
+    });
   }
 
   $('#list').onclick = e => {
@@ -1223,6 +1372,7 @@ function deleteAccount(){
         method: 'POST',
         headers: {
           'Authorization': 'Bearer ' + session.access_token,
+          'apikey': SB_KEY,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ selfDelete: true })
@@ -1409,37 +1559,76 @@ async function loadChatView(){
   }, 5000);
 }
 
+/* =========================================================
+   ANNOUNCEMENTS + POLLS
+   ========================================================= */
 async function loadAnn(){
   removeFab();
   const { data, error } = await sb.from('announcements').select('*').order('created_at',{ascending:false}).limit(50);
   if(error) return $('#view').innerHTML = '<div class="empty">Yüklenemedi: ' + esc(error.message) + '</div>';
+
   const ids = (data||[]).map(a => a.id);
+  // Yorum + oy verileri paralel
+  const [cmsRes, votesRes] = await Promise.all([
+    ids.length ? sb.from('announcement_comments').select('announcement_id').in('announcement_id', ids) : Promise.resolve({data:[]}),
+    ids.length ? sb.from('poll_votes').select('announcement_id,user_id,option_index').in('announcement_id', ids) : Promise.resolve({data:[]})
+  ]);
   const counts = {};
-  if(ids.length){
-    const { data: cms } = await sb.from('announcement_comments').select('announcement_id').in('announcement_id', ids);
-    (cms||[]).forEach(c => { counts[c.announcement_id] = (counts[c.announcement_id]||0) + 1; });
-  }
-  const form = me.is_admin ? '<form class="card composer" id="af"><input id="at" maxlength="100" placeholder="Duyuru başlığı" required><textarea id="ac" maxlength="1500" placeholder="Duyuru metni" required></textarea><div id="apv" class="pv hide"></div><div class="prog-wrap hide" id="aProg"><div class="prog-bar"><div class="prog-fill" id="aFill"></div></div><div class="prog-text" id="aText">Yükleniyor... %0</div></div><div class="row"><span class="rt"><label class="pick" title="Fotoğraf ekle"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><input type="file" id="aimg" accept="image/*" hidden></label><label class="pick" title="Video ekle"><svg viewBox="0 0 24 24"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg><input type="file" id="avid" accept="video/*" hidden></label><button class="btn sm">Yayınla</button></span></div></form>' : '';
+  (cmsRes.data||[]).forEach(c => { counts[c.announcement_id] = (counts[c.announcement_id]||0) + 1; });
+  const voteData = {};
+  (votesRes.data||[]).forEach(v => {
+    if(!voteData[v.announcement_id]) voteData[v.announcement_id] = { total: 0, counts: {}, mine: null };
+    voteData[v.announcement_id].total++;
+    voteData[v.announcement_id].counts[v.option_index] = (voteData[v.announcement_id].counts[v.option_index]||0) + 1;
+    if(v.user_id === me.id) voteData[v.announcement_id].mine = v.option_index;
+  });
+
+  const form = me.is_admin ? renderAnnForm() : '';
+
   const list = (data||[]).map(a => {
     const cc = counts[a.id] || 0;
     const media = (a.image_path ? '<a href="' + imgUrl(a.image_path) + '" target="_blank" rel="noopener"><img class="pimg" loading="lazy" src="' + imgUrl(a.image_path) + '" alt=""></a>' : '') + (a.video_path ? '<video class="pvid" controls playsinline preload="metadata" src="' + videoUrl(a.video_path) + '"></video>' : '');
-    return '<article class="card ann" data-id="' + a.id + '"><span class="badge">DUYURU</span> <span class="time">· ' + ago(a.created_at) + '</span><h3>' + esc(a.title) + '</h3><div class="body">' + esc(a.content) + '</div>' + media + '<div class="acts"><button data-a="acm">💬 Yorumlar · ' + cc + '</button>' + (me.is_admin ? '<button data-del>Sil</button>' : '') + '</div><div class="cm hide"></div></article>';
+    const pollHtml = (a.poll && a.poll.question && Array.isArray(a.poll.options)) ? renderPoll(a.id, a.poll, voteData[a.id]) : '';
+    return '<article class="card ann" data-id="' + a.id + '"><span class="badge">DUYURU</span> <span class="time">· ' + ago(a.created_at) + '</span><h3>' + esc(a.title) + '</h3><div class="body">' + esc(a.content) + '</div>' + media + pollHtml + '<div class="acts"><button data-a="acm">💬 Yorumlar · ' + cc + '</button>' + (me.is_admin ? '<button data-del>Sil</button>' : '') + '</div><div class="cm hide"></div></article>';
   }).join('') || '<div class="empty">Henüz duyuru yok.</div>';
+
   $('#view').innerHTML = form + list + renderAdvertiseCTA();
 
-  let annMedia = null;
-  const renderAnnPv = () => {
-    const pv = $('#apv');
-    if(!annMedia){ pv.classList.add('hide'); pv.innerHTML=''; return; }
-    if(annMedia.type === 'image') pv.innerHTML = '<img src="' + URL.createObjectURL(annMedia.file) + '" alt=""><button type="button">×</button>';
-    else pv.innerHTML = '<video src="' + URL.createObjectURL(annMedia.file) + '" controls playsinline></video><button type="button">×</button>';
-    pv.classList.remove('hide');
-    pv.querySelector('button').onclick = () => { annMedia = null; const i=$('#aimg'); if(i)i.value=''; const v=$('#avid'); if(v)v.value=''; renderAnnPv(); };
-  };
+  // Admin form handlers
   if(me.is_admin){
+    let annMedia = null;
+    const renderAnnPv = () => {
+      const pv = $('#apv');
+      if(!annMedia){ pv.classList.add('hide'); pv.innerHTML=''; return; }
+      if(annMedia.type === 'image') pv.innerHTML = '<img src="' + URL.createObjectURL(annMedia.file) + '" alt=""><button type="button">×</button>';
+      else pv.innerHTML = '<video src="' + URL.createObjectURL(annMedia.file) + '" controls playsinline></video><button type="button">×</button>';
+      pv.classList.remove('hide');
+      pv.querySelector('button').onclick = () => { annMedia = null; const i=$('#aimg'); if(i)i.value=''; const v=$('#avid'); if(v)v.value=''; renderAnnPv(); };
+    };
     $('#aimg').onchange = () => { const f = $('#aimg').files[0]; if(!f) return; const v=$('#avid'); if(v)v.value=''; if(f.type.startsWith('image/')){ annMedia={type:'image',file:f}; renderAnnPv(); } };
     const av = $('#avid'); if(av) av.onchange = () => { const f = av.files[0]; if(!f) return; $('#aimg').value=''; if(f.type.startsWith('video/')){ annMedia={type:'video',file:f}; renderAnnPv(); } };
+
+    // Poll toggle
+    const pollOn = $('#apollOn');
+    const pollBox = $('#apollBox');
+    pollOn.onchange = () => { pollBox.classList.toggle('hide', !pollOn.checked); };
+    const addOpt = () => {
+      const box = $('#apollOpts');
+      const count = box.querySelectorAll('.poll-opt-row').length;
+      if(count >= 6) return alert('En fazla 6 seçenek ekleyebilirsin.');
+      const div = document.createElement('div');
+      div.className = 'poll-opt-row';
+      div.innerHTML = '<input class="poll-opt-inp" maxlength="80" placeholder="Seçenek ' + (count+1) + '"><button type="button" class="rm-opt">×</button>';
+      box.appendChild(div);
+    };
+    $('#apollAdd').onclick = addOpt;
+    $('#apollBox').onclick = e => {
+      const rm = e.target.closest('.rm-opt');
+      if(rm){ const rows = $('#apollOpts').querySelectorAll('.poll-opt-row'); if(rows.length > 2) rm.parentElement.remove(); }
+    };
+
     const setAP = p => { $('#aProg').classList.remove('hide'); $('#aFill').style.width = Math.round(p*100) + '%'; $('#aText').textContent = 'Yükleniyor... %' + Math.round(p*100); };
+
     $('#af').onsubmit = async e => {
       e.preventDefault();
       const btn = $('#af .btn'); btn.disabled = true;
@@ -1448,21 +1637,93 @@ async function loadAnn(){
         if(annMedia?.type === 'image'){ setAP(0); image_path = await uploadImg(annMedia.file, 'images', p => setAP(p)); }
         else if(annMedia?.type === 'video'){ setAP(0); video_path = await uploadVideo(annMedia.file, p => setAP(p)); }
       }catch(err){ btn.disabled = false; $('#aProg').classList.add('hide'); return alert('Yükleme: ' + err.message); }
+
+      let poll = null;
+      if(pollOn.checked){
+        const q = $('#apollQ').value.trim();
+        const opts = [...$('#apollOpts').querySelectorAll('.poll-opt-inp')].map(i => i.value.trim()).filter(Boolean);
+        if(!q) { btn.disabled = false; return alert('Anket sorusu zorunlu.'); }
+        if(opts.length < 2){ btn.disabled = false; return alert('En az 2 seçenek gerekli.'); }
+        poll = { question: q, options: opts };
+      }
+
       const row = { title: $('#at').value.trim(), content: $('#ac').value.trim() };
       if(image_path) row.image_path = image_path;
       if(video_path) row.video_path = video_path;
+      if(poll) row.poll = poll;
       const { error } = await sb.from('announcements').insert(row);
       if(error){ btn.disabled = false; return alert(error.message); }
       loadAnn();
     };
   }
+
   $('#view').onclick = async e => {
+    // Oylama
+    const optBtn = e.target.closest('.poll-opt.poll-choice');
+    if(optBtn){
+      const poll = optBtn.closest('.poll');
+      const annId = +poll.dataset.poll;
+      const idx = +optBtn.dataset.opt;
+      if(me.is_banned) return alert('🚫 Hesabın banlanmış.');
+      optBtn.disabled = true; optBtn.style.opacity = '.6';
+      const { error } = await sb.from('poll_votes').insert({ announcement_id: annId, user_id: me.id, option_index: idx });
+      if(error){
+        optBtn.disabled = false; optBtn.style.opacity = '';
+        if(error.code === '23505') return alert('Bu ankette zaten oy kullandın.');
+        return alert(error.message);
+      }
+      loadAnn();
+      return;
+    }
     const delBtn = e.target.closest('button[data-del]');
     if(delBtn && confirm('Duyuru silinsin mi?')){ await sb.from('announcements').delete().eq('id', +delBtn.closest('.card').dataset.id); return loadAnn(); }
     const cmBtn = e.target.closest('button[data-a="acm"]');
     if(cmBtn){ const card = cmBtn.closest('.card'); const box = card.querySelector('.cm'); box.classList.toggle('hide'); if(!box.classList.contains('hide')) loadAnnComments(box, +card.dataset.id); }
   };
 }
+
+function renderPoll(annId, poll, v){
+  if(!poll || !poll.question || !poll.options?.length) return '';
+  v = v || { total: 0, counts: {}, mine: null };
+  const voted = v.mine !== null && v.mine !== undefined;
+  return '<div class="poll" data-poll="' + annId + '">' +
+    '<div class="poll-q">' + esc(poll.question) + '</div>' +
+    poll.options.map((opt, i) => {
+      const count = v.counts[i] || 0;
+      const pct = v.total ? Math.round(count / v.total * 100) : 0;
+      const isMine = voted && v.mine === i;
+      const cls = 'poll-opt' + (isMine ? ' voted' : '') + (voted ? '' : ' poll-choice');
+      return '<button type="button" class="' + cls + '" data-opt="' + i + '"' + (voted ? ' disabled' : '') + '>' +
+        (voted ? '<span class="bar" style="width:' + pct + '%"></span>' : '') +
+        '<span class="txt"><span>' + esc(opt) + (isMine ? ' <span style="color:var(--ac)">✓</span>' : '') + '</span>' + (voted ? '<span class="pct">' + pct + '% · ' + count + '</span>' : '') + '</span>' +
+      '</button>';
+    }).join('') +
+    '<div class="poll-total">' + (voted ? '<span class="vote-ok">✓ Oyunu kullandın</span> · ' : '') + v.total + ' oy</div>' +
+  '</div>';
+}
+
+function renderAnnForm(){
+  return '<form class="card composer" id="af">' +
+    '<input id="at" maxlength="100" placeholder="Duyuru başlığı" required>' +
+    '<textarea id="ac" maxlength="1500" placeholder="Duyuru metni" required></textarea>' +
+    '<div id="apv" class="pv hide"></div>' +
+    '<div class="prog-wrap hide" id="aProg"><div class="prog-bar"><div class="prog-fill" id="aFill"></div></div><div class="prog-text" id="aText">Yükleniyor... %0</div></div>' +
+    '<label class="poll-toggle"><input type="checkbox" id="apollOn"> 📊 Anket ekle</label>' +
+    '<div id="apollBox" class="poll-form-box hide">' +
+      '<h5>ANKET</h5>' +
+      '<input id="apollQ" maxlength="140" placeholder="Anket sorusu (örn: Hangi etkinlik olsun?)">' +
+      '<div id="apollOpts" style="margin-top:8px">' +
+        '<div class="poll-opt-row"><input class="poll-opt-inp" maxlength="80" placeholder="Seçenek 1"><button type="button" class="rm-opt">×</button></div>' +
+        '<div class="poll-opt-row"><input class="poll-opt-inp" maxlength="80" placeholder="Seçenek 2"><button type="button" class="rm-opt">×</button></div>' +
+      '</div>' +
+      '<button type="button" id="apollAdd" class="link" style="margin-top:6px">+ Seçenek ekle</button>' +
+    '</div>' +
+    '<div class="row"><span class="rt">' +
+      '<label class="pick" title="Fotoğraf ekle"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><input type="file" id="aimg" accept="image/*" hidden></label>' +
+      '<label class="pick" title="Video ekle"><svg viewBox="0 0 24 24"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg><input type="file" id="avid" accept="video/*" hidden></label>' +
+      '<button class="btn sm">Yayınla</button></span></div></form>';
+}
+
 async function loadAnnComments(box, annId){
   const { data } = await sb.from('announcement_comments').select('id,content,user_id,created_at,profiles(first_name,last_name)').eq('announcement_id', annId).order('id');
   const itemsHtml = (data||[]).map(c => {
@@ -1494,32 +1755,43 @@ async function loadAnnComments(box, annId){
   };
 }
 
+/* =========================================================
+   ADMIN PANEL
+   ========================================================= */
 async function loadAdmin(){
   removeFab();
-  const seg = '<div class="seg"><button data-at="reports" class="on">🚩 Şikayetler</button><button data-at="ads">📢 Reklamlar</button><button data-at="requests">📥 Reklam Talepleri</button><button data-at="users">👥 Kullanıcılar</button></div>';
+  const seg = '<div class="seg">' +
+    '<button data-at="reports" class="on">🚩 Şikayetler</button>' +
+    '<button data-at="banned">🚫 Yasaklılar</button>' +
+    '<button data-at="users">👥 Kullanıcılar</button>' +
+    '<button data-at="ads">📢 Reklamlar</button>' +
+    '<button data-at="requests">📥 Reklam Talepleri</button>' +
+    '</div>';
   $('#view').innerHTML = seg + '<div id="adminView"><div class="empty">Yükleniyor...</div></div>';
   $('#view').querySelector('.seg').onclick = e => {
     const b = e.target.closest('button[data-at]'); if(!b) return;
     $('#view').querySelectorAll('.seg button').forEach(x => x.classList.toggle('on', x === b));
     if(b.dataset.at === 'reports') loadAdminReports();
+    else if(b.dataset.at === 'banned') loadAdminBanned();
+    else if(b.dataset.at === 'users') loadAdminAllUsers();
     else if(b.dataset.at === 'ads') loadAdminAds();
     else if(b.dataset.at === 'requests') loadAdminRequests();
-    else if(b.dataset.at === 'users') loadAdminUsers();
   };
   loadAdminReports();
 }
 
+/* ---- ŞİKAYETLER (sadece bekleyen) ---- */
 async function loadAdminReports(){
   const box = $('#adminView');
-  const { data: reports, error } = await sb.from('reports').select('*').order('created_at',{ascending:false}).limit(100);
+  const { data: reports, error } = await sb.from('reports').select('*').eq('status', 'pending').order('created_at',{ascending:false}).limit(100);
   if(error){ box.innerHTML = '<div class="empty">' + esc(error.message) + '</div>'; return; }
-  if(!reports || !reports.length){ box.innerHTML = '<div class="empty">Henüz şikayet yok.</div>'; return; }
+  if(!reports || !reports.length){ box.innerHTML = '<div class="empty">✅ Bekleyen şikayet yok. Her şey temiz!</div>'; return; }
 
   const userIds = new Set();
   reports.forEach(r => { if(r.reporter_id) userIds.add(r.reporter_id); if(r.reported_user_id) userIds.add(r.reported_user_id); });
   let profMap = {};
   if(userIds.size){
-    const {data:ps} = await sb.from('profiles').select('id,first_name,last_name,department,is_banned,is_restricted').in('id', [...userIds]);
+    const {data:ps} = await sb.from('profiles').select('id,first_name,last_name,department,is_banned,is_restricted,restrict_count').in('id', [...userIds]);
     (ps||[]).forEach(p => profMap[p.id] = p);
   }
   const postIds = reports.filter(r => r.post_id).map(r => r.post_id);
@@ -1543,39 +1815,26 @@ async function loadAdminReports(){
     else if(r.comment_id){ kind = 'comments'; cid = r.comment_id; const c = contentMap['cm_' + r.comment_id] || {}; content = c.content; }
     else if(r.confession_comment_id){ kind = 'confession_comments'; cid = r.confession_comment_id; const c = contentMap['cc_' + r.confession_comment_id] || {}; content = c.content; }
 
-    window._rep[r.id] = { kind, cid, uid: r.reported_user_id, email: r.reported_email, name: r.reported_name };
+    window._rep[r.id] = { kind, cid, uid: r.reported_user_id };
 
     const reporter = profMap[r.reporter_id] || { first_name:'?', last_name:'' };
     const reported = r.reported_user_id ? profMap[r.reported_user_id] : null;
-    const isBannedReport = r.status === 'banned';
-
-    let statusTag = '';
-    if(isBannedReport) statusTag = ' <span class="tag" style="background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger)">🚫 BANLANDI</span>';
-    else if(reported?.is_restricted) statusTag = ' <span class="tag" style="background:color-mix(in srgb,#FF9900 14%,transparent);color:#ff9900">⚠️ KISITLI</span>';
 
     let label = 'İçerik';
     if(r.reported_user_id && !kind) label = '👤 Kullanıcı şikayeti';
     else if(kind) label = ({ posts:'📝 Paylaşım', confessions:'👻 İtiraf', comments:'💬 Yorum', confession_comments:'👻 İtiraf yorumu' })[kind] || 'İçerik';
 
-    const reportedName = reported ? (reported.first_name + ' ' + reported.last_name) : (r.reported_name || 'Silinmiş kullanıcı');
+    const reportedName = reported ? (reported.first_name + ' ' + reported.last_name) : 'Silinmiş kullanıcı';
     const reportedDept = reported ? reported.department : '';
     const bodyText = (r.reported_user_id && !kind)
-      ? '<b>' + esc(reportedName) + '</b> (' + esc(reportedDept||'') + ')' + statusTag
-      : esc(content || '(içerik silinmiş)') + statusTag;
+      ? '<b>' + esc(reportedName) + '</b> (' + esc(reportedDept||'') + ')'
+      : esc(content || '(içerik silinmiş)');
 
-    let actions = '';
-    if(isBannedReport){
-      actions = '<button data-x="unban" style="color:#2ecc71">✅ Banı Kaldır</button>';
-    } else if(reported?.is_restricted){
-      actions = '<button data-x="unrestrict" style="color:#2ecc71">✅ Kısıtlamayı Kaldır</button>' +
-                '<button data-x="ban" style="color:var(--danger)">🚫 Banla</button>';
-    } else {
-      actions = '<button data-x="skip" style="color:var(--mute)">🚮 Yoksay</button>';
-      if(kind) actions += '<button data-x="del" style="color:var(--mute)">🗑️ İçeriği Sil</button>';
-      if(r.reported_user_id){
-        actions += '<button data-x="restrict" style="color:#ff9900">⚠️ Kısıtla</button>' +
-                   '<button data-x="ban" style="color:var(--danger)">🚫 Banla</button>';
-      }
+    let actions = '<button data-x="skip" style="color:var(--mute)">🚮 Yoksay</button>';
+    if(kind) actions += '<button data-x="del" style="color:var(--mute)">🗑️ İçeriği Sil</button>';
+    if(r.reported_user_id){
+      actions += '<button data-x="restrict" style="color:#ff9900">⚠️ Kısıtla</button>' +
+                 '<button data-x="ban" style="color:var(--danger)">🚫 Banla</button>';
     }
 
     return '<article class="card" data-r="' + r.id + '">' +
@@ -1587,15 +1846,7 @@ async function loadAdminReports(){
       '<div class="acts">' + actions + '</div></article>';
   };
 
-  const pending = reports.filter(r => (r.status || 'pending') === 'pending');
-  const banned = reports.filter(r => r.status === 'banned');
-  const resolved = reports.filter(r => r.status && r.status !== 'pending' && r.status !== 'banned');
-
-  box.innerHTML =
-    '<h3 style="margin:8px 6px;font-size:14px;color:var(--mute);font-weight:700">⏳ BEKLEYEN (' + pending.length + ')</h3>' +
-    (pending.length ? pending.map(render).join('') : '<div class="empty" style="padding:20px">Bekleyen şikayet yok.</div>') +
-    (banned.length ? '<h3 style="margin:24px 6px 8px;font-size:14px;color:#D42F4B;font-weight:700">🚫 BANLANANLAR (' + banned.length + ')</h3>' + banned.map(render).join('') : '') +
-    (resolved.length ? '<h3 style="margin:24px 6px 8px;font-size:14px;color:var(--mute);font-weight:700">✔️ GEÇMİŞ (' + resolved.length + ')</h3>' + resolved.slice(0,20).map(render).join('') : '');
+  box.innerHTML = '<h3 style="margin:8px 6px;font-size:14px;color:var(--mute);font-weight:700">⏳ BEKLEYEN ŞİKAYETLER (' + reports.length + ')</h3>' + reports.map(render).join('');
 
   box.onclick = async e => {
     const b = e.target.closest('button[data-x]'); if(!b) return;
@@ -1619,18 +1870,13 @@ async function loadAdminReports(){
 
     if(x === 'restrict'){
       if(!confirm('⚠️ Kullanıcı kısıtlansın mı?\n\nPaylaşım, yorum ve mesaj yapamayacak.')) return;
-      if(rep.uid) await sb.from('profiles').update({ is_restricted: true }).eq('id', rep.uid);
-      await sb.from('reports').update({ status: 'restricted' }).eq('id', rid);
-      alert('✅ Kullanıcı kısıtlandı.');
-      loadAdminReports();
-      return;
-    }
-
-    if(x === 'unrestrict'){
-      if(!confirm('✅ Kısıtlama kaldırılsın mı?')) return;
-      if(rep.uid) await sb.from('profiles').update({ is_restricted: false }).eq('id', rep.uid);
+      if(rep.uid){
+        const { data: prof } = await sb.from('profiles').select('restrict_count').eq('id', rep.uid).single();
+        const newCount = (prof?.restrict_count || 0) + 1;
+        await sb.from('profiles').update({ is_restricted: true, restrict_count: newCount }).eq('id', rep.uid);
+      }
       await sb.from('reports').delete().eq('id', rid);
-      alert('✅ Kısıtlama kaldırıldı.');
+      alert('✅ Kullanıcı kısıtlandı. (Yasaklılar sekmesinden kaldırabilirsin)');
       loadAdminReports();
       return;
     }
@@ -1639,8 +1885,6 @@ async function loadAdminReports(){
       if(!confirm('🚫 KULLANICI KALICI BANLANSIN MI?\n\n⚠️ GERİ ALINAMAZ:\n• Hesabı ve tüm verileri SİLİNECEK\n• Aynı mail ile bir daha KAYIT OLAMAYACAK')) return;
       if(!confirm('Son onay: Kalıcı ban uygulanacak. Emin misin?')) return;
 
-      const reported = rep.uid ? (await sb.from('profiles').select('first_name,last_name').eq('id', rep.uid).single()).data : null;
-
       const btn = b;
       btn.disabled = true; btn.textContent = 'İşleniyor...';
 
@@ -1648,19 +1892,13 @@ async function loadAdminReports(){
         const { data: { session } } = await sb.auth.getSession();
         const res = await fetch(SB_URL + '/functions/v1/clever-responder', {
           method: 'POST',
-          headers: { 'Authorization': 'Bearer ' + session.access_token, 'Content-Type': 'application/json' },
+          headers: { 'Authorization': 'Bearer ' + session.access_token, 'apikey': SB_KEY, 'Content-Type': 'application/json' },
           body: JSON.stringify({ targetUserId: rep.uid, ban: true, reason: 'Admin kararı ile kalıcı ban' })
         });
         const j = await res.json().catch(()=>({}));
         if(!res.ok) throw new Error(j.error || 'Ban başarısız');
 
-        await sb.from('reports').update({
-          status: 'banned',
-          reported_name: reported ? (reported.first_name + ' ' + reported.last_name) : 'Silinmiş kullanıcı',
-          reported_email: j.banned_email || null,
-          reported_user_id: null
-        }).eq('id', rid);
-
+        await sb.from('reports').delete().eq('id', rid);
         alert('✅ Kullanıcı kalıcı olarak banlandı ve tüm verileri silindi.');
         loadAdminReports();
       } catch(err){
@@ -1669,30 +1907,14 @@ async function loadAdminReports(){
       }
       return;
     }
-
-    if(x === 'unban'){
-      if(!confirm('✅ Ban kaldırılsın mı?\n\nKullanıcı aynı mail ile yeniden kayıt olabilir. (Eski verileri geri gelmez)')) return;
-
-      const email = rep.email;
-      if(email){
-        await sb.from('banned_emails').delete().eq('email', email);
-        alert('✅ Ban kaldırıldı. Mail artık kayıt olabilir.');
-      } else {
-        alert('⚠️ Bu eski bir ban kaydı, mail bilgisi yok.\n\n"👥 Kullanıcılar" sekmesinden manuel kaldırabilirsin.');
-      }
-
-      await sb.from('reports').delete().eq('id', rid);
-      loadAdminReports();
-      return;
-    }
   };
 }
 
-async function loadAdminUsers(){
+/* ---- YASAKLILAR ---- */
+async function loadAdminBanned(){
   const box = $('#adminView');
-
   const { data: profiles, error: pErr } = await sb.from('profiles')
-    .select('id, first_name, last_name, department, is_banned, is_restricted')
+    .select('id, first_name, last_name, department, is_banned, is_restricted, restrict_count')
     .or('is_banned.eq.true,is_restricted.eq.true')
     .order('first_name');
   if(pErr){ box.innerHTML = '<div class="empty">' + esc(pErr.message) + '</div>'; return; }
@@ -1703,6 +1925,8 @@ async function loadAdminUsers(){
     const status = u.is_banned
       ? '<span class="tag" style="background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger)">🚫 BANLI</span>'
       : '<span class="tag" style="background:color-mix(in srgb,#FF9900 14%,transparent);color:#ff9900">⚠️ KISITLI</span>';
+    const rc = u.restrict_count || 0;
+    const rcBadge = rc > 0 ? '<div class="restrict-badge">⚠️ ' + rc + ' kez kısıtlandı</div>' : '';
     let btn = '';
     if(u.is_banned){
       btn = '<button data-uid="' + u.id + '" data-act="unban" style="color:#2ecc71">✅ Banı Kaldır</button>';
@@ -1710,9 +1934,9 @@ async function loadAdminUsers(){
       btn = '<button data-uid="' + u.id + '" data-act="unrestrict" style="color:#2ecc71">✅ Kısıtlamayı Kaldır</button>' +
             '<button data-uid="' + u.id + '" data-act="ban" style="color:var(--danger)">🚫 Banla</button>';
     }
-    return '<article class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">' +
-      '<div><b style="font-size:15px">' + esc(u.first_name) + ' ' + esc(u.last_name) + '</b>' +
-      '<div class="dep">' + esc(u.department||'') + '</div></div>' +
+    return '<article class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap">' +
+      '<div style="flex:1;min-width:0"><b style="font-size:15px">' + esc(u.first_name) + ' ' + esc(u.last_name) + '</b>' +
+      '<div class="dep">' + esc(u.department||'') + '</div>' + rcBadge + '</div>' +
       status + '</div>' +
       '<div class="acts">' + btn + '</div></article>';
   }).join('');
@@ -1730,30 +1954,30 @@ async function loadAdminUsers(){
   const total = (profiles||[]).length + (bannedEmails||[]).length;
   if(!total){ box.innerHTML = '<div class="empty">✅ Şu an banlı veya kısıtlı kullanıcı yok.</div>'; return; }
 
-  box.innerHTML = '<h3 style="margin:8px 6px;font-size:14px;color:var(--mute);font-weight:700">👥 BANLI / KISITLI (' + total + ')</h3>' + rowsProfile + rowsEmail;
+  box.innerHTML = '<h3 style="margin:8px 6px;font-size:14px;color:var(--mute);font-weight:700">🚫 YASAKLILAR (' + total + ')</h3>' + rowsProfile + rowsEmail;
 
   box.onclick = async e => {
     const b = e.target.closest('button[data-act]'); if(!b) return;
     const act = b.dataset.act;
 
     if(act === 'unrestrict'){
-      if(!confirm('✅ Kısıtlama kaldırılsın mı?')) return;
+      if(!confirm('✅ Kısıtlama kaldırılsın mı?\n\n(Kısıtlanma sayacı silinmez, geçmiş olarak kalır)')) return;
       await sb.from('profiles').update({ is_restricted: false }).eq('id', b.dataset.uid);
-      loadAdminUsers();
+      loadAdminBanned();
       return;
     }
 
     if(act === 'unban'){
       if(!confirm('✅ Ban kaldırılsın mı?')) return;
       await sb.from('profiles').update({ is_banned: false, is_restricted: false }).eq('id', b.dataset.uid);
-      loadAdminUsers();
+      loadAdminBanned();
       return;
     }
 
     if(act === 'unbanEmail'){
       if(!confirm('✅ ' + b.dataset.email + ' için ban kaldırılsın mı?')) return;
       await sb.from('banned_emails').delete().eq('email', b.dataset.email);
-      loadAdminUsers();
+      loadAdminBanned();
       return;
     }
 
@@ -1766,14 +1990,107 @@ async function loadAdminUsers(){
         const { data: { session } } = await sb.auth.getSession();
         const res = await fetch(SB_URL + '/functions/v1/clever-responder', {
           method: 'POST',
-          headers: { 'Authorization': 'Bearer ' + session.access_token, 'Content-Type': 'application/json' },
+          headers: { 'Authorization': 'Bearer ' + session.access_token, 'apikey': SB_KEY, 'Content-Type': 'application/json' },
           body: JSON.stringify({ targetUserId: b.dataset.uid, ban: true, reason: 'Admin kararı' })
         });
         const j = await res.json().catch(()=>({}));
         if(!res.ok) throw new Error(j.error || 'Ban başarısız');
-        loadAdminUsers();
+        loadAdminBanned();
       } catch(err){ btn.disabled = false; btn.textContent = '🚫 Banla'; alert('Hata: ' + err.message); }
     }
+  };
+}
+
+/* ---- TÜM KULLANICILAR ---- */
+async function loadAdminAllUsers(){
+  const box = $('#adminView');
+  const { data, error } = await sb.from('profiles')
+    .select('id,first_name,last_name,department,is_banned,is_restricted,restrict_count,created_at')
+    .order('created_at', { ascending: false })
+    .limit(1000);
+  if(error){ box.innerHTML = '<div class="empty">' + esc(error.message) + '</div>'; return; }
+
+  const q = (window._userSearch || '').toLowerCase().trim();
+  const filtered = q ? (data||[]).filter(u => ((u.first_name||'') + ' ' + (u.last_name||'') + ' ' + (u.department||'')).toLowerCase().includes(q)) : (data||[]);
+
+  const search = '<div class="search-box"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="usearch" placeholder="İsim, soyisim veya bölüm ara..." value="' + esc(window._userSearch || '') + '"></div>';
+
+  const list = filtered.map(u => {
+    let status = '';
+    if(u.is_banned) status = '<span class="tag" style="background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger)">🚫 BANLI</span>';
+    else if(u.is_restricted) status = '<span class="tag" style="background:color-mix(in srgb,#FF9900 14%,transparent);color:#ff9900">⚠️ KISITLI</span>';
+    const rc = u.restrict_count || 0;
+    const rcBadge = rc > 0 ? '<div class="restrict-badge">⚠️ ' + rc + ' kez kısıtlandı</div>' : '';
+    return '<article class="card user-card" data-uid="' + u.id + '">' +
+      '<div class="user-card-row">' +
+        '<div class="av" style="cursor:default">' + esc(initials(u.first_name, u.last_name).toUpperCase() || '?') + '</div>' +
+        '<div style="flex:1;min-width:0">' +
+          '<div style="font-weight:800;font-size:15px">' + esc(u.first_name || '') + ' ' + esc(u.last_name || '') + '</div>' +
+          '<div class="dep">' + esc(u.department || '—') + '</div>' +
+          rcBadge +
+        '</div>' +
+        '<div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">' +
+          status +
+          '<button class="link" data-uedit="' + u.id + '" style="font-size:12px;padding:2px 6px">✏️ Düzenle</button>' +
+        '</div>' +
+      '</div>' +
+    '</article>';
+  }).join('');
+
+  box.innerHTML = '<h3 style="margin:8px 6px;font-size:14px;color:var(--mute);font-weight:700">👥 TÜM KULLANICILAR (' + (data||[]).length + ')</h3>' +
+    search +
+    (list || '<div class="empty">Sonuç bulunamadı.</div>');
+
+  const inp = document.getElementById('usearch');
+  if(inp){
+    inp.oninput = () => {
+      window._userSearch = inp.value;
+      const v = inp.value;
+      loadAdminAllUsers().then(() => {
+        const i = document.getElementById('usearch');
+        if(i){ i.focus(); i.setSelectionRange(v.length, v.length); }
+      });
+    };
+  }
+
+  box.onclick = e => {
+    const b = e.target.closest('button[data-uedit]');
+    if(!b) return;
+    const u = (data||[]).find(x => x.id === b.dataset.uedit);
+    if(u) openEditUserSheet(u);
+  };
+}
+
+function openEditUserSheet(u){
+  const el = document.createElement('div');
+  el.className = 'sheet-bg';
+  el.innerHTML = '<div class="sheet"><h4>✏️ Kullanıcıyı Düzenle<button class="sheet-close">×</button></h4>' +
+    '<form id="ueForm" style="display:flex;flex-direction:column;gap:10px">' +
+      '<label style="font-size:13px;font-weight:600;color:var(--mute)">Ad</label>' +
+      '<input id="ueFirst" maxlength="60" value="' + esc(u.first_name||'') + '" required>' +
+      '<label style="font-size:13px;font-weight:600;color:var(--mute)">Soyad</label>' +
+      '<input id="ueLast" maxlength="60" value="' + esc(u.last_name||'') + '" required>' +
+      '<label style="font-size:13px;font-weight:600;color:var(--mute)">Bölüm</label>' +
+      '<input id="ueDept" maxlength="120" value="' + esc(u.department||'') + '" required>' +
+      '<div style="display:flex;gap:8px;margin-top:8px">' +
+        '<button type="button" class="btn sheet-btn cancel" data-x="cancel" style="flex:1;margin:0">Vazgeç</button>' +
+        '<button type="submit" class="btn" style="flex:1">Kaydet</button>' +
+      '</div>' +
+    '</form></div>';
+  document.body.appendChild(el);
+  el.onclick = e => { if(e.target === el || e.target.classList.contains('sheet-close') || e.target.dataset.x === 'cancel') el.remove(); };
+  $('#ueForm').onsubmit = async e => {
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = true; btn.textContent = 'Kaydediliyor...';
+    const { error } = await sb.from('profiles').update({
+      first_name: capFirst($('#ueFirst').value.trim()),
+      last_name: capFirst($('#ueLast').value.trim()),
+      department: $('#ueDept').value.trim()
+    }).eq('id', u.id);
+    if(error){ btn.disabled = false; btn.textContent = 'Kaydet'; return alert('Hata: ' + error.message); }
+    el.remove();
+    loadAdminAllUsers();
   };
 }
 
