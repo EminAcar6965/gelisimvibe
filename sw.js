@@ -1,5 +1,5 @@
-const CACHE = 'gv-v11';
-const RUNTIME_CACHE = 'gv-runtime-v11';
+const CACHE = 'gv-v12';
+const RUNTIME_CACHE = 'gv-runtime-v12';
 const OFFLINE_HTML = '<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Çevrimdışı</title><style>body{font-family:system-ui,sans-serif;display:grid;place-items:center;height:100vh;margin:0;background:#EEF1F6;color:#101B33;text-align:center;padding:24px}button{margin-top:16px;padding:12px 22px;background:#2C4A8E;color:#fff;border:0;border-radius:12px;font-weight:700;font-size:15px}</style><div><div style="font-size:64px">📡</div><h1 style="margin:12px 0 6px">Çevrimdışısın</h1><p style="color:#66708A;max-width:320px">İnternet bağlantını kontrol edip tekrar dene.</p><button onclick="location.reload()">Tekrar Dene</button></div>';
 const hasCaches = (typeof caches !== 'undefined');
 
