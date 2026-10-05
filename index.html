@@ -28,7 +28,7 @@ body.night{
   --sh:0 6px 20px rgba(0,0,0,.45);
 }
 
-/* ============ SECTION: KİTAPLIK (AMBER - SENKRON) ============ */
+/* ============ SECTION: KİTAPLIK (AMBER) ============ */
 body[data-sec="library"]{
   --bg:#FBF4E0;--card:#fff;--ink:#1A1200;--mute:#7A6533;--line:#EBD9A8;
   --ac:#B8860B;--acink:#fff;--ac2:#D4A017;
@@ -46,7 +46,7 @@ body[data-sec="library"] .search-box svg{stroke:var(--ac)}
 body[data-sec="library"] .pcat{background:color-mix(in srgb,var(--ac) 14%,transparent);color:var(--ac)}
 body[data-sec="library"] .pico{background:linear-gradient(135deg,var(--ac),var(--ac2))}
 
-/* ============ SECTION: DUYURU (RESMİ LACİVERT) ============ */
+/* ============ SECTION: DUYURU ============ */
 body[data-sec="ann"]{
   --bg:#EFF3F9;--card:#fff;--ink:#0A1428;--mute:#546B8A;--line:#D5DEEB;
   --ac:#1E3A8A;--acink:#fff;--ac2:#2E4AA0;
@@ -60,8 +60,7 @@ body.night[data-sec="ann"]{
 body[data-sec="ann"] .ann{
   border-left:0;
   background:linear-gradient(180deg,color-mix(in srgb,var(--ac) 3%,var(--card)),var(--card));
-  position:relative;
-  overflow:hidden;
+  position:relative;overflow:hidden;
 }
 body[data-sec="ann"] .ann::before{
   content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
@@ -69,112 +68,41 @@ body[data-sec="ann"] .ann::before{
   border-radius:18px 0 0 18px;
 }
 body[data-sec="ann"] .badge{
-  background:linear-gradient(135deg,var(--ac),var(--ac2));
-  color:#fff;
-  letter-spacing:1.2px;
-  box-shadow:0 2px 8px color-mix(in srgb,var(--ac) 30%,transparent);
-  border:0;
+  background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;
+  letter-spacing:1.2px;box-shadow:0 2px 8px color-mix(in srgb,var(--ac) 30%,transparent);border:0;
 }
-body[data-sec="ann"] .ann h3{
-  font-size:19px;
-  letter-spacing:-.3px;
-  padding-bottom:8px;
-  border-bottom:1px dashed var(--line);
-  margin-bottom:6px;
-}
+body[data-sec="ann"] .ann h3{font-size:19px;letter-spacing:-.3px;padding-bottom:8px;border-bottom:1px dashed var(--line);margin-bottom:6px}
 body[data-sec="ann"] .ann .body{font-size:15px;line-height:1.6;color:color-mix(in srgb,var(--ink) 90%,var(--mute))}
 
-/* Resmi duyuru composer */
-.ann-form{
-  background:var(--card);
-  border-radius:20px;
-  border:1px solid var(--line);
-  box-shadow:var(--sh);
-  margin-bottom:14px;
-  overflow:hidden;
-  animation:up .3s ease both;
-}
-.ann-form-head{
-  display:flex;align-items:center;gap:12px;
-  padding:16px 18px 12px;
-  background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 8%,var(--card)),var(--card));
-  border-bottom:1px solid var(--line);
-}
-.ann-form-seal{
-  width:44px;height:44px;border-radius:50%;
-  background:linear-gradient(135deg,var(--ac),var(--ac2));
-  display:grid;place-items:center;flex:none;
-  color:#fff;font-size:22px;
-  box-shadow:0 4px 14px color-mix(in srgb,var(--ac) 35%,transparent);
-  border:2px solid color-mix(in srgb,#fff 20%,transparent);
-}
+.ann-form{background:var(--card);border-radius:20px;border:1px solid var(--line);box-shadow:var(--sh);margin-bottom:14px;overflow:hidden;animation:up .3s ease both}
+.ann-form-head{display:flex;align-items:center;gap:12px;padding:16px 18px 12px;background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 8%,var(--card)),var(--card));border-bottom:1px solid var(--line)}
+.ann-form-seal{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--ac),var(--ac2));display:grid;place-items:center;flex:none;color:#fff;font-size:22px;box-shadow:0 4px 14px color-mix(in srgb,var(--ac) 35%,transparent);border:2px solid color-mix(in srgb,#fff 20%,transparent)}
 .ann-form-head-txt{flex:1;min-width:0}
 .ann-form-head-txt b{display:block;font-size:15.5px;font-weight:800;letter-spacing:-.2px}
 .ann-form-head-txt small{color:var(--mute);font-size:12px;letter-spacing:.2px}
 .ann-form-body{padding:16px 18px}
 .ann-form-body .field{margin-bottom:12px}
-.ann-form-body label.fld-lbl{
-  display:block;font-size:11.5px;font-weight:800;color:var(--mute);
-  letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;
-}
-.ann-form-body input,
-.ann-form-body textarea{
-  border:1px solid var(--line);border-radius:11px;
-  background:color-mix(in srgb,var(--bg) 60%,var(--card));
-}
-.ann-form-body input:focus,
-.ann-form-body textarea:focus{
-  background:var(--card);
-  border-color:var(--ac);
-  box-shadow:0 0 0 3px color-mix(in srgb,var(--ac) 18%,transparent);
-}
+.ann-form-body label.fld-lbl{display:block;font-size:11.5px;font-weight:800;color:var(--mute);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+.ann-form-body input,.ann-form-body textarea{border:1px solid var(--line);border-radius:11px;background:color-mix(in srgb,var(--bg) 60%,var(--card))}
+.ann-form-body input:focus,.ann-form-body textarea:focus{background:var(--card);border-color:var(--ac);box-shadow:0 0 0 3px color-mix(in srgb,var(--ac) 18%,transparent)}
 .ann-form-body textarea{min-height:110px}
-.ann-form-foot{
-  display:flex;align-items:center;justify-content:space-between;gap:10px;
-  padding:12px 18px;
-  border-top:1px solid var(--line);
-  background:color-mix(in srgb,var(--bg) 50%,var(--card));
-  flex-wrap:wrap;
-}
+.ann-form-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;border-top:1px solid var(--line);background:color-mix(in srgb,var(--bg) 50%,var(--card));flex-wrap:wrap}
 .ann-form-tools{display:flex;gap:8px;align-items:center}
-.ann-tool-btn{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:8px 12px;border-radius:999px;
-  background:var(--card);border:1px solid var(--line);
-  color:var(--ac);font-size:12.5px;font-weight:700;cursor:pointer;
-  transition:background .15s,border-color .15s,transform .1s;
-}
+.ann-tool-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;background:var(--card);border:1px solid var(--line);color:var(--ac);font-size:12.5px;font-weight:700;cursor:pointer;transition:background .15s,border-color .15s,transform .1s}
 .ann-tool-btn:hover{background:color-mix(in srgb,var(--ac) 8%,var(--card));border-color:color-mix(in srgb,var(--ac) 40%,var(--line))}
 .ann-tool-btn:active{transform:scale(.96)}
 .ann-tool-btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .ann-tool-btn.on{background:var(--ac);color:var(--acink);border-color:var(--ac)}
-.ann-publish{
-  display:inline-flex;align-items:center;gap:8px;
-  background:linear-gradient(135deg,var(--ac),var(--ac2));
-  color:#fff;border:0;border-radius:999px;
-  padding:10px 22px;font-weight:800;font-size:13.5px;letter-spacing:.3px;
-  box-shadow:0 4px 14px color-mix(in srgb,var(--ac) 35%,transparent);
-  transition:transform .1s,box-shadow .15s;
-}
+.ann-publish{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:0;border-radius:999px;padding:10px 22px;font-weight:800;font-size:13.5px;letter-spacing:.3px;box-shadow:0 4px 14px color-mix(in srgb,var(--ac) 35%,transparent);transition:transform .1s,box-shadow .15s}
 .ann-publish:active{transform:scale(.96);box-shadow:0 2px 8px color-mix(in srgb,var(--ac) 40%,transparent)}
 .ann-publish svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
-.ann-poll-box{
-  background:color-mix(in srgb,var(--ac) 4%,var(--bg));
-  border:1px dashed color-mix(in srgb,var(--ac) 40%,var(--line));
-  border-radius:14px;padding:14px;margin-top:12px;
-  animation:up .25s ease both;
-}
-.ann-poll-box h5{
-  margin:0 0 10px;font-size:11.5px;font-weight:800;color:var(--ac);
-  letter-spacing:1.2px;text-transform:uppercase;
-  display:flex;align-items:center;gap:6px;
-}
+.ann-poll-box{background:color-mix(in srgb,var(--ac) 4%,var(--bg));border:1px dashed color-mix(in srgb,var(--ac) 40%,var(--line));border-radius:14px;padding:14px;margin-top:12px;animation:up .25s ease both}
+.ann-poll-box h5{margin:0 0 10px;font-size:11.5px;font-weight:800;color:var(--ac);letter-spacing:1.2px;text-transform:uppercase;display:flex;align-items:center;gap:6px}
 
-/* ============ SECTION: İTİRAF (GİZEMLİ MOR) ============ */
+/* ============ SECTION: İTİRAF ============ */
 body[data-sec="conf"]{
   --bg:#140A1F;--card:#1E1230;--ink:#EDE4FF;--mute:#9B8AB8;--line:#33204A;
-  --ac:#B064E0;--acink:#fff;--ac2:#C88AF0;
-  --danger:#FF5580;
+  --ac:#B064E0;--acink:#fff;--ac2:#C88AF0;--danger:#FF5580;
   --sh:0 4px 20px rgba(0,0,0,.35);
   background:radial-gradient(ellipse 80% 50% at 50% 0,color-mix(in srgb,#B064E0 12%,transparent),transparent 70%),var(--bg);
 }
@@ -183,66 +111,22 @@ body.night[data-sec="conf"]{
   --ac:#C080FF;--acink:#1A0A2A;--ac2:#D8A0FF;
   --sh:0 0 24px rgba(176,100,224,.15),0 6px 20px rgba(0,0,0,.55);
 }
-body[data-sec="conf"] header,
-body[data-sec="conf"] nav{
-  backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
-}
-body[data-sec="conf"] .card{
-  background:linear-gradient(180deg,color-mix(in srgb,#B064E0 4%,var(--card)),var(--card));
-  border:1px solid color-mix(in srgb,var(--ac) 18%,var(--line));
-  box-shadow:0 4px 24px rgba(176,100,224,.08),inset 0 1px 0 color-mix(in srgb,#fff 5%,transparent);
-}
-body[data-sec="conf"] .card::after{
-  content:"";position:absolute;inset:0;pointer-events:none;border-radius:18px;
-  background:radial-gradient(circle at 20% 0,color-mix(in srgb,var(--ac) 6%,transparent),transparent 40%);
-}
-body[data-sec="conf"] .card{position:relative;overflow:hidden}
-body[data-sec="conf"] .av.an{
-  background:linear-gradient(135deg,#4A2060,#2A1040);
-  border:1px solid color-mix(in srgb,var(--ac) 40%,transparent);
-  box-shadow:0 0 18px color-mix(in srgb,var(--ac) 30%,transparent),inset 0 0 12px color-mix(in srgb,var(--ac) 20%,transparent);
-}
+body[data-sec="conf"] header,body[data-sec="conf"] nav{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+body[data-sec="conf"] .card{background:linear-gradient(180deg,color-mix(in srgb,#B064E0 4%,var(--card)),var(--card));border:1px solid color-mix(in srgb,var(--ac) 18%,var(--line));box-shadow:0 4px 24px rgba(176,100,224,.08),inset 0 1px 0 color-mix(in srgb,#fff 5%,transparent);position:relative;overflow:hidden}
+body[data-sec="conf"] .card::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:18px;background:radial-gradient(circle at 20% 0,color-mix(in srgb,var(--ac) 6%,transparent),transparent 40%)}
+body[data-sec="conf"] .av.an{background:linear-gradient(135deg,#4A2060,#2A1040);border:1px solid color-mix(in srgb,var(--ac) 40%,transparent);box-shadow:0 0 18px color-mix(in srgb,var(--ac) 30%,transparent),inset 0 0 12px color-mix(in srgb,var(--ac) 20%,transparent)}
 body[data-sec="conf"] .av.an svg{stroke:var(--ac);filter:drop-shadow(0 0 6px var(--ac))}
-body[data-sec="conf"] .composer-new{
-  background:linear-gradient(180deg,color-mix(in srgb,#B064E0 6%,var(--card)),var(--card));
-  border:1px solid color-mix(in srgb,var(--ac) 25%,var(--line));
-}
-body[data-sec="conf"] .composer-new::before{
-  background:linear-gradient(90deg,transparent,var(--ac),transparent);
-  height:2px;
-  box-shadow:0 0 12px var(--ac);
-}
-body[data-sec="conf"] .composer-anon-badge{
-  background:linear-gradient(135deg,#4A2060,#2A1040);
-  border:1px solid color-mix(in srgb,var(--ac) 50%,transparent);
-  box-shadow:0 0 12px color-mix(in srgb,var(--ac) 30%,transparent);
-}
-body[data-sec="conf"] .composer-head .cav{
-  background:linear-gradient(135deg,#4A2060,#2A1040);
-  box-shadow:0 0 18px color-mix(in srgb,var(--ac) 40%,transparent);
-  color:var(--ac);
-}
-body[data-sec="conf"] .btn,
-body[data-sec="conf"] .composer-submit{
-  background:linear-gradient(135deg,var(--ac),var(--ac2));
-  box-shadow:0 4px 16px color-mix(in srgb,var(--ac) 40%,transparent);
-}
+body[data-sec="conf"] .composer-new{background:linear-gradient(180deg,color-mix(in srgb,#B064E0 6%,var(--card)),var(--card));border:1px solid color-mix(in srgb,var(--ac) 25%,var(--line))}
+body[data-sec="conf"] .composer-new::before{background:linear-gradient(90deg,transparent,var(--ac),transparent);height:2px;box-shadow:0 0 12px var(--ac)}
+body[data-sec="conf"] .composer-anon-badge{background:linear-gradient(135deg,#4A2060,#2A1040);border:1px solid color-mix(in srgb,var(--ac) 50%,transparent);box-shadow:0 0 12px color-mix(in srgb,var(--ac) 30%,transparent)}
+body[data-sec="conf"] .composer-head .cav{background:linear-gradient(135deg,#4A2060,#2A1040);box-shadow:0 0 18px color-mix(in srgb,var(--ac) 40%,transparent);color:var(--ac)}
+body[data-sec="conf"] .btn,body[data-sec="conf"] .composer-submit{background:linear-gradient(135deg,var(--ac),var(--ac2));box-shadow:0 4px 16px color-mix(in srgb,var(--ac) 40%,transparent)}
 body[data-sec="conf"] .acts button.on{color:var(--ac);text-shadow:0 0 10px color-mix(in srgb,var(--ac) 60%,transparent)}
-body[data-sec="conf"] .cm-item{
-  background:linear-gradient(180deg,color-mix(in srgb,#B064E0 5%,var(--bg)),var(--bg));
-  border:1px solid color-mix(in srgb,var(--ac) 12%,var(--line));
-}
-body[data-sec="conf"] .cm-name .anon{
-  color:var(--ac);
-  text-shadow:0 0 8px color-mix(in srgb,var(--ac) 50%,transparent);
-}
+body[data-sec="conf"] .cm-item{background:linear-gradient(180deg,color-mix(in srgb,#B064E0 5%,var(--bg)),var(--bg));border:1px solid color-mix(in srgb,var(--ac) 12%,var(--line))}
+body[data-sec="conf"] .cm-name .anon{color:var(--ac);text-shadow:0 0 8px color-mix(in srgb,var(--ac) 50%,transparent)}
 body.night[data-sec="conf"] .cm-name .anon{color:var(--ac2)}
-body[data-sec="conf"] .empty{
-  color:var(--mute);
-}
 
-/* ============ SECTION: MESAJ (YEŞİL) ============ */
+/* ============ SECTION: MESAJ ============ */
 body[data-sec="chat"]{
   --bg:#ECF5F0;--card:#fff;--ink:#0A1A12;--mute:#5E7D6E;--line:#D5E5DC;
   --ac:#0F6B4A;--acink:#fff;--ac2:#158A60;
@@ -254,7 +138,7 @@ body.night[data-sec="chat"]{
   --sh:0 6px 20px rgba(0,0,0,.5);
 }
 
-/* ============ SECTION: AYARLAR (SLATE GRİ) ============ */
+/* ============ SECTION: AYARLAR ============ */
 body[data-sec="settings"]{
   --bg:#F4F6F8;--card:#fff;--ink:#1A202C;--mute:#718096;--line:#E2E8F0;
   --ac:#4A5568;--acink:#fff;--ac2:#5F6B7E;
@@ -266,7 +150,7 @@ body.night[data-sec="settings"]{
   --sh:0 6px 20px rgba(0,0,0,.55);
 }
 
-/* ============ SECTION: ADMIN (HACKER TERMINAL) ============ */
+/* ============ SECTION: ADMIN ============ */
 body[data-sec="admin"]{
   font-family:'JetBrains Mono',ui-monospace,'Courier New',monospace;
   --bg:#F0F7F2;--card:#fff;--ink:#0A1A10;--mute:#4D6B58;--line:#D4E5DA;
@@ -279,82 +163,24 @@ body.night[data-sec="admin"]{
   --sh:0 0 24px rgba(0,255,136,.08),0 6px 20px rgba(0,0,0,.55);
 }
 body[data-sec="admin"]{
-  background:
-    repeating-linear-gradient(0deg,transparent 0,transparent 2px,color-mix(in srgb,var(--ac) 2%,transparent) 2px,color-mix(in srgb,var(--ac) 2%,transparent) 3px),
-    radial-gradient(ellipse 60% 40% at 50% 0,color-mix(in srgb,var(--ac) 6%,transparent),transparent 70%),
-    var(--bg);
+  background:repeating-linear-gradient(0deg,transparent 0,transparent 2px,color-mix(in srgb,var(--ac) 2%,transparent) 2px,color-mix(in srgb,var(--ac) 2%,transparent) 3px),radial-gradient(ellipse 60% 40% at 50% 0,color-mix(in srgb,var(--ac) 6%,transparent),transparent 70%),var(--bg);
 }
-body[data-sec="admin"] header{
-  border-bottom:1px solid color-mix(in srgb,var(--ac) 30%,transparent);
-  background:color-mix(in srgb,var(--bg) 92%,transparent);
-}
-body[data-sec="admin"] .brand b::before{
-  content:"$ ";color:var(--ac);opacity:.7;
-  animation:blink 1.2s steps(1) infinite;
-}
-body[data-sec="admin"] .brand b::after{
-  content:"_";color:var(--ac);
-  animation:blink 1s steps(1) infinite;
-}
+body[data-sec="admin"] header{border-bottom:1px solid color-mix(in srgb,var(--ac) 30%,transparent);background:color-mix(in srgb,var(--bg) 92%,transparent)}
+body[data-sec="admin"] .brand b::before{content:"$ ";color:var(--ac);opacity:.7;animation:blink 1.2s steps(1) infinite}
+body[data-sec="admin"] .brand b::after{content:"_";color:var(--ac);animation:blink 1s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
-
-body[data-sec="admin"] .card{
-  background:linear-gradient(180deg,color-mix(in srgb,var(--ac) 4%,var(--card)),var(--card));
-  border:1px solid color-mix(in srgb,var(--ac) 25%,var(--line));
-  box-shadow:0 0 0 1px color-mix(in srgb,var(--ac) 8%,transparent),inset 0 1px 0 color-mix(in srgb,var(--ac) 12%,transparent),0 4px 20px rgba(0,0,0,.3);
-  position:relative;
-}
-body[data-sec="admin"] .card::before{
-  content:"";position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--ac) 60%,transparent),transparent);
-}
-body[data-sec="admin"] .btn{
-  background:linear-gradient(135deg,var(--ac),var(--ac2));
-  box-shadow:0 0 18px color-mix(in srgb,var(--ac) 40%,transparent);
-  font-family:inherit;font-weight:800;letter-spacing:.5px;
-}
-body[data-sec="admin"] .seg button.on{
-  background:linear-gradient(135deg,var(--ac),var(--ac2));
-  color:var(--acink);
-  box-shadow:0 0 16px color-mix(in srgb,var(--ac) 40%,transparent);
-}
-body[data-sec="admin"] .tag{
-  background:color-mix(in srgb,var(--ac) 10%,transparent);
-  color:var(--ac);
-  border:1px solid color-mix(in srgb,var(--ac) 40%,transparent);
-  font-family:inherit;
-  letter-spacing:.5px;
-}
-body[data-sec="admin"] .badge{
-  background:color-mix(in srgb,var(--ac) 14%,transparent);
-  color:var(--ac);
-  border:1px solid color-mix(in srgb,var(--ac) 40%,transparent);
-  letter-spacing:1px;
-}
-body[data-sec="admin"] .admin-toggle{
-  background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 10%,transparent),transparent);
-  border:1px dashed color-mix(in srgb,var(--ac) 50%,transparent);
-  font-family:inherit;
-  letter-spacing:.3px;
-}
+body[data-sec="admin"] .card{background:linear-gradient(180deg,color-mix(in srgb,var(--ac) 4%,var(--card)),var(--card));border:1px solid color-mix(in srgb,var(--ac) 25%,var(--line));box-shadow:0 0 0 1px color-mix(in srgb,var(--ac) 8%,transparent),inset 0 1px 0 color-mix(in srgb,var(--ac) 12%,transparent),0 4px 20px rgba(0,0,0,.3);position:relative}
+body[data-sec="admin"] .card::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--ac) 60%,transparent),transparent)}
+body[data-sec="admin"] .btn{background:linear-gradient(135deg,var(--ac),var(--ac2));box-shadow:0 0 18px color-mix(in srgb,var(--ac) 40%,transparent);font-family:inherit;font-weight:800;letter-spacing:.5px}
+body[data-sec="admin"] .seg button.on{background:linear-gradient(135deg,var(--ac),var(--ac2));color:var(--acink);box-shadow:0 0 16px color-mix(in srgb,var(--ac) 40%,transparent)}
+body[data-sec="admin"] .tag{background:color-mix(in srgb,var(--ac) 10%,transparent);color:var(--ac);border:1px solid color-mix(in srgb,var(--ac) 40%,transparent);font-family:inherit;letter-spacing:.5px}
+body[data-sec="admin"] .badge{background:color-mix(in srgb,var(--ac) 14%,transparent);color:var(--ac);border:1px solid color-mix(in srgb,var(--ac) 40%,transparent);letter-spacing:1px}
+body[data-sec="admin"] .admin-toggle{background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 10%,transparent),transparent);border:1px dashed color-mix(in srgb,var(--ac) 50%,transparent);font-family:inherit;letter-spacing:.3px}
 body[data-sec="admin"] .admin-toggle b{color:var(--ac)}
-body[data-sec="admin"] .admin-toggle button{
-  background:var(--ac);color:var(--acink);
-  font-family:inherit;font-weight:800;letter-spacing:.3px;
-  box-shadow:0 0 12px color-mix(in srgb,var(--ac) 50%,transparent);
-}
-body[data-sec="admin"] .av{
-  background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 60%,#000),color-mix(in srgb,var(--ac) 30%,#000));
-  border:1px solid color-mix(in srgb,var(--ac) 50%,transparent);
-  box-shadow:0 0 12px color-mix(in srgb,var(--ac) 30%,transparent);
-}
+body[data-sec="admin"] .admin-toggle button{background:var(--ac);color:var(--acink);font-family:inherit;font-weight:800;letter-spacing:.3px;box-shadow:0 0 12px color-mix(in srgb,var(--ac) 50%,transparent)}
+body[data-sec="admin"] .av{background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 60%,#000),color-mix(in srgb,var(--ac) 30%,#000));border:1px solid color-mix(in srgb,var(--ac) 50%,transparent);box-shadow:0 0 12px color-mix(in srgb,var(--ac) 30%,transparent);font-family:'Bricolage Grotesque',system-ui,sans-serif}
 body[data-sec="admin"] .user-card{position:relative}
-body[data-sec="admin"] .user-card::after{
-  content:"";position:absolute;top:8px;right:10px;width:6px;height:6px;
-  background:var(--ac);border-radius:50%;
-  box-shadow:0 0 8px var(--ac);
-  animation:pulse 2s ease-in-out infinite;
-}
+body[data-sec="admin"] .user-card::after{content:"";position:absolute;top:8px;right:10px;width:6px;height:6px;background:var(--ac);border-radius:50%;box-shadow:0 0 8px var(--ac);animation:pulse 2s ease-in-out infinite}
 @keyframes pulse{50%{opacity:.4;transform:scale(.85)}}
 
 *{box-sizing:border-box}
@@ -465,8 +291,15 @@ body.night .composer-anon-badge{background:#B0284F}
 .poll-toggle{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;cursor:pointer;margin-top:6px;color:var(--ac)}
 .poll-toggle input{width:auto}
 
-.empty{text-align:center;color:var(--mute);padding:40px 10px}
+.empty{text-align:center;color:var(--mute);padding:44px 16px;font-size:14px;line-height:1.6}
+.empty .em-ic{font-size:44px;display:block;margin-bottom:12px;opacity:.7}
+.empty .em-t{font-weight:800;color:var(--ink);margin-bottom:4px;font-size:15.5px}
 .skeleton{background:linear-gradient(90deg,var(--bg) 25%,color-mix(in srgb,var(--line) 60%,var(--bg)) 50%,var(--bg) 75%);background-size:200% 100%;animation:shine 1.4s infinite;border-radius:14px;height:100px;margin-bottom:10px}
+.skel-card{background:var(--card);border-radius:18px;padding:14px;margin-bottom:10px;border:1px solid var(--line);box-shadow:var(--sh)}
+.skel-line{height:12px;background:linear-gradient(90deg,var(--bg) 25%,color-mix(in srgb,var(--line) 60%,var(--bg)) 50%,var(--bg) 75%);background-size:200% 100%;animation:shine 1.4s infinite;border-radius:6px;margin-bottom:8px}
+.skel-line.w60{width:60%}
+.skel-line.w80{width:80%}
+.skel-line.w40{width:40%}
 @keyframes shine{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
 /* ============ NAV ============ */
@@ -505,10 +338,8 @@ body.night .nav-tabs button[data-t="admin"]{--nc:#00FF88}
 .av.an{background:#8B1A3D;color:#fff;cursor:default}
 body.night .av.an{background:#B0284F}
 .av.an svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:2}
-body[data-sec="admin"] .av{font-family:'Bricolage Grotesque',system-ui,sans-serif}
 .ann h3{margin:6px 0 0;font-size:18px;font-weight:800}
 .badge{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.6px;padding:3px 9px;border-radius:999px;background:color-mix(in srgb,var(--ac) 14%,transparent);color:var(--ac)}
-body[data-sec="admin"] .badge{font-family:'JetBrains Mono',monospace}
 .pick{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;color:var(--ac);cursor:pointer}
 .pick:hover{background:var(--bg)}
 .pick svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
@@ -544,10 +375,8 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2a2010,#3a2d15)}
 .pcard .pactions{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
 .pcard .pactions a,.pcard .pactions button{background:var(--bg);border:0;color:var(--ac);font-weight:600;font-size:13px;padding:6px 11px;border-radius:999px;text-decoration:none;cursor:pointer}
 
-/* ============ FAB ============ */
 .fab{position:fixed;right:16px;bottom:calc(96px + env(safe-area-inset-bottom));width:54px;height:54px;border-radius:50%;background:var(--ac);color:var(--acink);border:0;font-size:30px;line-height:1;box-shadow:0 8px 22px color-mix(in srgb,var(--ac) 40%,transparent);cursor:pointer;z-index:22;display:grid;place-items:center;padding-bottom:5px}
 
-/* ============ SHEETS ============ */
 .sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:100;display:grid;place-items:end center;animation:fade .18s}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 .sheet{background:var(--card);border-radius:22px 22px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));width:100%;max-width:640px;animation:up2 .22s ease both;border-top:1px solid var(--line);max-height:88vh;overflow-y:auto}
@@ -564,8 +393,7 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2a2010,#3a2d15)}
 .prog-fill{height:100%;width:0%;background:var(--ac);transition:width .2s ease;border-radius:999px}
 .prog-text{font-size:12px;color:var(--mute);margin-top:5px;text-align:center}
 
-/* ============ CHAT ============ */
-.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 210px);min-height:400px}
+.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 210px);height:calc(100dvh - 210px);min-height:400px}
 .chat-head{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:10px;box-shadow:var(--sh)}
 .chat-head .back{background:none;border:0;color:var(--ac);font-weight:700;padding:4px 8px}
 .chat-body{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding:6px 2px}
@@ -581,7 +409,6 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2a2010,#3a2d15)}
 .conv .cl{color:var(--mute);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .conv .cb{background:var(--ac);color:var(--acink);font-size:11px;font-weight:800;border-radius:999px;padding:2px 8px}
 
-/* ============ ADMIN ============ */
 .admin-toggle{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;background:linear-gradient(135deg,rgba(255,149,0,.14),rgba(255,0,110,.10));border:1px dashed rgba(255,90,60,.5);border-radius:14px;margin-bottom:12px;font-size:13px;flex-wrap:wrap}
 .admin-toggle b{color:#ff5a3c}
 .admin-toggle button{background:#ff5a3c;color:#fff;border:0;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700}
@@ -602,7 +429,6 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2a2010,#3a2d15)}
 .success-box h3{margin:0 0 8px;font-size:20px}
 .success-box p{color:var(--mute);font-size:14px;line-height:1.6;margin:0}
 
-/* ============ SETTINGS ============ */
 .settings-list{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
 .settings-item{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;text-decoration:none;color:var(--ink);box-shadow:var(--sh)}
 .settings-item:hover{background:color-mix(in srgb,var(--ac) 6%,var(--card))}
@@ -615,7 +441,6 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2a2010,#3a2d15)}
 .settings-item.danger .txt b{color:var(--danger)}
 .avatar-big{width:70px;height:70px;border-radius:50%;background:var(--ac);color:var(--acink);display:grid;place-items:center;font-weight:800;font-size:26px;margin:0 auto 12px}
 
-/* ============ COOKIE ============ */
 .cookie-banner{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);padding:14px;z-index:999;box-shadow:0 -4px 20px rgba(0,0,0,.12);display:none}
 .cookie-banner.show{display:block}
 .cookie-content{max-width:640px;margin:0 auto}
@@ -623,12 +448,29 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2a2010,#3a2d15)}
 .cookie-content a{color:var(--ac);font-weight:600}
 .cookie-actions{display:flex;gap:8px;align-items:center}
 
-/* ============ USER CARD (admin) ============ */
 .user-card{padding:12px 14px}
 .user-card-row{display:flex;gap:12px;align-items:center}
 .restrict-badge{display:inline-flex;align-items:center;gap:4px;background:color-mix(in srgb,#FF9900 14%,transparent);color:#ff9900;font-size:11px;font-weight:800;padding:3px 9px;border-radius:999px;margin-top:4px}
 .restrict-badge.ban{background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger)}
 .restrict-badge.hist{background:var(--bg);color:var(--mute)}
+
+/* ============ TOAST ============ */
+#toast-container{position:fixed;top:calc(58px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;width:calc(100% - 28px);max-width:420px}
+.toast{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:12px 14px;box-shadow:0 12px 30px rgba(0,0,0,.18);font-size:13.5px;font-weight:600;line-height:1.4;opacity:0;transform:translateY(-12px);transition:opacity .25s,transform .25s;display:flex;align-items:flex-start;gap:10px;pointer-events:auto}
+.toast.show{opacity:1;transform:none}
+.toast.ok{border-left:4px solid #2ECC71}
+.toast.err{border-left:4px solid var(--danger)}
+.toast.info{border-left:4px solid var(--ac)}
+.toast.warn{border-left:4px solid #FF9900}
+.toast .t-ic{flex:none;font-size:15px;line-height:1.2}
+
+/* ============ REDUCED MOTION ============ */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+
+/* ============ THEME SMOOTH TRANSITIONS ============ */
+body,.card,.btn,.composer-new,.search-box,.settings-item,.conv,.cm-item,.seg,.sheet,.ann-form,.ad-card,.poll,.poll-opt,.nav-tabs button,header,input,textarea{transition:background-color .2s ease,color .2s ease,border-color .2s ease}
 </style>
 </head>
 <body>
@@ -681,19 +523,19 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2a2010,#3a2d15)}
       <b>Gelişim Vibe</b>
     </div>
     <div class="header-actions">
-      <button class="icon-btn" id="themeToggle" title="Tema">🌙</button>
+      <button class="icon-btn" id="themeToggle" title="Tema" aria-label="Tema değiştir">🌙</button>
     </div>
   </header>
   <div class="wrap" id="view"></div>
   <nav>
     <div class="nav-tabs">
-      <button data-t="feed" class="on"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg><span>Akış</span><i class="dot"></i></button>
-      <button data-t="library"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span>Kitaplık</span><i class="dot"></i></button>
-      <button data-t="ann"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span>Duyuru</span><i class="dot"></i></button>
-      <button data-t="conf"><svg viewBox="0 0 24 24"><path d="M9 10h.01M15 10h.01M12 2a8 8 0 0 0-8 8v12l3-3 2.5 3 2.5-3 2.5 3 2.5-3 3 3V10a8 8 0 0 0-8-8z"/></svg><span>İtiraf</span><i class="dot"></i></button>
-      <button data-t="chat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Mesaj</span><i class="dot"></i></button>
-      <button data-t="settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Ayarlar</span></button>
-      <button data-t="admin" id="adminTab" class="hide"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span>Admin</span></button>
+      <button data-t="feed" class="on" aria-label="Akış"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg><span>Akış</span><i class="dot"></i></button>
+      <button data-t="library" aria-label="Kitaplık"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span>Kitaplık</span><i class="dot"></i></button>
+      <button data-t="ann" aria-label="Duyurular"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span>Duyuru</span><i class="dot"></i></button>
+      <button data-t="conf" aria-label="İtiraflar"><svg viewBox="0 0 24 24"><path d="M9 10h.01M15 10h.01M12 2a8 8 0 0 0-8 8v12l3-3 2.5 3 2.5-3 2.5 3 2.5-3 3 3V10a8 8 0 0 0-8-8z"/></svg><span>İtiraf</span><i class="dot"></i></button>
+      <button data-t="chat" aria-label="Mesajlar"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Mesaj</span><i class="dot"></i></button>
+      <button data-t="settings" aria-label="Ayarlar"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Ayarlar</span></button>
+      <button data-t="admin" id="adminTab" class="hide" aria-label="Admin panel"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span>Admin</span></button>
     </div>
     <div class="app-footer">Designed &amp; Developed by <b>Emin Acar</b></div>
   </nav>
@@ -727,8 +569,42 @@ const pdfUrl   = p => sb.storage.from('pdfs').getPublicUrl(p).data.publicUrl;
 const videoUrl = p => sb.storage.from('videos').getPublicUrl(p).data.publicUrl;
 const adImgUrl = p => sb.storage.from('ads').getPublicUrl(p).data.publicUrl;
 
+/* ============== TOAST ============== */
+function toast(msg, type){
+  type = type || 'info';
+  let c = document.getElementById('toast-container');
+  if(!c){ c = document.createElement('div'); c.id = 'toast-container'; document.body.appendChild(c); }
+  const icons = { ok:'✅', err:'⚠️', info:'ℹ️', warn:'⚠️' };
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.innerHTML = '<span class="t-ic">' + (icons[type]||'ℹ️') + '</span><span>' + esc(msg) + '</span>';
+  c.appendChild(t);
+  requestAnimationFrame(() => t.classList.add('show'));
+  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 3400);
+}
+
+/* ============== DEBOUNCE ============== */
+const debounce = (fn, ms) => { ms = ms || 300; let t; return function(){ const a = arguments, ctx = this; clearTimeout(t); t = setTimeout(() => fn.apply(ctx, a), ms); }; };
+
+/* ============== SHEET ============== */
+function openSheet(html, opts){
+  opts = opts || {};
+  const el = document.createElement('div');
+  el.className = 'sheet-bg';
+  el.innerHTML = '<div class="sheet">' + html + '</div>';
+  document.body.appendChild(el);
+  if(opts.closeOnBg !== false){
+    el.onclick = e => { if(e.target === el || e.target.classList.contains('sheet-close')) el.remove(); };
+  }
+  return el;
+}
+
+/* ============== THEME ============== */
 function applyTheme(){
-  const t = localStorage.getItem('theme') || 'light';
+  let t = localStorage.getItem('theme');
+  if(!t){
+    t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'night' : 'light';
+  }
   document.body.classList.toggle('night', t === 'night');
   const btn = $('#themeToggle');
   if(btn) btn.textContent = t === 'night' ? '☀️' : '🌙';
@@ -769,55 +645,48 @@ window.openLegalDoc = function(kind){
       title: `📋 Aydınlatma Metni`,
       body: `
 <div style="line-height:1.85;font-size:14px;color:var(--mute);text-align:justify">
-<p style="margin:0 0 16px">İşbu Aydınlatma Metni, 6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") m.10 uyarınca, veri sorumlusu tarafından kişisel verilerinizin işlenmesine ilişkin olarak sizi bilgilendirmek amacıyla hazırlanmıştır. Uygulamamızı kullanmadan önce bu metni dikkatlice okumanızı ve içeriği anlamanızı rica ederiz.</p>
+<p style="margin:0 0 16px">İşbu Aydınlatma Metni, 6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") m.10 uyarınca, veri sorumlusu tarafından kişisel verilerinizin işlenmesine ilişkin olarak sizi bilgilendirmek amacıyla hazırlanmıştır.</p>
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">1. Veri Sorumlusunun Kimliği</h3>
-<p style="margin:0 0 16px">Bu uygulama kapsamında kişisel verileriniz, veri sorumlusu sıfatıyla Gelişim Vibe tarafından işlenmektedir. Gelişim Vibe, İstanbul Gelişim Üniversitesi öğrencileri tarafından öğrenciler için bağımsız olarak geliştirilmiş bir topluluk uygulamasıdır ve resmî bir üniversite uygulaması değildir. Uygulamanın geliştiricisi Emin Acar olup, kişisel verilerinizle ilgili her türlü soru, talep ve başvurunuz için ${CONTACT_EMAIL} adresinden bizimle iletişime geçebilirsiniz.</p>
+<p style="margin:0 0 16px">Bu uygulama kapsamında kişisel verileriniz, veri sorumlusu sıfatıyla Gelişim Vibe tarafından işlenmektedir. Uygulamanın geliştiricisi Emin Acar olup, kişisel verilerinizle ilgili her türlü soru ve talebiniz için ${CONTACT_EMAIL} adresinden bizimle iletişime geçebilirsiniz.</p>
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">2. İşlenen Kişisel Verileriniz</h3>
-<p style="margin:0 0 16px">Uygulamamıza kayıt olmanız ve hizmetlerimizi kullanmanız sırasında aşağıdaki kişisel verileriniz işlenmektedir: Kimlik verisi olarak adınız ve soyadınız; iletişim verisi olarak üniversite e-posta adresiniz; eğitim verisi olarak kayıt sırasında belirttiğiniz bölüm bilginiz; kullanıcı işlem verisi olarak uygulama içinde yaptığınız paylaşımlar, anonim itiraflar, yorumlar, beğeniler, birebir mesajlar, ikinci el kitap ilanları, yüklediğiniz PDF ders notları ve görsel/video içerikler; teknik veri olarak IP adresiniz, oturum bilgileriniz, cihaz ve tarayıcı bilgileriniz ile uygulama içi etkileşim kayıtlarınız; ve son olarak çerez verisi olarak Google AdSense ve iş ortakları tarafından yerleştirilen reklam ve analiz çerezleri işlenmektedir.</p>
+<p style="margin:0 0 16px">Kimlik verisi olarak adınız ve soyadınız; iletişim verisi olarak üniversite e-posta adresiniz; eğitim verisi olarak bölüm bilginiz; kullanıcı işlem verisi olarak paylaşımlar, yorumlar, mesajlar, ilanlar, PDF'ler ve medya içerikler; teknik veri olarak IP adresi, oturum ve cihaz bilgileri; çerez verisi olarak Google AdSense ve iş ortakları tarafından yerleştirilen reklam ve analiz çerezleri işlenmektedir.</p>
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">3. Kişisel Verilerin İşlenme Amaçları</h3>
-<p style="margin:0 0 16px">Kişisel verileriniz, üyelik kaydınızın oluşturulması ve hesap yönetiminizin sağlanması, üniversite e-postanız üzerinden kimlik doğrulama ve doğrulama kodu (OTP) gönderimi, uygulama içi sosyal etkileşimlerin (paylaşım, yorum, mesaj, beğeni) sağlanması, ikinci el kitap ve ders notu paylaşım hizmetinin sunulması, anonim itiraf özelliğinin işletilmesi ve içerik moderasyonu, şikayet, ban ve kısıtlama süreçlerinin yürütülmesi, platform güvenliğinin sağlanması ve kötüye kullanımın önlenmesi, yasal yükümlülüklerin yerine getirilmesi, Google AdSense aracılığıyla kişiselleştirilmiş reklam gösterimi ve son olarak hizmet kalitesinin ölçülmesi ve geliştirilmesi amaçlarıyla işlenmektedir.</p>
+<p style="margin:0 0 16px">Üyelik kaydı, kimlik doğrulama, sosyal etkileşimler, ikinci el kitap ve ders notu paylaşımı, anonim itiraf özelliği, içerik moderasyonu, platform güvenliği, yasal yükümlülükler, kişiselleştirilmiş reklam gösterimi ve hizmet kalitesinin ölçülmesi amaçlarıyla işlenmektedir.</p>
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">4. Kişisel Verilerin İşlenmesinin Hukuki Sebepleri</h3>
-<p style="margin:0 0 16px">Kişisel verileriniz, KVKK m.5 kapsamında aşağıdaki hukuki sebeplere dayanılarak işlenmektedir: m.5/2(c) uyarınca "bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması" sebebiyle hesap oluşturma ve hizmet sunumu için; m.5/2(ç) uyarınca "veri sorumlusunun hukuki yükümlülüğünü yerine getirebilmesi için zorunlu olması" sebebiyle yasal kayıtlar için; m.5/2(f) uyarınca "ilgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması" sebebiyle platform güvenliği için; ve m.5/1 uyarınca Google AdSense gibi reklam çerezleri ve kişiselleştirilmiş reklam gösterimi için açık rızanıza dayanılarak işlenmektedir.</p>
+<p style="margin:0 0 16px">KVKK m.5/2(c) sözleşmenin kurulması, m.5/2(ç) hukuki yükümlülük, m.5/2(f) meşru menfaat ve m.5/1 açık rıza hukuki sebeplerine dayanılarak işlenmektedir.</p>
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">5. Kişisel Verilerin Aktarılması</h3>
-<p style="margin:0 0 16px">Kişisel verileriniz, hizmetlerimizin teknik olarak çalışabilmesi amacıyla aşağıdaki hizmet sağlayıcılar aracılığıyla işlenmekte ve yurt dışındaki sunucularda saklanabilmektedir: Supabase Inc. (ABD/AB) kimlik doğrulama, veritabanı ve dosya depolama altyapısı için; Google LLC (ABD) Google AdSense reklam hizmeti ve analitik için; Cloudflare Inc. (ABD) CDN, güvenlik ve DDoS koruması için; ve nihayet web sitesi barındırma hizmeti sunan hosting sağlayıcıları için. Yurt dışına aktarım, KVKK m.9 kapsamında Standart Sözleşme Hükümleri (SCC) ve kayıt sırasında verdiğiniz açık rızanıza dayanılarak gerçekleştirilmektedir. Verileriniz ticari amaçlarla üçüncü taraflara satılmaz, kiralanmaz veya pazarlama listeleri için paylaşılmaz.</p>
+<p style="margin:0 0 16px">Supabase Inc. (ABD/AB), Google LLC (ABD), Cloudflare Inc. (ABD) ve hosting sağlayıcıları aracılığıyla yurt dışında işlenebilir. Yurt dışı aktarım KVKK m.9 kapsamında Standart Sözleşme Hükümleri (SCC) ve açık rızanıza dayanılarak gerçekleştirilir. Verileriniz ticari amaçla üçüncü taraflara satılmaz.</p>
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">6. Kişisel Verilerin Toplanma Yöntemi</h3>
-<p style="margin:0 0 16px">Kişisel verileriniz; kayıt formu, paylaşım/yorum/mesaj alanları, dosya yükleme araçları, çerezler ve otomatik sistem kayıtları aracılığıyla tamamen elektronik ortamda toplanmaktadır. Verilerinizin bir kısmı sizin doğrudan girişinizle (ad, e-posta, paylaşım içerikleri), bir kısmı ise platformun teknik işleyişi gereği otomatik olarak (IP adresi, oturum bilgileri, çerez verileri) toplanmaktadır.</p>
+<p style="margin:0 0 16px">Kayıt formu, paylaşım/yorum/mesaj alanları, dosya yükleme araçları, çerezler ve otomatik sistem kayıtları aracılığıyla elektronik ortamda toplanmaktadır.</p>
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">7. Saklama Süresi</h3>
-<p style="margin:0 0 16px">Hesap verileriniz, hesabınız aktif olduğu sürece saklanmaktadır. Hesabınızı "Hesabımı Sil" özelliği üzerinden sildiğinizde tüm paylaşımlarınız, mesajlarınız, yüklediğiniz dosyalar ve kişisel verileriniz anında ve kalıcı olarak silinmektedir. Yasal yükümlülükler gereği saklanması zorunlu olan kayıtlar (güvenlik logları, işlem kayıtları) ilgili mevzuatta belirtilen süre boyunca saklanmaktadır. Bununla birlikte, platform kurallarını ihlal ettiği için kalıcı olarak banlanan kullanıcıların e-posta adresleri, aynı mail adresi ile yeniden kayıt olunmasını engellemek amacıyla süresiz olarak saklanmaktadır.</p>
+<p style="margin:0 0 16px">Hesap verileriniz hesabınız aktif olduğu sürece saklanır. Hesabınızı sildiğinizde tüm verileriniz anında ve kalıcı olarak silinir. Banlanan kullanıcıların e-posta adresleri, yeniden kayıt olmayı engellemek için süresiz saklanır.</p>
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">8. Veri Güvenliği</h3>
-<p style="margin:0 0 16px">Kişisel verileriniz, gerekli teknik ve idari güvenlik önlemleriyle korunmaktadır. Veri iletişimi SSL/TLS şifreleme ile sağlanmakta, veriler AES-256 standardında şifrelenerek saklanmaktadır. Supabase altyapısında uygulanan Row Level Security (RLS) politikaları ile kullanıcıların yalnızca kendi verilerine erişmesi sağlanmakta, şifreler güvenli biçimde hash işlemine tabi tutularak saklanmaktadır. Kullandığımız altyapı hizmeti Supabase, ISO 27001 ve SOC2 Type II sertifikalarına sahiptir ve düzenli olarak bağımsız güvenlik denetimlerinden geçmektedir.</p>
+<p style="margin:0 0 16px">SSL/TLS şifreleme, AES-256 storage, Supabase RLS politikaları, hash'lenmiş şifreler ve ISO 27001 / SOC2 Type II sertifikalı altyapı ile korunur.</p>
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">9. KVKK m.11 Kapsamındaki Haklarınız</h3>
-<p style="margin:0 0 16px">KVKK m.11 uyarınca, kişisel verilerinizle ilgili olarak şu haklara sahipsiniz: Kişisel verilerinizin işlenip işlenmediğini öğrenme, işlenmişse buna ilişkin bilgi talep etme, işlenme amacını ve amacına uygun kullanılıp kullanılmadığını öğrenme, yurt içinde veya yurt dışında verilerinizin aktarıldığı üçüncü kişileri bilme, eksik veya yanlış işlenmişse düzeltilmesini isteme, KVKK m.7 çerçevesinde silinmesini veya yok edilmesini isteme, aktarıldığı üçüncü kişilere yapılan işlemlerin bildirilmesini isteme, münhasıran otomatik sistemler ile analiz edilmesi nedeniyle aleyhinize bir sonucun ortaya çıkmasına itiraz etme ve kanuna aykırı işleme sebebiyle zarara uğramanız hâlinde zararın giderilmesini talep etme.</p>
+<p style="margin:0 0 16px">Verilerinize erişme, düzeltme, silme, işlenmesine itiraz etme ve zararın giderilmesini talep etme hakkına sahipsiniz.</p>
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">10. Başvuru Yöntemi</h3>
-<p style="margin:0 0 16px">Yukarıda belirtilen haklarınızı kullanmak için ${CONTACT_EMAIL} adresine "KVKK Başvurusu" konu başlığıyla e-posta göndererek bizimle iletişime geçebilirsiniz. Başvurularınız, KVKK m.13 uyarınca en geç otuz (30) gün içinde ücretsiz olarak yanıtlanacaktır. Başvurunuzun reddedilmesi hâlinde, cevabı öğrendiğiniz tarihten itibaren otuz gün ve her hâlde başvuru tarihinden itibaren altmış gün içinde Kişisel Verileri Koruma Kuruluna şikâyette bulunma hakkınız saklıdır.</p>
+<p style="margin:0 0 16px">${CONTACT_EMAIL} adresine "KVKK Başvurusu" konu başlığıyla e-posta göndererek başvurabilirsiniz. Talepler en geç 30 gün içinde ücretsiz yanıtlanır.</p>
 <div style="background:var(--bg);border-radius:12px;padding:14px 16px;margin-top:20px;border-left:3px solid var(--ac)">
-<p style="margin:0;font-size:13px;line-height:1.7"><b style="color:var(--ink)">📌 Önemli Not:</b> Uygulamamızı kullanmaya devam etmeniz ve kayıt sırasında ilgili onay kutusunu işaretlemeniz, bu Aydınlatma Metnini okuduğunuzu ve anladığınızı gösterir. Detaylı bilgi için uygulama içindeki Gizlilik Politikamızı ve Açık Rıza Metnimizi de inceleyebilirsiniz.</p>
+<p style="margin:0;font-size:13px;line-height:1.7"><b style="color:var(--ink)">📌 Önemli Not:</b> Uygulamamızı kullanmaya devam etmeniz ve kayıt sırasında ilgili onay kutusunu işaretlemeniz, bu Aydınlatma Metnini okuduğunuzu ve anladığınızı gösterir.</p>
 </div>
-</div>
-      `
+</div>`
     },
     riza: {
       title: `✅ Açık Rıza Metni`,
       body: `
 <div style="line-height:1.85;font-size:14px;color:var(--mute);text-align:justify">
-<p style="margin:0 0 16px">İşbu Açık Rıza Metni, 6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") m.5 ve m.9 uyarınca, özel nitelik taşımayan kişisel verilerimin işlenmesine ve yurt dışına aktarılmasına ilişkin olarak, hiçbir etki altında kalmadan, özgür irademle vereceğim onayı düzenlemek amacıyla hazırlanmıştır. Gelişim Vibe uygulamasına kayıt olmadan ve uygulamayı kullanmaya başlamadan önce bu metni dikkatlice okuduğumu ve anladığımı beyan ederim.</p>
-<p style="margin:0 0 16px">Bu kapsamda, Gelişim Vibe tarafından hazırlanan Aydınlatma Metnini okuduğumu, kişisel verilerimin hangi amaçlarla ve nasıl işlendiği konusunda yeterince bilgilendirildiğimi, veri sorumlusunun kimliği, işleme amacı, hukuki sebebi, aktarım yapılabilecek taraflar ve KVKK m.11 kapsamındaki haklarım konusunda tam olarak aydınlatıldığımı kabul ederim.</p>
-<p style="margin:0 0 16px">Bu bilgilendirme çerçevesinde, üniversite e-posta adresimin, ad ve soyadımın, bölüm bilgimin kimlik doğrulama, hesap oluşturma ve platform güvenliği amacıyla işlenmesine; kendi isteğimle paylaştığım anonim itiraf, mesaj, ilan, yorum ve medya içeriklerimin uygulamanın teknik olarak çalışabilmesi, içeriklerin görüntülenebilmesi ve gerektiğinde moderasyon işlemlerinin yürütülebilmesi için saklanmasına; Google AdSense ve iş ortakları aracılığıyla tarafıma kişiselleştirilmiş reklamlar gösterilebilmesi için çerez (cookie) verilerimin ve kullanım verilerimin işlenmesine; ve nihayet uygulamanın altyapısında kullanılan sunucu, bulut depolama ve reklam servisleri nedeniyle kişisel verilerimin yurt dışındaki hizmet sağlayıcılara (Supabase Inc., Google LLC, Cloudflare Inc. ve hosting sağlayıcıları) aktarılmasına, hiçbir etki altında kalmadan, özgür irademle açık rıza veriyorum.</p>
-<p style="margin:0 0 16px">Bu rızanın, kayıt sırasında verdiğim bilgilerin doğruluğunu ve güncelliğini garanti etmediğini; rıza verirken herhangi bir baskı, tehdit veya yönlendirme altında kalmadığımı; rızamı geri çekmemin, geri çekme tarihine kadar yapılan veri işleme faaliyetlerinin hukuki geçerliliğini etkilemeyeceğini biliyorum.</p>
-<p style="margin:0 0 16px">Bu açık rızamı dilediğim zaman ${CONTACT_EMAIL} adresine e-posta göndererek geri çekebileceğimi; rızamı geri çekmem hâlinde uygulamanın bazı özelliklerinin (özellikle kişiselleştirilmiş reklam gösterimi) çalışmayabileceğini ve hesabımı tamamen silmek istediğimde uygulama içindeki "Hesabımı Sil" özelliğini kullanabileceğimi kabul ederim.</p>
-<p style="margin:0 0 16px">Verdiğim bu açık rıza, yalnızca bu metinde belirtilen amaçlarla sınırlı olup, başka hiçbir amaç için genişletilemez. Rıza kapsamı dışındaki yeni bir veri işleme faaliyeti için tarafımdan yeniden açık rıza alınması gerektiğini bilmekteyim.</p>
+<p style="margin:0 0 16px">İşbu Açık Rıza Metni, 6698 sayılı KVKK m.5 ve m.9 uyarınca, özel nitelik taşımayan kişisel verilerimin işlenmesine ve yurt dışına aktarılmasına ilişkin olarak, hiçbir etki altında kalmadan, özgür irademle vereceğim onayı düzenlemek amacıyla hazırlanmıştır.</p>
+<p style="margin:0 0 16px">Bu kapsamda, Gelişim Vibe tarafından hazırlanan Aydınlatma Metnini okuduğumu, veri sorumlusunun kimliği, işleme amacı, hukuki sebebi, aktarım yapılabilecek taraflar ve KVKK m.11 kapsamındaki haklarım konusunda tam olarak aydınlatıldığımı kabul ederim.</p>
+<p style="margin:0 0 16px">Bu bilgilendirme çerçevesinde; üniversite e-posta adresimin, ad ve soyadımın, bölüm bilgimin işlenmesine; paylaştığım içeriklerin saklanmasına; Google AdSense aracılığıyla kişiselleştirilmiş reklam için çerez verilerimin işlenmesine; ve kişisel verilerimin yurt dışındaki hizmet sağlayıcılara aktarılmasına, özgür irademle açık rıza veriyorum.</p>
+<p style="margin:0 0 16px">Bu rızamı dilediğim zaman ${CONTACT_EMAIL} adresine e-posta göndererek geri çekebileceğimi; rızamı geri çekmem hâlinde bazı özelliklerin çalışmayabileceğini kabul ederim.</p>
 <div style="background:var(--bg);border-radius:12px;padding:14px 16px;margin-top:20px;border-left:3px solid var(--ac)">
-<p style="margin:0;font-size:13px;line-height:1.7"><b style="color:var(--ink)">📌 Bilgilendirme:</b> Bu rızayı dilediğiniz zaman <b>${CONTACT_EMAIL}</b> adresine yazarak geri çekebilirsiniz. Rızanın geri çekilmesi, o tarihe kadar yapılan işlemlerin hukuki geçerliliğini etkilemez.</p>
+<p style="margin:0;font-size:13px;line-height:1.7"><b style="color:var(--ink)">📌 Bilgilendirme:</b> Bu rızayı dilediğiniz zaman <b>${CONTACT_EMAIL}</b> adresine yazarak geri çekebilirsiniz.</p>
 </div>
-</div>
-      `
+</div>`
     }
   };
   const d = docs[kind]; if(!d) return;
-  const el = document.createElement('div'); el.className = 'sheet-bg';
-  el.innerHTML = '<div class="sheet"><h4>' + d.title + '<button class="sheet-close">×</button></h4>' + d.body + '<button class="btn" style="margin-top:16px;width:100%" onclick="this.closest(\'.sheet-bg\').remove()">Anladım</button></div>';
-  document.body.appendChild(el);
-  el.onclick = e => { if(e.target === el || e.target.classList.contains('sheet-close')) el.remove(); };
+  openSheet('<h4>' + d.title + '<button class="sheet-close" aria-label="Kapat">×</button></h4>' + d.body + '<button class="btn" style="margin-top:16px;width:100%" onclick="this.closest(\'.sheet-bg\').remove()">Anladım</button>');
 };
 
 function loadViaImg(file){
@@ -910,14 +779,14 @@ $('#toggle').onclick = () => {
 $('#forgotBtn').onclick = async () => {
   const email = prompt('Şifreni sıfırlamak için okul mailini gir:');
   if(!email) return;
-  if(!email.trim().toLowerCase().endsWith(DOMAIN)) return alert('Sadece ' + DOMAIN + ' uzantılı mail ile sıfırlayabilirsin.');
+  if(!email.trim().toLowerCase().endsWith(DOMAIN)) return toast('Sadece ' + DOMAIN + ' uzantılı mail ile sıfırlayabilirsin.', 'err');
   say('Gönderiliyor...');
   const { error } = await sb.auth.resetPasswordForEmail(email.trim().toLowerCase(), {
     redirectTo: window.location.origin + window.location.pathname + '#reset'
   });
   if(error) return say(error.message, 1);
   say('');
-  alert('✅ Mailine şifre sıfırlama linki gönderdik.\n\nSpam klasörünü de kontrol et.');
+  toast('Mailine şifre sıfırlama linki gönderdik. Spam klasörünü de kontrol et.', 'ok');
 };
 $('#authForm').onsubmit = async e => {
   e.preventDefault();
@@ -989,7 +858,7 @@ function showOtpScreen(email, password){
 
 document.addEventListener('click', e => {
   if(e.target.id === 'themeToggle'){
-    const cur = localStorage.getItem('theme') || 'light';
+    const cur = localStorage.getItem('theme') || (document.body.classList.contains('night') ? 'night' : 'light');
     localStorage.setItem('theme', cur === 'night' ? 'light' : 'night');
     applyTheme();
   }
@@ -999,10 +868,10 @@ window.addEventListener('load', async () => {
   if(window.location.hash.includes('type=recovery') || (window.location.hash.includes('access_token') && window.location.hash.includes('type=recovery'))){
     setTimeout(() => {
       const np = prompt('Yeni şifreni gir (en az 6 karakter):');
-      if(!np || np.length < 6) return alert('Şifre en az 6 karakter olmalı.');
+      if(!np || np.length < 6) return toast('Şifre en az 6 karakter olmalı.', 'err');
       sb.auth.updateUser({ password: np }).then(({ error }) => {
-        if(error) return alert('Hata: ' + error.message);
-        alert('✅ Şifren güncellendi! Şimdi giriş yapabilirsin.');
+        if(error) return toast('Hata: ' + error.message, 'err');
+        toast('Şifren güncellendi! Şimdi giriş yapabilirsin.', 'ok');
         window.history.replaceState({}, '', window.location.pathname);
         sb.auth.signOut();
       });
@@ -1018,6 +887,12 @@ async function boot(session){
   $('#auth').classList.add('hide'); $('#app').classList.remove('hide');
   $('#adminTab').classList.toggle('hide', !me.is_admin);
   applyTheme();
+  // Restore tab from session
+  const savedTab = (() => { try { return sessionStorage.getItem('gv_tab'); } catch(_){ return null; } })();
+  if(savedTab && ['feed','library','ann','conf','chat','settings','admin'].includes(savedTab)){
+    tab = savedTab;
+    if(tab === 'admin' && !me.is_admin) tab = 'feed';
+  }
   show(tab);
   checkNotifications();
 }
@@ -1035,6 +910,7 @@ const SEC_MAP = { feed:'', library:'library', ann:'ann', conf:'conf', chat:'chat
 
 function show(t, opts){
   tab = t;
+  try { sessionStorage.setItem('gv_tab', t); } catch(_){}
   document.body.dataset.sec = SEC_MAP[t] || '';
 
   removeFab();
@@ -1045,7 +921,7 @@ function show(t, opts){
   const title = document.querySelector('header .brand b'); if(title) title.textContent = titles[t] || 'Gelişim Vibe';
   if(t !== 'admin' && t !== 'chat' && t !== 'settings') markSeen(t);
   if(t === 'feed' || t === 'conf'){
-    $('#view').innerHTML = '<div class="skeleton"></div><div class="skeleton"></div><div class="skeleton" style="height:70px"></div>';
+    $('#view').innerHTML = '<div class="skel-card"><div class="skel-line w40"></div><div class="skel-line w80"></div><div class="skel-line w60"></div></div><div class="skel-card"><div class="skel-line w60"></div><div class="skel-line w80"></div></div><div class="skeleton" style="height:70px"></div>';
   } else {
     $('#view').innerHTML = '<div class="empty">Yükleniyor...</div>';
   }
@@ -1103,9 +979,8 @@ function renderAdvertiseCTA(){
 }
 
 window.openAdvertiseSheet = function(){
-  const el = document.createElement('div');
-  el.className = 'sheet-bg';
-  el.innerHTML = '<div class="sheet"><h4>📢 Reklam Ver<button class="sheet-close">×</button></h4>' +
+  const el = openSheet(
+    '<h4>📢 Reklam Ver<button class="sheet-close" aria-label="Kapat">×</button></h4>' +
     '<p style="color:var(--mute);font-size:13.5px;line-height:1.5;margin:0 0 14px">Formu doldur, yönetici ekibimiz en kısa sürede sana ulaşsın.</p>' +
     '<form id="adreqForm">' +
     '<label style="font-size:13px;font-weight:600;color:var(--mute)">Ne reklamı vereceksin?</label>' +
@@ -1117,19 +992,19 @@ window.openAdvertiseSheet = function(){
     '<div style="display:flex;gap:8px;margin-top:6px">' +
     '<button type="button" class="btn sheet-btn cancel" data-x="cancel" style="flex:1;margin:0">Vazgeç</button>' +
     '<button type="submit" class="btn" style="flex:1">Gönder</button>' +
-    '</div></form></div>';
-  document.body.appendChild(el);
+    '</div></form>'
+  );
   el.onclick = e => { if(e.target === el || e.target.classList.contains('sheet-close') || e.target.dataset.x === 'cancel') el.remove(); };
   $('#adreqForm').onsubmit = async e => {
     e.preventDefault();
     const ad_type = $('#adreqType').value.trim();
     const contact_info = $('#adreqContact').value.trim();
     const message = $('#adreqMsg').value.trim() || null;
-    if(!ad_type || !contact_info) return alert('Reklam türü ve iletişim bilgisi zorunlu.');
+    if(!ad_type || !contact_info) return toast('Reklam türü ve iletişim bilgisi zorunlu.', 'err');
     const btn = el.querySelector('button[type="submit"]');
     btn.disabled = true; btn.textContent = 'Gönderiliyor...';
     const { error } = await sb.from('ad_requests').insert({ user_id: me.id, ad_type, contact_info, message });
-    if(error){ btn.disabled = false; btn.textContent = 'Gönder'; return alert('Talep gönderilemedi:\n\n' + error.message); }
+    if(error){ btn.disabled = false; btn.textContent = 'Gönder'; return toast('Talep gönderilemedi: ' + error.message, 'err'); }
     el.querySelector('.sheet').innerHTML = '<div class="success-box"><div class="ic">✓</div><h3>Talebin Alındı!</h3><p>En yakın zamanda sana dönüş yapacağız.<br>İlgin için teşekkürler 💙</p><button class="btn" style="margin-top:18px;width:100%" onclick="this.closest(\'.sheet-bg\').remove()">Tamam</button></div>';
   };
 };
@@ -1179,8 +1054,8 @@ async function loadList(t){
       '<div class="prog-wrap hide" id="uploadProg"><div class="prog-bar"><div class="prog-fill" id="progFill"></div></div><div class="prog-text" id="progText">Yükleniyor... %0</div></div>' +
       '<div class="composer-foot">' +
         '<div class="composer-tools">' +
-          '<label class="composer-tool" title="Fotoğraf ekle"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><input type="file" id="cimg" accept="image/*" hidden></label>' +
-          (conf ? '' : '<label class="composer-tool" title="Video ekle"><svg viewBox="0 0 24 24"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg><input type="file" id="cvid" accept="video/*" hidden></label>') +
+          '<label class="composer-tool" title="Fotoğraf ekle" aria-label="Fotoğraf ekle"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><input type="file" id="cimg" accept="image/*" hidden></label>' +
+          (conf ? '' : '<label class="composer-tool" title="Video ekle" aria-label="Video ekle"><svg viewBox="0 0 24 24"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg><input type="file" id="cvid" accept="video/*" hidden></label>') +
         '</div>' +
         '<div class="composer-right">' +
           '<span class="composer-counter" id="cCount">0/' + max + '</span>' +
@@ -1213,8 +1088,8 @@ async function loadList(t){
   const renderPv = () => {
     const pv = $('#pv');
     if(!curMedia){ pv.classList.add('hide'); pv.innerHTML = ''; return; }
-    if(curMedia.type === 'image') pv.innerHTML = '<img src="' + URL.createObjectURL(curMedia.file) + '" alt=""><button type="button">×</button>';
-    else pv.innerHTML = '<video src="' + URL.createObjectURL(curMedia.file) + '" controls playsinline></video><button type="button">×</button>';
+    if(curMedia.type === 'image') pv.innerHTML = '<img src="' + URL.createObjectURL(curMedia.file) + '" alt=""><button type="button" aria-label="Kaldır">×</button>';
+    else pv.innerHTML = '<video src="' + URL.createObjectURL(curMedia.file) + '" controls playsinline></video><button type="button" aria-label="Kaldır">×</button>';
     pv.classList.remove('hide');
     pv.querySelector('button').onclick = () => { curMedia = null; const ci = $('#cimg'); if(ci) ci.value = ''; const cv = $('#cvid'); if(cv) cv.value = ''; renderPv(); };
   };
@@ -1226,23 +1101,23 @@ async function loadList(t){
 
   $('#cf').onsubmit = async e => {
     e.preventDefault();
-    if(me.is_restricted) return alert('⚠️ Hesabın kısıtlanmış. Yeni içerik paylaşamazsın.');
-    if(me.is_banned) return alert('🚫 Hesabın banlanmış. Yeni içerik paylaşamazsın.');
+    if(me.is_restricted) return toast('Hesabın kısıtlanmış. Yeni içerik paylaşamazsın.', 'warn');
+    if(me.is_banned) return toast('Hesabın banlanmış. Yeni içerik paylaşamazsın.', 'err');
     const content = $('#ct').value.trim();
-    if(!content && !curMedia) return alert('Bir şeyler yaz ya da medya ekle.');
+    if(!content && !curMedia) return toast('Bir şeyler yaz ya da medya ekle.', 'err');
     const btn = $('#cf .composer-submit'); btn.disabled = true; btn.textContent = 'Yükleniyor...';
     let image_path = null, video_path = null;
     try{
       if(curMedia && curMedia.type === 'image'){ setProg(0); image_path = await uploadImg(curMedia.file, 'images', p => setProg(p)); }
       else if(curMedia && curMedia.type === 'video'){ setProg(0); video_path = await uploadVideo(curMedia.file, p => setProg(p)); }
       else { setProg(0.4); }
-    }catch(err){ btn.disabled = false; btn.textContent = conf ? 'Fısılda' : 'Paylaş'; hideProg(); return alert('Yükleme: ' + err.message); }
+    }catch(err){ btn.disabled = false; btn.textContent = conf ? 'Fısılda' : 'Paylaş'; hideProg(); return toast('Yükleme: ' + err.message, 'err'); }
     setProg(0.95);
     const row = { user_id: me.id, content: content || '' };
     if(image_path) row.image_path = image_path;
     if(video_path) row.video_path = video_path;
     const { error } = await sb.from(conf ? 'confessions' : 'posts').insert(row);
-    if(error){ btn.disabled = false; btn.textContent = conf ? 'Fısılda' : 'Paylaş'; hideProg(); return alert(me.is_banned ? 'Hesabın kısıtlandı.' : error.message); }
+    if(error){ btn.disabled = false; btn.textContent = conf ? 'Fısılda' : 'Paylaş'; hideProg(); return toast(me.is_banned ? 'Hesabın kısıtlandı.' : error.message, 'err'); }
     show(t);
   };
 
@@ -1262,13 +1137,13 @@ async function loadList(t){
     const media = (i.image_path ? '<a href="' + imgUrl(i.image_path) + '" target="_blank" rel="noopener"><img class="pimg" loading="lazy" src="' + imgUrl(i.image_path) + '" alt=""></a>' : '') + (i.video_path ? '<video class="pvid" controls playsinline preload="metadata" src="' + videoUrl(i.video_path) + '"></video>' : '');
     return '<article class="card" data-id="' + i.id + '"><div class="hd">' + head + '</div>' +
       (i.content ? '<div class="body">' + esc(i.content) + '</div>' : '') + media +
-      '<div class="acts"><button data-a="like" class="' + (ls.includes(me.id) ? 'on' : '') + '">' + (ls.includes(me.id) ? '♥' : '♡') + ' ' + ls.length + '</button>' +
-      '<button data-a="cm">💬 Yorumlar</button><button data-a="rep">Şikayet et</button>' + ((mine || me.is_admin) ? '<button data-a="del">Sil</button>' : '') + '</div>' +
+      '<div class="acts"><button data-a="like" class="' + (ls.includes(me.id) ? 'on' : '') + '" aria-label="Beğen">' + (ls.includes(me.id) ? '♥' : '♡') + ' ' + ls.length + '</button>' +
+      '<button data-a="cm" aria-label="Yorumlar">💬 Yorumlar</button><button data-a="rep">Şikayet et</button>' + ((mine || me.is_admin) ? '<button data-a="del">Sil</button>' : '') + '</div>' +
       '<div class="cm hide"></div></article>';
   };
 
   if(!items || !items.length){
-    $('#list').innerHTML = '<div class="empty">' + (conf ? '👻 Henüz itiraf yok. İlk fısıltıyı sen gönder.' : 'Henüz paylaşım yok.') + '</div>' + (conf ? '' : renderAdvertiseCTA());
+    $('#list').innerHTML = '<div class="empty">' + (conf ? '<span class="em-ic">👻</span><div class="em-t">Henüz itiraf yok</div>İlk fısıltıyı sen gönder.' : '<span class="em-ic">📝</span><div class="em-t">Henüz paylaşım yok</div>İlk paylaşımı sen yap.') + '</div>' + (conf ? '' : renderAdvertiseCTA());
   } else if(conf){
     $('#list').innerHTML = items.map(postHtml).join('');
   } else {
@@ -1318,12 +1193,27 @@ async function loadList(t){
     act(b.dataset.a, id, card, conf, col, t);
   };
 }
+
 async function act(a, id, card, conf, col, t){
   if(a === 'like'){
-    const on = card.querySelector('[data-a=like]').classList.contains('on');
-    const r = on ? await sb.from('likes').delete().eq('user_id', me.id).eq(col, id) : await sb.from('likes').insert({ user_id: me.id, [col]: id });
-    if(r.error) return alert(r.error.message);
-    return show(t);
+    // Optimistic UI
+    const btn = card.querySelector('[data-a=like]');
+    const on = btn.classList.contains('on');
+    const m = btn.textContent.match(/(\d+)/);
+    const currentCount = m ? +m[1] : 0;
+    const newCount = on ? Math.max(0, currentCount - 1) : currentCount + 1;
+    btn.classList.toggle('on', !on);
+    btn.textContent = (!on ? '♥' : '♡') + ' ' + newCount;
+    const r = on
+      ? await sb.from('likes').delete().eq('user_id', me.id).eq(col, id)
+      : await sb.from('likes').insert({ user_id: me.id, [col]: id });
+    if(r.error){
+      // Revert on error
+      btn.classList.toggle('on', on);
+      btn.textContent = (on ? '♥' : '♡') + ' ' + currentCount;
+      toast(r.error.message, 'err');
+    }
+    return;
   }
   if(a === 'del'){
     if(!confirm('Silinsin mi?')) return;
@@ -1332,7 +1222,7 @@ async function act(a, id, card, conf, col, t){
       else { await sb.from('likes').delete().eq('post_id', id); await sb.from('comments').delete().eq('post_id', id); }
     }catch(_){}
     const { error } = await sb.from(conf ? 'confessions' : 'posts').delete().eq('id', id);
-    if(error) return alert('Silinemedi: ' + error.message);
+    if(error) return toast('Silinemedi: ' + error.message, 'err');
     return show(t);
   }
   if(a === 'rep') return report({ [col]: id });
@@ -1340,10 +1230,8 @@ async function act(a, id, card, conf, col, t){
 }
 
 async function report(target){
-  const el = document.createElement('div');
-  el.className = 'sheet-bg';
-  el.innerHTML =
-    '<div class="sheet"><h4>🚩 Şikayet Et<button class="sheet-close">×</button></h4>' +
+  const el = openSheet(
+    '<h4>🚩 Şikayet Et<button class="sheet-close" aria-label="Kapat">×</button></h4>' +
     '<p style="color:var(--mute);font-size:13px;line-height:1.55;margin:0 0 14px">Şikayet sebebini detaylı yaz. Gerekirse ekran görüntüsü de ekleyebilirsin.</p>' +
     '<form id="repForm" style="display:flex;flex-direction:column;gap:10px">' +
       '<textarea id="repReason" maxlength="500" placeholder="Şikayet sebebin nedir?" required style="min-height:100px"></textarea>' +
@@ -1361,8 +1249,8 @@ async function report(target){
         '<button type="button" class="btn sheet-btn cancel" data-x="cancel" style="flex:1;margin:0">Vazgeç</button>' +
         '<button type="submit" class="btn" style="flex:1">🚩 Şikayeti Gönder</button>' +
       '</div>' +
-    '</form></div>';
-  document.body.appendChild(el);
+    '</form>'
+  );
   el.onclick = e => { if(e.target === el || e.target.classList.contains('sheet-close') || e.target.dataset.x === 'cancel') el.remove(); };
 
   let imgFile = null;
@@ -1372,7 +1260,7 @@ async function report(target){
     const f = imgInput.files[0];
     if(!f){ pv.classList.add('hide'); pv.innerHTML = ''; imgFile = null; return; }
     imgFile = f;
-    pv.innerHTML = '<img src="' + URL.createObjectURL(f) + '" alt=""><button type="button">×</button>';
+    pv.innerHTML = '<img src="' + URL.createObjectURL(f) + '" alt=""><button type="button" aria-label="Kaldır">×</button>';
     pv.classList.remove('hide');
     pv.querySelector('button').onclick = () => { imgInput.value = ''; imgFile = null; pv.classList.add('hide'); pv.innerHTML = ''; };
   };
@@ -1385,8 +1273,8 @@ async function report(target){
 
   el.querySelector('#repForm').onsubmit = async e => {
     e.preventDefault();
-    if(me.is_restricted) return alert('⚠️ Hesabın kısıtlanmış.');
-    if(me.is_banned) return alert('🚫 Hesabın banlanmış.');
+    if(me.is_restricted) return toast('Hesabın kısıtlanmış.', 'warn');
+    if(me.is_banned) return toast('Hesabın banlanmış.', 'err');
     const reason = el.querySelector('#repReason').value.trim();
     if(!reason) return;
     const btn = e.target.querySelector('button[type="submit"]');
@@ -1395,7 +1283,7 @@ async function report(target){
     let image_path = null;
     if(imgFile){
       try{ image_path = await uploadImg(imgFile, 'images', setP); }
-      catch(err){ btn.disabled = false; btn.textContent = '🚩 Şikayeti Gönder'; return alert('Fotoğraf yüklenemedi: ' + err.message); }
+      catch(err){ btn.disabled = false; btn.textContent = '🚩 Şikayeti Gönder'; return toast('Fotoğraf yüklenemedi: ' + err.message, 'err'); }
     }
 
     const row = { reporter_id: me.id, reason: reason.slice(0, 500), ...target };
@@ -1404,7 +1292,7 @@ async function report(target){
     if(error){
       btn.disabled = false; btn.textContent = '🚩 Şikayeti Gönder';
       console.error(error);
-      return alert('Şikayet gönderilemedi:\n\n' + error.message);
+      return toast('Şikayet gönderilemedi: ' + error.message, 'err');
     }
     el.querySelector('.sheet').innerHTML =
       '<div class="success-box"><div class="ic">✓</div><h3>Şikayetin Alındı</h3>' +
@@ -1441,11 +1329,11 @@ async function loadComments(box, id, conf){
   ta.addEventListener('keydown', e => { if(e.key === 'Enter' && (e.metaKey || e.ctrlKey)){ e.preventDefault(); box.querySelector('form').requestSubmit(); } });
   box.querySelector('form').onsubmit = async e => {
     e.preventDefault();
-    if(me.is_restricted) return alert('⚠️ Hesabın kısıtlanmış.');
-    if(me.is_banned) return alert('🚫 Hesabın banlanmış.');
+    if(me.is_restricted) return toast('Hesabın kısıtlanmış.', 'warn');
+    if(me.is_banned) return toast('Hesabın banlanmış.', 'err');
     const content = ta.value.trim(); if(!content) return;
     const { error } = await sb.from(tbl).insert({ user_id: me.id, [conf ? 'confession_id' : 'post_id']: id, content });
-    if(error) return alert(error.message);
+    if(error) return toast(error.message, 'err');
     loadComments(box, id, conf);
   };
   box.onclick = async e => {
@@ -1459,32 +1347,29 @@ async function loadComments(box, id, conf){
 
 function openUserMenu(userId, userName){
   if(!userId || userId === me.id) return;
-  const el = document.createElement('div'); el.className = 'sheet-bg';
   const ini = (userName || '?').split(' ').map(x => x[0]).slice(0,2).join('').toUpperCase();
   let adminBtn = '';
   if(me.is_admin){
     adminBtn = '<button class="sheet-btn danger" data-x="ban">🚫 Kullanıcıyı Engelle</button>';
   }
-  el.innerHTML = '<div class="sheet"><h4><span style="display:flex;align-items:center;gap:10px"><span class="av">' + esc(ini) + '</span> ' + esc(userName) + '</span><button class="sheet-close">×</button></h4>' +
+  const el = openSheet(
+    '<h4><span style="display:flex;align-items:center;gap:10px"><span class="av">' + esc(ini) + '</span> ' + esc(userName) + '</span><button class="sheet-close" aria-label="Kapat">×</button></h4>' +
     '<button class="sheet-btn" data-x="msg">💬 Mesaj gönder</button>' +
     '<button class="sheet-btn danger" data-x="rep">🚩 Kullanıcıyı şikayet et</button>' +
     adminBtn +
-    '<button class="sheet-btn cancel" data-x="cancel">Vazgeç</button></div>';
-  document.body.appendChild(el);
+    '<button class="sheet-btn cancel" data-x="cancel">Vazgeç</button>'
+  );
   el.onclick = async e => {
     if(e.target === el || e.target.classList.contains('sheet-close') || e.target.dataset.x === 'cancel') return el.remove();
     const b = e.target.closest('button[data-x]'); if(!b) return;
     if(b.dataset.x === 'msg'){ el.remove(); show('chat', { chatWith: userId, chatUser: userName }); }
-    if(b.dataset.x === 'rep'){
-      el.remove();
-      report({ reported_user_id: userId });
-    }
+    if(b.dataset.x === 'rep'){ el.remove(); report({ reported_user_id: userId }); }
     if(b.dataset.x === 'ban'){
       el.remove();
       if(!confirm(userName + ' adlı kullanıcı engellensin mi?')) return;
       const { error } = await sb.from('profiles').update({ is_banned: true }).eq('id', userId);
-      if(error) return alert('Engellenemedi: ' + error.message);
-      alert('✅ Kullanıcı engellendi.');
+      if(error) return toast('Engellenemedi: ' + error.message, 'err');
+      toast('Kullanıcı engellendi.', 'ok');
     }
   };
 }
@@ -1520,8 +1405,14 @@ async function loadBooks(){
     const prof = b.profiles || {first_name:'?',last_name:'',department:''};
     return '<article class="bcard" data-id="' + b.id + '">' + img + '<div class="info"><div class="bt">' + esc(b.title) + '</div>' + (b.author ? '<div class="ba">' + esc(b.author) + '</div>' : '') + (b.description ? '<div class="ba" style="margin-top:4px;line-height:1.4">' + esc(b.description) + '</div>' : '') + '<div class="bp">' + price + '</div><div class="bseller" data-uid="' + b.user_id + '" data-name="' + esc(prof.first_name + ' ' + prof.last_name) + '"><span class="dot">' + esc(initials(prof.first_name, prof.last_name)).toUpperCase() + '</span><span>' + esc(prof.first_name) + ' ' + esc(prof.last_name) + '</span></div>' + (canDel ? '<div style="margin-top:8px"><button class="link" data-bdel="' + b.id + '" style="padding:0;font-size:12px;color:var(--danger)">Sil</button></div>' : '') + '</div></article>';
   }).join('');
-  $('#libView').innerHTML = search + (list ? '<div class="bgrid">' + list + '</div>' : (q ? '<div class="empty">Arama sonucu bulunamadı.</div>' : '<div class="empty">Henüz kitap yok.</div>'));
-  const sb_ = document.getElementById('bsearch'); if(sb_) sb_.oninput = () => { bookSearch = sb_.value; const v = bookSearch; loadBooks().then(() => { const i = document.getElementById('bsearch'); if(i){ i.focus(); i.setSelectionRange(v.length, v.length); } }); };
+  $('#libView').innerHTML = search + (list ? '<div class="bgrid">' + list + '</div>' : (q ? '<div class="empty"><span class="em-ic">🔍</span><div class="em-t">Sonuç bulunamadı</div>Farklı kelimelerle dene.</div>' : '<div class="empty"><span class="em-ic">📚</span><div class="em-t">Henüz kitap yok</div>Sağ alttaki + butonuna bas.</div>'));
+  const sb_ = document.getElementById('bsearch');
+  const doSearch = debounce(() => {
+    bookSearch = sb_.value;
+    const v = bookSearch;
+    loadBooks().then(() => { const i = document.getElementById('bsearch'); if(i){ i.focus(); i.setSelectionRange(v.length, v.length); } });
+  }, 350);
+  if(sb_) sb_.oninput = () => { bookSearch = sb_.value; doSearch(); };
   addFab(() => openBookForm());
   $('#libView').onclick = async e => {
     const u = e.target.closest('.bseller'); if(u){ openUserMenu(u.dataset.uid, u.dataset.name); return; }
@@ -1530,30 +1421,29 @@ async function loadBooks(){
   };
 }
 function openBookForm(){
-  const el = document.createElement('div'); el.className = 'sheet-bg';
-  el.innerHTML = '<div class="sheet"><h4>📚 Kitap Satışa Çıkar<button class="sheet-close">×</button></h4><form id="bf">' +
+  const el = openSheet(
+    '<h4>📚 Kitap Satışa Çıkar<button class="sheet-close" aria-label="Kapat">×</button></h4><form id="bf">' +
     '<input id="bt" maxlength="120" placeholder="Kitap adı" required>' +
     '<input id="ba" maxlength="120" placeholder="Yazar (opsiyonel)">' +
     '<textarea id="bd" maxlength="600" placeholder="Kısa açıklama / durum"></textarea>' +
     '<input id="bp" type="number" min="0" step="1" placeholder="Fiyat ₺ (boş = takas/ücretsiz)">' +
     '<div id="bimgpv" class="pv hide"></div>' +
     '<div class="prog-wrap hide" id="bProg"><div class="prog-bar"><div class="prog-fill" id="bProgFill"></div></div><div class="prog-text" id="bProgText">Yükleniyor... %0</div></div>' +
-    '<div class="row"><label class="pick" style="width:auto;padding:8px 12px;border-radius:10px;border:1px solid var(--line);gap:6px;color:var(--ac);font-weight:600"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span style="font-size:13px">Fotoğraf</span><input type="file" id="bimg" accept="image/*" hidden></label><button class="btn sm">Yayınla</button></div></form></div>';
-  document.body.appendChild(el);
-  el.onclick = e => { if(e.target === el || e.target.classList.contains('sheet-close')) el.remove(); };
-  $('#bimg').onchange = () => { const f = $('#bimg').files[0], pv = $('#bimgpv'); if(!f){ pv.classList.add('hide'); pv.innerHTML = ''; return; } pv.innerHTML = '<img src="' + URL.createObjectURL(f) + '" alt=""><button type="button">×</button>'; pv.classList.remove('hide'); pv.querySelector('button').onclick = () => { $('#bimg').value = ''; pv.classList.add('hide'); pv.innerHTML = ''; }; };
+    '<div class="row"><label class="pick" style="width:auto;padding:8px 12px;border-radius:10px;border:1px solid var(--line);gap:6px;color:var(--ac);font-weight:600"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span style="font-size:13px">Fotoğraf</span><input type="file" id="bimg" accept="image/*" hidden></label><button class="btn sm">Yayınla</button></div></form>'
+  );
+  $('#bimg').onchange = () => { const f = $('#bimg').files[0], pv = $('#bimgpv'); if(!f){ pv.classList.add('hide'); pv.innerHTML = ''; return; } pv.innerHTML = '<img src="' + URL.createObjectURL(f) + '" alt=""><button type="button" aria-label="Kaldır">×</button>'; pv.classList.remove('hide'); pv.querySelector('button').onclick = () => { $('#bimg').value = ''; pv.classList.add('hide'); pv.innerHTML = ''; }; };
   const setP = p => { $('#bProg').classList.remove('hide'); $('#bProgFill').style.width = Math.round(p*100) + '%'; $('#bProgText').textContent = 'Yükleniyor... %' + Math.round(p*100); };
   $('#bf').onsubmit = async e => {
     e.preventDefault();
-    if(me.is_restricted) return alert('⚠️ Hesabın kısıtlanmış.');
-    if(me.is_banned) return alert('🚫 Hesabın banlanmış.');
+    if(me.is_restricted) return toast('Hesabın kısıtlanmış.', 'warn');
+    if(me.is_banned) return toast('Hesabın banlanmış.', 'err');
     const btn = $('#bf .btn'); btn.disabled = true;
     let image_path = null;
     const f = $('#bimg').files[0];
-    if(f){ try{ image_path = await uploadImg(f, 'books', setP); }catch(err){ btn.disabled = false; return alert('Fotoğraf: ' + err.message); } }
+    if(f){ try{ image_path = await uploadImg(f, 'books', setP); }catch(err){ btn.disabled = false; return toast('Fotoğraf: ' + err.message, 'err'); } }
     const priceVal = $('#bp').value.trim();
     const { error } = await sb.from('books').insert({ user_id: me.id, title: $('#bt').value.trim(), author: $('#ba').value.trim() || null, description: $('#bd').value.trim() || null, price: priceVal === '' ? null : Number(priceVal), image_path });
-    if(error){ btn.disabled = false; return alert('Kayıt: ' + error.message); }
+    if(error){ btn.disabled = false; return toast('Kayıt: ' + error.message, 'err'); }
     el.remove(); loadBooks();
   };
 }
@@ -1576,8 +1466,14 @@ async function loadPdfs(){
     const prof = p.profiles || {first_name:'?',last_name:''};
     return '<article class="pcard" data-id="' + p.id + '"><div class="pico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div><div class="pmeta"><div class="pt">' + esc(p.title) + '</div>' + (p.category ? '<span class="pcat">' + esc(p.category) + '</span>' : '') + (p.description ? '<div class="pd" style="margin-top:6px">' + esc(p.description) + '</div>' : '') + '<div class="pd" style="margin-top:6px"><span class="who" data-uid="' + p.user_id + '" data-name="' + esc(prof.first_name + ' ' + prof.last_name) + '">' + esc(prof.first_name) + ' ' + esc(prof.last_name) + '</span> · ' + ago(p.created_at) + '</div><div class="pactions"><a href="' + pdfUrl(p.file_path) + '" target="_blank" rel="noopener">📖 Aç / İndir</a>' + (canDel ? '<button data-pdel="' + p.id + '" style="color:var(--danger)">Sil</button>' : '') + '</div></div></article>';
   }).join('');
-  $('#libView').innerHTML = search + (list || (q ? '<div class="empty">Arama sonucu bulunamadı.</div>' : '<div class="empty">Henüz PDF yok. Sağ alttaki + butonuna bas.</div>'));
-  const sb_ = document.getElementById('psearch'); if(sb_) sb_.oninput = () => { pdfSearch = sb_.value; const v = pdfSearch; loadPdfs().then(() => { const i = document.getElementById('psearch'); if(i){ i.focus(); i.setSelectionRange(v.length, v.length); } }); };
+  $('#libView').innerHTML = search + (list || (q ? '<div class="empty"><span class="em-ic">🔍</span><div class="em-t">Sonuç bulunamadı</div>Farklı kelimelerle dene.</div>' : '<div class="empty"><span class="em-ic">📄</span><div class="em-t">Henüz PDF yok</div>Sağ alttaki + butonuna bas.</div>'));
+  const sb_ = document.getElementById('psearch');
+  const doSearch = debounce(() => {
+    pdfSearch = sb_.value;
+    const v = pdfSearch;
+    loadPdfs().then(() => { const i = document.getElementById('psearch'); if(i){ i.focus(); i.setSelectionRange(v.length, v.length); } });
+  }, 350);
+  if(sb_) sb_.oninput = () => { pdfSearch = sb_.value; doSearch(); };
   addFab(() => openPdfForm());
   $('#libView').onclick = async e => {
     const u = e.target.closest('[data-uid]');
@@ -1587,22 +1483,21 @@ async function loadPdfs(){
   };
 }
 function openPdfForm(){
-  const el = document.createElement('div'); el.className = 'sheet-bg';
-  el.innerHTML = '<div class="sheet"><h4>📄 PDF Yükle<button class="sheet-close">×</button></h4><form id="pf">' +
+  const el = openSheet(
+    '<h4>📄 PDF Yükle<button class="sheet-close" aria-label="Kapat">×</button></h4><form id="pf">' +
     '<input id="pt" maxlength="140" placeholder="Kitap / ders notu başlığı" required>' +
     '<input id="pcat" maxlength="80" placeholder="Bölüm / Kategori (örn: Bilgisayar Müh.)" required>' +
     '<textarea id="pd" maxlength="600" placeholder="Açıklama (opsiyonel)"></textarea>' +
     '<div class="row"><label class="pick" style="width:auto;padding:8px 12px;border-radius:10px;border:1px solid var(--line);gap:6px;color:var(--ac);font-weight:600"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg><span id="plabel" style="font-size:13px">PDF seç</span><input type="file" id="pfile" accept="application/pdf,.pdf,application/octet-stream" hidden></label><button class="btn sm">Yükle</button></div>' +
-    '<div class="prog-wrap hide" id="pdfProg"><div class="prog-bar"><div class="prog-fill" id="pdfFill"></div></div><div class="prog-text" id="pdfText">Yükleniyor... %0</div></div></form></div>';
-  document.body.appendChild(el);
-  el.onclick = e => { if(e.target === el || e.target.classList.contains('sheet-close')) el.remove(); };
+    '<div class="prog-wrap hide" id="pdfProg"><div class="prog-bar"><div class="prog-fill" id="pdfFill"></div></div><div class="prog-text" id="pdfText">Yükleniyor... %0</div></div></form>'
+  );
   $('#pfile').onchange = () => { const f = $('#pfile').files[0]; $('#plabel').textContent = f ? f.name.slice(0, 22) + (f.name.length > 22 ? '…' : '') : 'PDF seç'; };
   const setP = p => { $('#pdfProg').classList.remove('hide'); $('#pdfFill').style.width = Math.round(p*100) + '%'; $('#pdfText').textContent = 'Yükleniyor... %' + Math.round(p*100); };
   $('#pf').onsubmit = async e => {
     e.preventDefault();
-    if(me.is_restricted) return alert('⚠️ Hesabın kısıtlanmış.');
-    if(me.is_banned) return alert('🚫 Hesabın banlanmış.');
-    const f = $('#pfile').files[0]; if(!f) return alert('Lütfen PDF dosyası seç.');
+    if(me.is_restricted) return toast('Hesabın kısıtlanmış.', 'warn');
+    if(me.is_banned) return toast('Hesabın banlanmış.', 'err');
+    const f = $('#pfile').files[0]; if(!f) return toast('Lütfen PDF dosyası seç.', 'err');
     const btn = $('#pf .btn'); btn.disabled = true;
     try{
       const file_path = await uploadPdf(f, setP);
@@ -1611,7 +1506,7 @@ function openPdfForm(){
       if(error) throw new Error('DB: ' + error.message);
       setP(1);
       setTimeout(() => { el.remove(); loadPdfs(); }, 400);
-    }catch(err){ btn.disabled = false; $('#pdfProg').classList.add('hide'); alert('PDF eklenemedi:\n\n' + err.message); }
+    }catch(err){ btn.disabled = false; $('#pdfProg').classList.add('hide'); toast('PDF eklenemedi: ' + err.message, 'err'); }
   };
 }
 let fabEl = null, fabHandler = null;
@@ -1619,7 +1514,7 @@ function addFab(handler){
   if(fabEl && fabHandler === handler) return;
   removeFab();
   fabEl = document.createElement('button');
-  fabEl.className = 'fab'; fabEl.textContent = '+';
+  fabEl.className = 'fab'; fabEl.textContent = '+'; fabEl.setAttribute('aria-label','Yeni ekle');
   fabEl.onclick = handler;
   document.body.appendChild(fabEl);
   fabHandler = handler;
@@ -1655,9 +1550,9 @@ async function loadFeedback(){
     const btn = ff.querySelector('.btn.sm:last-of-type'); btn.disabled = true;
     const { error } = await sb.from('app_feedback').insert({ user_id: me.id, type: $('#ftype').value, content });
     btn.disabled = false;
-    if(error) return alert('Gönderilemedi: ' + error.message);
+    if(error) return toast('Gönderilemedi: ' + error.message, 'err');
     $('#fc').value = '';
-    alert('✅ Geri bildirimin yöneticiye iletildi.');
+    toast('Geri bildirimin yöneticiye iletildi.', 'ok');
   };
   if(me.is_admin){
     $('#view').onclick = async e => {
@@ -1672,7 +1567,7 @@ async function loadSettings(sub){
   if(sub === 'info') return loadInfo();
   if(sub === 'password') return loadPasswordChange();
   const initials_ = initials(me.first_name, me.last_name).toUpperCase();
-  const themeLabel = (localStorage.getItem('theme') === 'night') ? 'Karanlık' : 'Aydınlık';
+  const themeLabel = (localStorage.getItem('theme') === 'night' || document.body.classList.contains('night')) ? 'Karanlık' : 'Aydınlık';
   $('#view').innerHTML =
     '<div class="card" style="text-align:center">' +
       '<div class="avatar-big">' + esc(initials_) + '</div>' +
@@ -1689,14 +1584,14 @@ async function loadSettings(sub){
       '<div class="settings-item danger" data-open="delete"><div class="ico">🗑️</div><div class="txt"><b>Hesabımı Sil</b><small>Anında ve kalıcı olarak silinir</small></div><span class="arrow">›</span></div>' +
       '<div class="settings-item danger" data-open="logout"><div class="ico">🚪</div><div class="txt"><b>Çıkış Yap</b><small>Hesabından güvenli çıkış</small></div><span class="arrow">›</span></div>' +
     '</div>' +
-    '<div style="text-align:center;margin-top:22px;color:var(--mute);font-size:11px">Gelişim Vibe · v1.0<br>Designed &amp; Developed by <b style="color:var(--ac)">Emin Acar</b></div>';
+    '<div style="text-align:center;margin-top:22px;color:var(--mute);font-size:11px">Gelişim Vibe · v1.1<br>Designed &amp; Developed by <b style="color:var(--ac)">Emin Acar</b></div>';
 
   $('#view').onclick = async e => {
     const item = e.target.closest('[data-open]'); if(!item) return;
     const x = item.dataset.open;
     if(x === 'delete') deleteAccount();
     if(x === 'logout'){ if(confirm('Çıkış yapmak istediğine emin misin?')) sb.auth.signOut(); }
-    if(x === 'theme'){ const cur = localStorage.getItem('theme') || 'light'; localStorage.setItem('theme', cur === 'night' ? 'light' : 'night'); applyTheme(); loadSettings(); }
+    if(x === 'theme'){ const cur = document.body.classList.contains('night') ? 'night' : 'light'; localStorage.setItem('theme', cur === 'night' ? 'light' : 'night'); applyTheme(); loadSettings(); }
     if(x === 'info') loadSettings('info');
     if(x === 'password') loadSettings('password');
     if(x === 'feedback') show('feedback');
@@ -1705,30 +1600,26 @@ async function loadSettings(sub){
 }
 
 function deleteAccount(){
-  const el = document.createElement('div');
-  el.className = 'sheet-bg';
-  el.innerHTML =
-    '<div class="sheet">' +
-      '<h4>⚠️ Hesabımı Sil<button class="sheet-close">×</button></h4>' +
-      '<div style="background:color-mix(in srgb,#D42F4B 10%,transparent);border:1px solid color-mix(in srgb,#D42F4B 40%,transparent);border-radius:12px;padding:14px;margin-bottom:14px">' +
-        '<p style="margin:0 0 10px;font-size:14px;line-height:1.6;color:var(--ink)"><b>Bu işlem geri alınamaz.</b></p>' +
-        '<ul style="margin:0;padding-left:20px;font-size:13.5px;line-height:1.7;color:var(--mute)">' +
-          '<li>Hesabın <b>anında</b> silinir.</li>' +
-          '<li>Tüm paylaşımların, yorumların, mesajların, kitapların, PDF\'lerin ve fotoğrafların <b>kalıcı olarak silinir</b>.</li>' +
-          '<li>Bu işlem <b>geri alınamaz</b>.</li>' +
-          '<li>KVKK m.7 uyarınca silme talebiniz derhal yerine getirilir.</li>' +
-        '</ul>' +
+  const el = openSheet(
+    '<h4>⚠️ Hesabımı Sil<button class="sheet-close" aria-label="Kapat">×</button></h4>' +
+    '<div style="background:color-mix(in srgb,#D42F4B 10%,transparent);border:1px solid color-mix(in srgb,#D42F4B 40%,transparent);border-radius:12px;padding:14px;margin-bottom:14px">' +
+      '<p style="margin:0 0 10px;font-size:14px;line-height:1.6;color:var(--ink)"><b>Bu işlem geri alınamaz.</b></p>' +
+      '<ul style="margin:0;padding-left:20px;font-size:13.5px;line-height:1.7;color:var(--mute)">' +
+        '<li>Hesabın <b>anında</b> silinir.</li>' +
+        '<li>Tüm paylaşımların, yorumların, mesajların, kitapların, PDF\'lerin ve fotoğrafların <b>kalıcı olarak silinir</b>.</li>' +
+        '<li>Bu işlem <b>geri alınamaz</b>.</li>' +
+        '<li>KVKK m.7 uyarınca silme talebiniz derhal yerine getirilir.</li>' +
+      '</ul>' +
+    '</div>' +
+    '<form id="delForm">' +
+      '<label style="font-size:13px;font-weight:600;color:var(--mute);margin-bottom:4px;display:block">Onaylamak için <b style="color:var(--ink)">SİL</b> yaz:</label>' +
+      '<input id="delConfirm" maxlength="3" placeholder="SİL" autocomplete="off" style="text-align:center;font-size:20px;font-weight:800;letter-spacing:6px;text-transform:uppercase">' +
+      '<div style="display:flex;gap:8px;margin-top:12px">' +
+        '<button type="button" class="btn sheet-btn cancel" data-x="cancel" style="flex:1;margin:0">Vazgeç</button>' +
+        '<button type="submit" class="btn" style="flex:1;background:#D42F4B">Hesabımı Sil</button>' +
       '</div>' +
-      '<form id="delForm">' +
-        '<label style="font-size:13px;font-weight:600;color:var(--mute);margin-bottom:4px;display:block">Onaylamak için <b style="color:var(--ink)">SİL</b> yaz:</label>' +
-        '<input id="delConfirm" maxlength="3" placeholder="SİL" autocomplete="off" style="text-align:center;font-size:20px;font-weight:800;letter-spacing:6px;text-transform:uppercase">' +
-        '<div style="display:flex;gap:8px;margin-top:12px">' +
-          '<button type="button" class="btn sheet-btn cancel" data-x="cancel" style="flex:1;margin:0">Vazgeç</button>' +
-          '<button type="submit" class="btn" style="flex:1;background:#D42F4B">Hesabımı Sil</button>' +
-        '</div>' +
-      '</form>' +
-    '</div>';
-  document.body.appendChild(el);
+    '</form>'
+  );
   el.onclick = e => { if(e.target === el || e.target.classList.contains('sheet-close') || e.target.dataset.x === 'cancel') el.remove(); };
   const input = $('#delConfirm');
   setTimeout(() => input.focus(), 150);
@@ -1736,7 +1627,7 @@ function deleteAccount(){
 
   $('#delForm').onsubmit = async e => {
     e.preventDefault();
-    if(input.value.trim().toUpperCase() !== 'SİL') return alert('Onay için SİL yazman gerekiyor.');
+    if(input.value.trim().toUpperCase() !== 'SİL') return toast('Onay için SİL yazman gerekiyor.', 'err');
 
     const btn = e.target.querySelector('button[type="submit"]');
     btn.disabled = true; btn.textContent = 'Siliniyor...';
@@ -1762,12 +1653,11 @@ function deleteAccount(){
       localStorage.removeItem('theme');
       Object.keys(localStorage).forEach(k => { if(k.startsWith('seen_')) localStorage.removeItem(k); });
 
-      alert('✅ Hesabın ve tüm verilerin kalıcı olarak silindi.\n\nBizi tercih ettiğin için teşekkürler. Görüşmek üzere 👋');
+      toast('Hesabın ve tüm verilerin kalıcı olarak silindi. Görüşmek üzere 👋', 'ok');
       await sb.auth.signOut();
-      location.reload();
     } catch(err){
       btn.disabled = false; btn.textContent = 'Hesabımı Sil';
-      alert('Hata: ' + err.message);
+      toast('Hata: ' + err.message, 'err');
     }
   };
 }
@@ -1787,8 +1677,8 @@ async function loadPasswordChange(){
   $('#pwForm').onsubmit = async e => {
     e.preventDefault();
     const oldPw = $('#pwOld').value, newPw = $('#pwNew').value, newPw2 = $('#pwNew2').value;
-    if(newPw !== newPw2) return alert('Yeni şifreler aynı değil.');
-    if(newPw.length < 6) return alert('Yeni şifre en az 6 karakter olmalı.');
+    if(newPw !== newPw2) return toast('Yeni şifreler aynı değil.', 'err');
+    if(newPw.length < 6) return toast('Yeni şifre en az 6 karakter olmalı.', 'err');
     const btn = e.target.querySelector('button[type="submit"]'); btn.disabled = true; btn.textContent = 'Değiştiriliyor...';
     try{
       const { data: { session } } = await sb.auth.getSession();
@@ -1797,9 +1687,9 @@ async function loadPasswordChange(){
       if(signErr) throw new Error('Mevcut şifren hatalı.');
       const { error } = await sb.auth.updateUser({ password: newPw });
       if(error) throw new Error(error.message);
-      alert('✅ Şifren başarıyla değiştirildi!');
+      toast('Şifren başarıyla değiştirildi!', 'ok');
       loadSettings();
-    }catch(err){ btn.disabled = false; btn.textContent = 'Şifreyi Değiştir'; alert('Hata: ' + err.message); }
+    }catch(err){ btn.disabled = false; btn.textContent = 'Şifreyi Değiştir'; toast('Hata: ' + err.message, 'err'); }
   };
 }
 async function loadInfo(){
@@ -1857,7 +1747,7 @@ async function loadChat(){
     const txt = (last.sender_id === me.id ? 'Sen: ' : '') + last.content;
     return '<div class="conv" data-uid="' + id + '" data-name="' + esc(p.first_name + ' ' + p.last_name) + '"><span class="av">' + esc(ini) + '</span><div class="cmid"><div class="cn">' + esc(p.first_name) + ' ' + esc(p.last_name) + '</div><div class="cl">' + esc(txt).slice(0,60) + '</div></div>' + (info.unread ? '<span class="cb">' + info.unread + '</span>' : '') + '</div>';
   }).join('');
-  $('#view').innerHTML = (rows || '<div class="empty">Henüz mesajın yok.</div>') + '<div class="empty" style="padding:12px;font-size:12px">💡 Bir sohbete uzun basarak silebilirsin</div>';
+  $('#view').innerHTML = (rows || '<div class="empty"><span class="em-ic">💬</span><div class="em-t">Henüz mesajın yok</div>Bir kullanıcının profiline dokunup mesaj gönderebilirsin.</div>') + (rows ? '<div class="empty" style="padding:12px;font-size:12px">💡 Bir sohbete uzun basarak silebilirsin</div>' : '');
   $('#view').onclick = e => { const c = e.target.closest('.conv'); if(!c) return; show('chat', { chatWith: c.dataset.uid, chatUser: c.dataset.name }); };
 
   let lpTimer = null;
@@ -1882,11 +1772,11 @@ async function loadChat(){
 }
 
 function openConvMenu(otherId, otherName){
-  const el = document.createElement('div'); el.className = 'sheet-bg';
-  el.innerHTML = '<div class="sheet"><h4>Sohbet<button class="sheet-close">×</button></h4>' +
+  const el = openSheet(
+    '<h4>Sohbet<button class="sheet-close" aria-label="Kapat">×</button></h4>' +
     '<button class="sheet-btn danger" data-x="del">🗑️ Bu sohbeti sil</button>' +
-    '<button class="sheet-btn cancel" data-x="cancel">Vazgeç</button></div>';
-  document.body.appendChild(el);
+    '<button class="sheet-btn cancel" data-x="cancel">Vazgeç</button>'
+  );
   el.onclick = async e => {
     if(e.target === el || e.target.classList.contains('sheet-close') || e.target.dataset.x === 'cancel') return el.remove();
     const b = e.target.closest('button[data-x]'); if(!b) return;
@@ -1895,8 +1785,8 @@ function openConvMenu(otherId, otherName){
       if(!confirm(otherName + ' ile olan tüm mesajlar silinsin mi?')) return;
       const { error } = await sb.from('messages').delete()
         .or('and(sender_id.eq.' + me.id + ',receiver_id.eq.' + otherId + '),and(sender_id.eq.' + otherId + ',receiver_id.eq.' + me.id + ')');
-      if(error) return alert('Silinemedi: ' + error.message);
-      alert('✅ Sohbet silindi.');
+      if(error) return toast('Silinemedi: ' + error.message, 'err');
+      toast('Sohbet silindi.', 'ok');
       loadChat();
     }
   };
@@ -1909,17 +1799,17 @@ async function loadChatView(){
   if(error) return $('#view').innerHTML = '<div class="empty">' + esc(error.message) + '</div>';
   await sb.from('messages').update({ read_at: new Date().toISOString() }).eq('receiver_id', me.id).eq('sender_id', other).is('read_at', null);
   const ini = (chatUser || '?').split(' ').map(x => x[0]).slice(0,2).join('').toUpperCase();
-  $('#view').innerHTML = '<div class="chat-wrap"><div class="chat-head"><button class="back" id="chatBack">←</button><span class="av" data-uid="' + other + '" data-name="' + esc(chatUser||'') + '" style="cursor:pointer">' + esc(ini) + '</span><div><div style="font-weight:700">' + esc(chatUser||'Kullanıcı') + '</div><div class="dep">çevrimiçi olabilir</div></div></div><div class="chat-body" id="chatBody">' + ((msgs||[]).map(m => '<div class="msg ' + (m.sender_id === me.id ? 'me' : 'them') + '">' + esc(m.content) + '<span class="mt">' + ago(m.created_at) + '</span></div>').join('') || '<div class="empty" style="padding:20px">Sohbeti başlat 👋</div>') + '</div><form class="chat-form" id="chatForm"><input id="chatInput" maxlength="1000" placeholder="Mesaj yaz..." autocomplete="off" required><button class="btn">Gönder</button></form></div>';
+  $('#view').innerHTML = '<div class="chat-wrap"><div class="chat-head"><button class="back" id="chatBack" aria-label="Geri">←</button><span class="av" data-uid="' + other + '" data-name="' + esc(chatUser||'') + '" style="cursor:pointer">' + esc(ini) + '</span><div><div style="font-weight:700">' + esc(chatUser||'Kullanıcı') + '</div><div class="dep">çevrimiçi olabilir</div></div></div><div class="chat-body" id="chatBody">' + ((msgs||[]).map(m => '<div class="msg ' + (m.sender_id === me.id ? 'me' : 'them') + '">' + esc(m.content) + '<span class="mt">' + ago(m.created_at) + '</span></div>').join('') || '<div class="empty" style="padding:20px">Sohbeti başlat 👋</div>') + '</div><form class="chat-form" id="chatForm"><input id="chatInput" maxlength="1000" placeholder="Mesaj yaz..." autocomplete="off" required><button class="btn">Gönder</button></form></div>';
   const body = $('#chatBody'); body.scrollTop = body.scrollHeight;
   $('#chatBack').onclick = () => { chatWith = null; chatUser = null; show('chat'); };
   $('#chatForm').onsubmit = async e => {
     e.preventDefault();
-    if(me.is_restricted) return alert('⚠️ Hesabın kısıtlanmış.');
-    if(me.is_banned) return alert('🚫 Hesabın banlanmış.');
+    if(me.is_restricted) return toast('Hesabın kısıtlanmış.', 'warn');
+    if(me.is_banned) return toast('Hesabın banlanmış.', 'err');
     const content = $('#chatInput').value.trim(); if(!content) return;
     $('#chatInput').value = '';
     const { error } = await sb.from('messages').insert({ sender_id: me.id, receiver_id: other, content });
-    if(error) return alert(error.message);
+    if(error) return toast(error.message, 'err');
     loadChatView();
   };
   $('#view').querySelector('.chat-head .av').onclick = () => openUserMenu(other, chatUser);
@@ -1929,15 +1819,17 @@ async function loadChatView(){
     if(!data) return;
     const cur = body.querySelectorAll('.msg').length;
     if(data.length !== cur){
+      // Only auto-scroll if user was near bottom
+      const nearBottom = body.scrollHeight - body.scrollTop - body.clientHeight < 120;
       body.innerHTML = data.map(m => '<div class="msg ' + (m.sender_id === me.id ? 'me' : 'them') + '">' + esc(m.content) + '<span class="mt">' + ago(m.created_at) + '</span></div>').join('') || '<div class="empty" style="padding:20px">Sohbeti başlat 👋</div>';
-      body.scrollTop = body.scrollHeight;
+      if(nearBottom) body.scrollTop = body.scrollHeight;
       await sb.from('messages').update({ read_at: new Date().toISOString() }).eq('receiver_id', me.id).eq('sender_id', other).is('read_at', null);
     }
   }, 5000);
 }
 
 /* =========================================================
-   ANNOUNCEMENTS + POLLS (YENİ RESMİ TASARIM)
+   ANNOUNCEMENTS + POLLS
    ========================================================= */
 async function loadAnn(){
   removeFab();
@@ -1966,7 +1858,7 @@ async function loadAnn(){
     const media = (a.image_path ? '<a href="' + imgUrl(a.image_path) + '" target="_blank" rel="noopener"><img class="pimg" loading="lazy" src="' + imgUrl(a.image_path) + '" alt=""></a>' : '') + (a.video_path ? '<video class="pvid" controls playsinline preload="metadata" src="' + videoUrl(a.video_path) + '"></video>' : '');
     const pollHtml = (a.poll && a.poll.question && Array.isArray(a.poll.options)) ? renderPoll(a.id, a.poll, voteData[a.id]) : '';
     return '<article class="card ann" data-id="' + a.id + '"><span class="badge">📢 RESMİ DUYURU</span> <span class="time">· ' + ago(a.created_at) + '</span><h3>' + esc(a.title) + '</h3><div class="body">' + esc(a.content) + '</div>' + media + pollHtml + '<div class="acts"><button data-a="acm">💬 Yorumlar · ' + cc + '</button>' + (me.is_admin ? '<button data-del>Sil</button>' : '') + '</div><div class="cm hide"></div></article>';
-  }).join('') || '<div class="empty">Henüz duyuru yok.</div>';
+  }).join('') || '<div class="empty"><span class="em-ic">📢</span><div class="em-t">Henüz duyuru yok</div>Yeni duyurular burada görünecek.</div>';
 
   $('#view').innerHTML = form + list + renderAdvertiseCTA();
 
@@ -1975,8 +1867,8 @@ async function loadAnn(){
     const renderAnnPv = () => {
       const pv = $('#apv');
       if(!annMedia){ pv.classList.add('hide'); pv.innerHTML=''; return; }
-      if(annMedia.type === 'image') pv.innerHTML = '<img src="' + URL.createObjectURL(annMedia.file) + '" alt=""><button type="button">×</button>';
-      else pv.innerHTML = '<video src="' + URL.createObjectURL(annMedia.file) + '" controls playsinline></video><button type="button">×</button>';
+      if(annMedia.type === 'image') pv.innerHTML = '<img src="' + URL.createObjectURL(annMedia.file) + '" alt=""><button type="button" aria-label="Kaldır">×</button>';
+      else pv.innerHTML = '<video src="' + URL.createObjectURL(annMedia.file) + '" controls playsinline></video><button type="button" aria-label="Kaldır">×</button>';
       pv.classList.remove('hide');
       pv.querySelector('button').onclick = () => { annMedia = null; const i=$('#aimg'); if(i)i.value=''; const v=$('#avid'); if(v)v.value=''; renderAnnPv(); };
     };
@@ -1985,14 +1877,16 @@ async function loadAnn(){
 
     const pollOn = $('#apollOn');
     const pollBox = $('#apollBox');
-    pollOn.onchange = () => { pollBox.classList.toggle('hide', !pollOn.checked); };
+    const pollToggleBtn = $('#apollToggleBtn');
+    pollOn.onchange = () => { pollBox.classList.toggle('hide', !pollOn.checked); pollToggleBtn.classList.toggle('on', pollOn.checked); };
+    pollToggleBtn.onclick = (e) => { /* label click, checkbox toggles anyway */ };
     const addOpt = () => {
       const box = $('#apollOpts');
       const count = box.querySelectorAll('.poll-opt-row').length;
-      if(count >= 6) return alert('En fazla 6 seçenek ekleyebilirsin.');
+      if(count >= 6) return toast('En fazla 6 seçenek ekleyebilirsin.', 'warn');
       const div = document.createElement('div');
       div.className = 'poll-opt-row';
-      div.innerHTML = '<input class="poll-opt-inp" maxlength="80" placeholder="Seçenek ' + (count+1) + '"><button type="button" class="rm-opt">×</button>';
+      div.innerHTML = '<input class="poll-opt-inp" maxlength="80" placeholder="Seçenek ' + (count+1) + '"><button type="button" class="rm-opt" aria-label="Kaldır">×</button>';
       box.appendChild(div);
     };
     $('#apollAdd').onclick = addOpt;
@@ -2010,14 +1904,14 @@ async function loadAnn(){
       try{
         if(annMedia?.type === 'image'){ setAP(0); image_path = await uploadImg(annMedia.file, 'images', p => setAP(p)); }
         else if(annMedia?.type === 'video'){ setAP(0); video_path = await uploadVideo(annMedia.file, p => setAP(p)); }
-      }catch(err){ btn.disabled = false; $('#aProg').classList.add('hide'); return alert('Yükleme: ' + err.message); }
+      }catch(err){ btn.disabled = false; $('#aProg').classList.add('hide'); return toast('Yükleme: ' + err.message, 'err'); }
 
       let poll = null;
       if(pollOn.checked){
         const q = $('#apollQ').value.trim();
         const opts = [...$('#apollOpts').querySelectorAll('.poll-opt-inp')].map(i => i.value.trim()).filter(Boolean);
-        if(!q) { btn.disabled = false; return alert('Anket sorusu zorunlu.'); }
-        if(opts.length < 2){ btn.disabled = false; return alert('En az 2 seçenek gerekli.'); }
+        if(!q) { btn.disabled = false; return toast('Anket sorusu zorunlu.', 'err'); }
+        if(opts.length < 2){ btn.disabled = false; return toast('En az 2 seçenek gerekli.', 'err'); }
         poll = { question: q, options: opts };
       }
 
@@ -2026,7 +1920,7 @@ async function loadAnn(){
       if(video_path) row.video_path = video_path;
       if(poll) row.poll = poll;
       const { error } = await sb.from('announcements').insert(row);
-      if(error){ btn.disabled = false; return alert(error.message); }
+      if(error){ btn.disabled = false; return toast(error.message, 'err'); }
       loadAnn();
     };
   }
@@ -2037,13 +1931,13 @@ async function loadAnn(){
       const poll = optBtn.closest('.poll');
       const annId = +poll.dataset.poll;
       const idx = +optBtn.dataset.opt;
-      if(me.is_banned) return alert('🚫 Hesabın banlanmış.');
+      if(me.is_banned) return toast('Hesabın banlanmış.', 'err');
       optBtn.disabled = true; optBtn.style.opacity = '.6';
       const { error } = await sb.from('poll_votes').insert({ announcement_id: annId, user_id: me.id, option_index: idx });
       if(error){
         optBtn.disabled = false; optBtn.style.opacity = '';
-        if(error.code === '23505') return alert('Bu ankette zaten oy kullandın.');
-        return alert(error.message);
+        if(error.code === '23505') return toast('Bu ankette zaten oy kullandın.', 'warn');
+        return toast(error.message, 'err');
       }
       loadAnn();
       return;
@@ -2096,8 +1990,8 @@ function renderAnnForm(){
         '<h5>📊 ANKET OLUŞTUR</h5>' +
         '<input id="apollQ" maxlength="140" placeholder="Anket sorusu (örn: Hangi etkinlik olsun?)" style="margin-bottom:8px">' +
         '<div id="apollOpts">' +
-          '<div class="poll-opt-row"><input class="poll-opt-inp" maxlength="80" placeholder="Seçenek 1"><button type="button" class="rm-opt">×</button></div>' +
-          '<div class="poll-opt-row"><input class="poll-opt-inp" maxlength="80" placeholder="Seçenek 2"><button type="button" class="rm-opt">×</button></div>' +
+          '<div class="poll-opt-row"><input class="poll-opt-inp" maxlength="80" placeholder="Seçenek 1"><button type="button" class="rm-opt" aria-label="Kaldır">×</button></div>' +
+          '<div class="poll-opt-row"><input class="poll-opt-inp" maxlength="80" placeholder="Seçenek 2"><button type="button" class="rm-opt" aria-label="Kaldır">×</button></div>' +
         '</div>' +
         '<button type="button" id="apollAdd" class="link" style="margin-top:6px">+ Seçenek ekle</button>' +
       '</div>' +
@@ -2126,11 +2020,11 @@ async function loadAnnComments(box, annId){
   ta.addEventListener('keydown', e => { if(e.key === 'Enter' && (e.metaKey || e.ctrlKey)){ e.preventDefault(); box.querySelector('form').requestSubmit(); } });
   box.querySelector('form').onsubmit = async e => {
     e.preventDefault();
-    if(me.is_restricted) return alert('⚠️ Hesabın kısıtlanmış.');
-    if(me.is_banned) return alert('🚫 Hesabın banlanmış.');
+    if(me.is_restricted) return toast('Hesabın kısıtlanmış.', 'warn');
+    if(me.is_banned) return toast('Hesabın banlanmış.', 'err');
     const content = ta.value.trim(); if(!content) return;
     const { error } = await sb.from('announcement_comments').insert({ user_id: me.id, announcement_id: annId, content });
-    if(error) return alert(error.message);
+    if(error) return toast(error.message, 'err');
     loadAnnComments(box, annId);
     const card = box.closest('.card'); const btn = card.querySelector('button[data-a="acm"]');
     const newCount = box.querySelectorAll('.cm-item').length;
@@ -2169,12 +2063,11 @@ async function loadAdmin(){
   loadAdminReports();
 }
 
-/* ---- ŞİKAYETLER (sadece bekleyen) ---- */
 async function loadAdminReports(){
   const box = $('#adminView');
   const { data: reports, error } = await sb.from('reports').select('*').eq('status', 'pending').order('created_at',{ascending:false}).limit(100);
   if(error){ box.innerHTML = '<div class="empty">' + esc(error.message) + '</div>'; return; }
-  if(!reports || !reports.length){ box.innerHTML = '<div class="empty">✅ Bekleyen şikayet yok. Her şey temiz!</div>'; return; }
+  if(!reports || !reports.length){ box.innerHTML = '<div class="empty"><span class="em-ic">✅</span><div class="em-t">Bekleyen şikayet yok</div>Her şey temiz!</div>'; return; }
 
   const userIds = new Set();
   reports.forEach(r => { if(r.reporter_id) userIds.add(r.reporter_id); if(r.reported_user_id) userIds.add(r.reported_user_id); });
@@ -2266,7 +2159,7 @@ async function loadAdminReports(){
         await sb.from('profiles').update({ is_restricted: true, restrict_count: newCount }).eq('id', rep.uid);
       }
       await sb.from('reports').delete().eq('id', rid);
-      alert('✅ Kullanıcı kısıtlandı. (Yasaklılar sekmesinden kaldırabilirsin)');
+      toast('Kullanıcı kısıtlandı. (Yasaklılar sekmesinden kaldırabilirsin)', 'ok');
       loadAdminReports();
       return;
     }
@@ -2310,18 +2203,17 @@ async function loadAdminReports(){
         }
 
         await sb.from('reports').delete().eq('id', rid);
-        alert('✅ Kullanıcı kalıcı olarak banlandı ve tüm verileri silindi.');
+        toast('Kullanıcı kalıcı olarak banlandı ve tüm verileri silindi.', 'ok');
         loadAdminReports();
       } catch(err){
         btn.disabled = false; btn.textContent = '🚫 Banla';
-        alert('Hata: ' + err.message);
+        toast('Hata: ' + err.message, 'err');
       }
       return;
     }
   };
 }
 
-/* ---- YASAKLILAR ---- */
 async function loadAdminBanned(){
   const box = $('#adminView');
 
@@ -2403,7 +2295,7 @@ async function loadAdminBanned(){
   }).join('');
 
   const total = (profiles||[]).length + (bannedEmails||[]).length;
-  if(!total){ box.innerHTML = '<div class="empty">✅ Şu an banlı veya kısıtlı kullanıcı yok.</div>'; return; }
+  if(!total){ box.innerHTML = '<div class="empty"><span class="em-ic">✅</span><div class="em-t">Temiz</div>Şu an banlı veya kısıtlı kullanıcı yok.</div>'; return; }
 
   const activeProf  = (profiles||[]).filter(u => u.is_banned || u.is_restricted).length;
   const activeEmail = (bannedEmails||[]).filter(isEmailActive).length;
@@ -2487,13 +2379,12 @@ async function loadAdminBanned(){
         loadAdminBanned();
       } catch(err){
         btn.disabled = false; btn.textContent = '🚫 Banla';
-        alert('Hata: ' + err.message);
+        toast('Hata: ' + err.message, 'err');
       }
     }
   };
 }
 
-/* ---- TÜM KULLANICILAR ---- */
 async function loadAdminAllUsers(){
   const box = $('#adminView');
   const { data, error } = await sb.from('profiles')
@@ -2535,14 +2426,15 @@ async function loadAdminAllUsers(){
 
   const inp = document.getElementById('usearch');
   if(inp){
-    inp.oninput = () => {
+    const doSearch = debounce(() => {
       window._userSearch = inp.value;
       const v = inp.value;
       loadAdminAllUsers().then(() => {
         const i = document.getElementById('usearch');
         if(i){ i.focus(); i.setSelectionRange(v.length, v.length); }
       });
-    };
+    }, 300);
+    inp.oninput = doSearch;
   }
 
   box.onclick = e => {
@@ -2554,9 +2446,8 @@ async function loadAdminAllUsers(){
 }
 
 function openEditUserSheet(u){
-  const el = document.createElement('div');
-  el.className = 'sheet-bg';
-  el.innerHTML = '<div class="sheet"><h4>✏️ Kullanıcıyı Düzenle<button class="sheet-close">×</button></h4>' +
+  const el = openSheet(
+    '<h4>✏️ Kullanıcıyı Düzenle<button class="sheet-close" aria-label="Kapat">×</button></h4>' +
     '<form id="ueForm" style="display:flex;flex-direction:column;gap:10px">' +
       '<label style="font-size:13px;font-weight:600;color:var(--mute)">Ad</label>' +
       '<input id="ueFirst" maxlength="60" value="' + esc(u.first_name||'') + '" required>' +
@@ -2568,8 +2459,8 @@ function openEditUserSheet(u){
         '<button type="button" class="btn sheet-btn cancel" data-x="cancel" style="flex:1;margin:0">Vazgeç</button>' +
         '<button type="submit" class="btn" style="flex:1">Kaydet</button>' +
       '</div>' +
-    '</form></div>';
-  document.body.appendChild(el);
+    '</form>'
+  );
   el.onclick = e => { if(e.target === el || e.target.classList.contains('sheet-close') || e.target.dataset.x === 'cancel') el.remove(); };
   $('#ueForm').onsubmit = async e => {
     e.preventDefault();
@@ -2580,7 +2471,7 @@ function openEditUserSheet(u){
       last_name: capFirst($('#ueLast').value.trim()),
       department: $('#ueDept').value.trim()
     }).eq('id', u.id);
-    if(error){ btn.disabled = false; btn.textContent = 'Kaydet'; return alert('Hata: ' + error.message); }
+    if(error){ btn.disabled = false; btn.textContent = 'Kaydet'; return toast('Hata: ' + error.message, 'err'); }
     el.remove();
     loadAdminAllUsers();
   };
@@ -2598,17 +2489,17 @@ async function loadAdminAds(){
     return '<article class="card" data-adid="' + a.id + '" style="' + (a.active ? '' : 'opacity:.55') + '"><div style="display:flex;justify-content:space-between;align-items:center"><span class="ad-tag">📢 SPONSOR</span>' + status + '</div>' + img + '<div class="body" style="font-weight:800;font-size:15px;margin:6px 0 2px">' + esc(a.title) + '</div>' + (a.body ? '<div class="dep">' + esc(a.body) + '</div>' : '') + (a.link_url ? '<div class="dep">🔗 ' + esc(a.link_url) + '</div>' : '') + '<div class="acts"><button data-adact="toggle">' + (a.active ? 'Pasif yap' : 'Aktif yap') + '</button><button data-adact="del" style="color:var(--danger)">Sil</button></div></article>';
   }).join('') || '<div class="empty">Henüz sponsor reklamı yok.</div>';
   box.innerHTML = adsenseInfo + form + '<h3 style="margin:16px 6px 8px;font-size:14px;color:var(--mute);font-weight:700">SPONSOR REKLAMLARIN</h3>' + list;
-  $('#adimg').onchange = () => { const f = $('#adimg').files[0], pv = $('#adimgpv'); if(!f){ pv.classList.add('hide'); pv.innerHTML = ''; return; } pv.innerHTML = '<img src="' + URL.createObjectURL(f) + '" alt=""><button type="button">×</button>'; pv.classList.remove('hide'); pv.querySelector('button').onclick = () => { $('#adimg').value = ''; pv.classList.add('hide'); pv.innerHTML = ''; }; };
+  $('#adimg').onchange = () => { const f = $('#adimg').files[0], pv = $('#adimgpv'); if(!f){ pv.classList.add('hide'); pv.innerHTML = ''; return; } pv.innerHTML = '<img src="' + URL.createObjectURL(f) + '" alt=""><button type="button" aria-label="Kaldır">×</button>'; pv.classList.remove('hide'); pv.querySelector('button').onclick = () => { $('#adimg').value = ''; pv.classList.add('hide'); pv.innerHTML = ''; }; };
   const setP = p => { $('#adProg').classList.remove('hide'); $('#adFill').style.width = Math.round(p*100) + '%'; $('#adText').textContent = 'Yükleniyor... %' + Math.round(p*100); };
   $('#adf').onsubmit = async e => {
     e.preventDefault();
     const btn = $('#adf .btn'); btn.disabled = true;
     let image_path = null;
     const f = $('#adimg').files[0];
-    if(f){ try{ image_path = await uploadImg(f, 'ads', setP); }catch(err){ btn.disabled = false; return alert('Görsel: ' + err.message); } }
+    if(f){ try{ image_path = await uploadImg(f, 'ads', setP); }catch(err){ btn.disabled = false; return toast('Görsel: ' + err.message, 'err'); } }
     const { error } = await sb.from('ads').insert({ title: $('#adt').value.trim(), body: $('#adb').value.trim() || null, link_url: $('#adl').value.trim() || null, image_path, active: true });
     btn.disabled = false;
-    if(error) return alert('Kayıt: ' + error.message);
+    if(error) return toast('Kayıt: ' + error.message, 'err');
     loadAdminAds();
   };
   box.onclick = async e => {
@@ -2623,7 +2514,7 @@ async function loadAdminRequests(){
   const box = $('#adminView');
   const { data, error } = await sb.from('ad_requests').select('*,profiles(first_name,last_name,department)').order('created_at',{ascending:false}).limit(100);
   if(error){ box.innerHTML = '<div class="empty">' + esc(error.message) + '</div>'; return; }
-  if(!data || !data.length){ box.innerHTML = '<div class="empty">📭 Henüz reklam talebi yok.</div>'; return; }
+  if(!data || !data.length){ box.innerHTML = '<div class="empty"><span class="em-ic">📭</span><div class="em-t">Henüz reklam talebi yok</div>Yeni talepler burada görünecek.</div>'; return; }
   const rows = data.map(r => {
     const p = r.profiles || { first_name:'?', last_name:'', department:'' };
     const statusColor = r.status === 'pending' ? 'var(--ad)' : (r.status === 'contacted' ? 'var(--ac)' : '#2ecc71');
