@@ -14,91 +14,102 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-/* =========================================================
-   🎨 TEMA PALETİ
-   - Aydınlık: Açık mavi tonları
-   - Karanlık: Gece mavisi tonları
-   - İtiraf sayfası: Kırmızı tema (body.conf-mode)
-   ========================================================= */
-
+/* ============ BASE THEME ============ */
 :root{
-  /* ☀️ LIGHT — Açık mavi */
-  --bg:#E8F0FB;
-  --bg2:#DDE9F7;
-  --card:#FFFFFF;
-  --ink:#0A1F44;
-  --mute:#5A6E92;
-  --line:#D0DEF0;
-  --ac:#1E6BE0;
-  --ac2:#4A8BFF;
-  --acink:#FFFFFF;
-  --danger:#DC2626;
-  --ok:#16A34A;
-  --ad:#F59E0B;
-  --g:#4285F4;
-  --sh:0 1px 2px rgba(10,31,68,.05),0 6px 18px rgba(30,107,224,.08);
+  --bg:#EEF1F6;--card:#fff;--ink:#101B33;--mute:#66708A;--line:#DDE2EC;
+  --ac:#2347E8;--acink:#fff;--ac2:#4A6BFF;
+  --danger:#D42F4B;--ok:#2ECC71;
+  --sh:0 1px 2px rgba(16,27,51,.04),0 6px 18px rgba(16,27,51,.06);
+  --ad:#FFB020;--g:#4285F4;
 }
-
-/* 🌙 NIGHT — Gece mavisi */
+/* --- Blue (default) Night --- */
 body.night{
-  --bg:#0A1730;
-  --bg2:#06101F;
-  --card:#132B4A;
-  --ink:#E8F0FF;
-  --mute:#8FA6C9;
-  --line:#1F3A5E;
-  --ac:#4A90E2;
-  --ac2:#7BB0FF;
-  --acink:#06101F;
-  --danger:#FF5B7A;
-  --ok:#4EE49A;
-  --ad:#FFC24D;
-  --g:#5A9EFF;
-  --sh:0 8px 24px rgba(0,0,0,.35), 0 0 0 1px rgba(74,144,226,.06);
+  --bg:#0E1830;
+  --card:#162347;
+  --ink:#E8EEFF;
+  --mute:#8FA0CC;
+  --line:#28386A;
+  --ac:#6E8CFF;
+  --acink:#0A1230;
+  --ac2:#8AA5FF;
+  --danger:#E85B76;
+  --sh:0 6px 20px rgba(0,0,0,.45);
 }
 
-/* 🔴 CONF-MODE (itiraf sayfası) — Light: kırmızı */
-body.conf-mode{
-  --ac:#DC2626;
-  --ac2:#EF4444;
-  --acink:#FFFFFF;
-  --sh:0 1px 2px rgba(68,10,10,.06),0 6px 18px rgba(220,38,38,.10);
+/* ============ SECTION THEMES ============ */
+/* --- Confession (Burgundy) Day --- */
+body[data-sec="conf"]{
+  --bg:#F6EBEF;
+  --card:#fff;
+  --ink:#1A0B10;
+  --mute:#8A6D75;
+  --line:#EAD6DC;
+  --ac:#8B1A3D;
+  --acink:#fff;
+  --ac2:#A82550;
+  --sh:0 1px 2px rgba(26,11,16,.04),0 6px 18px rgba(26,11,16,.06);
 }
-/* 🔴 CONF-MODE — Night: parlak kırmızı */
-body.night.conf-mode{
-  --ac:#FF4D4D;
-  --ac2:#FF7A7A;
-  --acink:#1A0308;
-  --sh:0 8px 24px rgba(0,0,0,.35), 0 0 0 1px rgba(255,77,77,.10);
+/* --- Confession (Burgundy) Night --- */
+body.night[data-sec="conf"]{
+  --bg:#1F0A12;
+  --card:#2C111C;
+  --ink:#F7E8EE;
+  --mute:#BC96A3;
+  --line:#4A2030;
+  --ac:#E15A78;
+  --acink:#2A0810;
+  --ac2:#F07C96;
+  --sh:0 6px 20px rgba(0,0,0,.5);
+}
+/* --- Chat (Green) Day --- */
+body[data-sec="chat"]{
+  --bg:#ECF5F0;
+  --card:#fff;
+  --ink:#0A1A12;
+  --mute:#5E7D6E;
+  --line:#D5E5DC;
+  --ac:#0F6B4A;
+  --acink:#fff;
+  --ac2:#158A60;
+  --sh:0 1px 2px rgba(10,26,18,.04),0 6px 18px rgba(10,26,18,.06);
+}
+/* --- Chat (Green) Night --- */
+body.night[data-sec="chat"]{
+  --bg:#0A1D16;
+  --card:#122B21;
+  --ink:#E5F8EE;
+  --mute:#88B5A2;
+  --line:#1F4233;
+  --ac:#2EE594;
+  --acink:#0A1A12;
+  --ac2:#52EDAB;
+  --sh:0 6px 20px rgba(0,0,0,.5);
 }
 
 *{box-sizing:border-box}
 html,body{margin:0;height:100%}
 body{font-family:'Bricolage Grotesque',system-ui,sans-serif;background:var(--bg);color:var(--ink);transition:background .25s,color .25s;padding-top:env(safe-area-inset-top);-webkit-font-smoothing:antialiased}
-
-/* Arka plan ışıması — logodan esinlenmiş */
-body::before{
-  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
-  background:radial-gradient(60% 40% at 15% 0%,color-mix(in srgb,var(--ac) 14%,transparent),transparent 60%),
-             radial-gradient(50% 35% at 85% 8%,color-mix(in srgb,var(--ac2) 12%,transparent),transparent 65%);
-  opacity:.6;
-}
-body.night::before{opacity:1}
-header,nav,.wrap,#auth{position:relative;z-index:1}
-
 button,input,textarea,select{font:inherit;color:inherit}
 button{cursor:pointer}
 :focus-visible{outline:2px solid var(--ac);outline-offset:2px}
 .hide{display:none!important}
 .wrap{max-width:640px;margin:0 auto;padding:12px 14px 130px}
-#auth{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;gap:14px;background:radial-gradient(120% 60% at 50% 0,color-mix(in srgb,var(--ac) 18%,transparent),transparent 70%)}
+#auth{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;gap:14px;background:radial-gradient(120% 60% at 50% 0,color-mix(in srgb,var(--ac) 14%,transparent),transparent 70%)}
 #logo{width:96px;height:96px;border-radius:24px;object-fit:contain;background:#fff;display:grid;place-items:center;font-weight:800;color:var(--ac);box-shadow:var(--sh)}
 #auth h1{margin:4px 0 0;font-size:28px;font-weight:800}
 #auth form{width:100%;max-width:360px;display:flex;flex-direction:column;gap:10px;background:var(--card);padding:18px;border-radius:20px;box-shadow:var(--sh);border:1px solid var(--line)}
 input,textarea,select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card);transition:border-color .15s,box-shadow .15s}
 textarea{resize:none;min-height:84px}
-input:focus,textarea:focus,select:focus{outline:0;border-color:var(--ac);box-shadow:0 0 0 3px color-mix(in srgb,var(--ac) 20%,transparent)}
-.btn{background:linear-gradient(135deg,var(--ac),var(--ac2));color:var(--acink);border:0;border-radius:12px;padding:12px 16px;font-weight:600;transition:transform .1s,opacity .15s,filter .15s}
+input:focus,textarea:focus,select:focus{outline:0;border-color:var(--ac);box-shadow:0 0 0 3px color-mix(in srgb,var(--ac) 18%,transparent)}
+
+/* ============ BUTTONS (matte) ============ */
+.btn{
+  background:var(--ac);
+  color:var(--acink);
+  border:0;border-radius:12px;padding:12px 16px;font-weight:600;
+  transition:transform .1s,opacity .15s,background .15s;
+  box-shadow:0 2px 6px color-mix(in srgb,var(--ac) 22%,transparent);
+}
 .btn.sm{padding:8px 14px;border-radius:999px}
 .btn:active{transform:scale(.97)}
 .btn[disabled]{opacity:.5}
@@ -108,12 +119,14 @@ input:focus,textarea:focus,select:focus{outline:0;border-color:var(--ac);box-sha
 #msg.err{color:var(--danger)}
 .auth-footer{margin-top:6px;font-size:11px;color:var(--mute);text-align:center;letter-spacing:.3px}
 .auth-footer b{color:var(--ac)}
+
 header{position:sticky;top:0;z-index:15;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;justify-content:space-between;align-items:center;padding:8px 14px;max-width:640px;margin:0 auto;gap:10px}
 .brand{display:flex;align-items:center;gap:9px;min-width:0}
 .brand .logo-svg{width:30px;height:30px;border-radius:8px;object-fit:contain;flex:none;background:#fff}
 .brand b{font-size:17px;font-weight:800;letter-spacing:-.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .header-actions{display:flex;align-items:center;gap:2px;flex:none}
 .icon-btn{background:none;border:0;font-size:19px;padding:6px 8px;border-radius:10px;cursor:pointer;line-height:1;display:grid;place-items:center}
+
 .card{background:var(--card);border-radius:18px;padding:14px;margin-bottom:10px;border:1px solid var(--line);box-shadow:var(--sh);animation:up .3s ease both}
 @keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .who{font-weight:600;cursor:pointer}
@@ -128,8 +141,8 @@ header{position:sticky;top:0;z-index:15;background:color-mix(in srgb,var(--bg) 8
 .cm-item{background:var(--bg);border-radius:12px;padding:9px 12px;display:flex;flex-direction:column;gap:3px;word-break:break-word;overflow-wrap:anywhere}
 .cm-head{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px}
 .cm-name{font-weight:700;color:var(--ac);display:inline-flex;align-items:center;gap:5px}
-.cm-name .anon{color:#8e7cff}
-body.conf-mode .cm-name .anon{color:var(--ac)}
+.cm-name .anon{color:#B0284F}
+body.night .cm-name .anon{color:#E15A78}
 .cm-time{color:var(--mute);font-size:11.5px;flex:none}
 .cm-text{font-size:14px;line-height:1.5;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere}
 .cm-acts{display:flex;gap:2px;margin-top:2px}
@@ -145,18 +158,16 @@ body.conf-mode .cm-name .anon{color:var(--ac)}
 }
 .composer-new::before{
   content:"";position:absolute;top:0;left:0;right:0;height:3px;
-  background:linear-gradient(90deg,var(--ac),var(--ac2));
-  opacity:.9;
+  background:var(--ac);
+  opacity:1;
 }
 .composer-head{display:flex;gap:12px;align-items:flex-start;margin-top:4px}
 .composer-head .cav{
   width:42px;height:42px;border-radius:50%;flex:none;
-  background:linear-gradient(135deg,var(--ac),var(--ac2));
-  color:#fff;display:grid;place-items:center;font-weight:800;font-size:15px;
-  box-shadow:0 4px 12px color-mix(in srgb,var(--ac) 35%,transparent);
+  background:var(--ac);
+  color:var(--acink);display:grid;place-items:center;font-weight:800;font-size:15px;
+  box-shadow:0 3px 10px color-mix(in srgb,var(--ac) 30%,transparent);
 }
-.composer-head .cav-anon{background:linear-gradient(135deg,#8e7cff,#4a35b8)}
-body.conf-mode .composer-head .cav-anon{background:linear-gradient(135deg,var(--ac),color-mix(in srgb,var(--ac) 60%,#000))}
 .composer-head textarea{
   flex:1;border:0;background:transparent;padding:10px 0;min-height:64px;
   resize:none;font-size:15.5px;line-height:1.5;font-family:inherit;
@@ -183,7 +194,7 @@ body.conf-mode .composer-head .cav-anon{background:linear-gradient(135deg,var(--
   cursor:pointer;color:var(--ac);background:color-mix(in srgb,var(--ac) 10%,var(--bg));
   transition:background .15s,transform .1s;border:0;
 }
-.composer-tool:hover{background:color-mix(in srgb,var(--ac) 20%,var(--bg))}
+.composer-tool:hover{background:color-mix(in srgb,var(--ac) 18%,var(--bg))}
 .composer-tool:active{transform:scale(.94)}
 .composer-tool svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .composer-right{display:flex;align-items:center;gap:10px;margin-left:auto}
@@ -191,25 +202,22 @@ body.conf-mode .composer-head .cav-anon{background:linear-gradient(135deg,var(--
 .composer-counter.warn{color:#ff9900}
 .composer-counter.over{color:var(--danger)}
 .composer-submit{
-  background:linear-gradient(135deg,var(--ac),var(--ac2));color:var(--acink);
+  background:var(--ac);color:var(--acink);
   border:0;border-radius:999px;padding:9px 22px;font-weight:700;font-size:14px;
-  transition:transform .1s,opacity .15s,box-shadow .15s;
-  box-shadow:0 4px 14px color-mix(in srgb,var(--ac) 35%,transparent);
+  transition:transform .1s,opacity .15s,background .15s;
+  box-shadow:0 3px 10px color-mix(in srgb,var(--ac) 30%,transparent);
 }
 .composer-submit:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .composer-submit:not(:disabled):active{transform:scale(.96)}
 .composer-anon-badge{
-  display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#8e7cff,#4a35b8);
+  display:inline-flex;align-items:center;gap:5px;background:#8B1A3D;
   color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;
   margin-bottom:8px;
 }
-body.conf-mode .composer-anon-badge{background:linear-gradient(135deg,var(--ac),color-mix(in srgb,var(--ac) 60%,#000))}
+body.night .composer-anon-badge{background:#B0284F}
 
 /* ============ POLL ============ */
-.poll{
-  background:var(--bg);border-radius:16px;padding:14px;margin:10px 0;
-  border:1px solid var(--line);
-}
+.poll{background:var(--bg);border-radius:16px;padding:14px;margin:10px 0;border:1px solid var(--line)}
 .poll-q{font-weight:800;font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px;line-height:1.35}
 .poll-q::before{content:"📊";font-size:18px;flex:none}
 .poll-opt{
@@ -225,7 +233,7 @@ body.conf-mode .composer-anon-badge{background:linear-gradient(135deg,var(--ac),
 .poll-opt[disabled]{cursor:default;opacity:1}
 .poll-opt .bar{
   position:absolute;left:0;top:0;bottom:0;
-  background:linear-gradient(90deg,color-mix(in srgb,var(--ac) 22%,transparent),color-mix(in srgb,var(--ac2) 18%,transparent));
+  background:color-mix(in srgb,var(--ac) 20%,transparent);
   transition:width .5s cubic-bezier(.4,0,.2,1);z-index:0;border-radius:10px;
 }
 .poll-opt .txt{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center;gap:10px}
@@ -233,11 +241,7 @@ body.conf-mode .composer-anon-badge{background:linear-gradient(135deg,var(--ac),
 .poll-opt.voted .pct{color:var(--ac)}
 .poll-total{text-align:center;font-size:12px;color:var(--mute);margin-top:6px;font-weight:600}
 .poll-total .vote-ok{color:#2ecc71;font-weight:800}
-
-.poll-form-box{
-  background:var(--bg);border:1px dashed var(--line);border-radius:12px;
-  padding:12px;margin-top:8px;
-}
+.poll-form-box{background:var(--bg);border:1px dashed var(--line);border-radius:12px;padding:12px;margin-top:8px}
 .poll-form-box h5{margin:0 0 10px;font-size:13px;font-weight:800;color:var(--mute);letter-spacing:.4px}
 .poll-opt-row{display:flex;gap:6px;margin-bottom:6px;align-items:center}
 .poll-opt-row input{flex:1;padding:9px 12px;font-size:13.5px}
@@ -248,22 +252,42 @@ body.conf-mode .composer-anon-badge{background:linear-gradient(135deg,var(--ac),
 .empty{text-align:center;color:var(--mute);padding:40px 10px}
 .skeleton{background:linear-gradient(90deg,var(--bg) 25%,color-mix(in srgb,var(--line) 60%,var(--bg)) 50%,var(--bg) 75%);background-size:200% 100%;animation:shine 1.4s infinite;border-radius:14px;height:100px;margin-bottom:10px}
 @keyframes shine{0%{background-position:200% 0}100%{background-position:-200% 0}}
-nav{position:fixed;bottom:0;left:0;right:0;background:color-mix(in srgb,var(--card) 90%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line);display:flex;flex-direction:column;z-index:20}
+
+/* ============ NAV ============ */
+nav{position:fixed;bottom:0;left:0;right:0;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line);display:flex;flex-direction:column;z-index:20}
 .nav-tabs{display:flex;width:100%;overflow-x:auto;scrollbar-width:none}
 .nav-tabs::-webkit-scrollbar{display:none}
-.nav-tabs button{flex:1;min-width:58px;background:none;border:0;padding:8px 4px 7px;color:var(--mute);font-weight:600;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9.5px;position:relative}
-.nav-tabs button.on{color:var(--ac)}
+.nav-tabs button{flex:1;min-width:58px;background:none;border:0;padding:8px 4px 7px;color:var(--mute);font-weight:600;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9.5px;position:relative;transition:color .2s}
 .nav-tabs svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .nav-tabs button.on svg{stroke-width:2.4}
+
+/* section-colored nav icons */
+.nav-tabs button[data-t="feed"]{--nc:#2347E8}
+.nav-tabs button[data-t="library"]{--nc:#2347E8}
+.nav-tabs button[data-t="ann"]{--nc:#2347E8}
+.nav-tabs button[data-t="conf"]{--nc:#8B1A3D}
+.nav-tabs button[data-t="chat"]{--nc:#0F6B4A}
+.nav-tabs button[data-t="settings"]{--nc:#2347E8}
+.nav-tabs button[data-t="admin"]{--nc:#2347E8}
+.nav-tabs button.on{color:var(--nc)}
+body.night .nav-tabs button[data-t="feed"],
+body.night .nav-tabs button[data-t="library"],
+body.night .nav-tabs button[data-t="ann"],
+body.night .nav-tabs button[data-t="settings"],
+body.night .nav-tabs button[data-t="admin"]{--nc:#7D9BFF}
+body.night .nav-tabs button[data-t="conf"]{--nc:#E15A78}
+body.night .nav-tabs button[data-t="chat"]{--nc:#2EE594}
+
 .nav-tabs .dot{position:absolute;top:4px;right:calc(50% - 13px);width:7px;height:7px;border-radius:50%;background:#F03E3E;border:1.5px solid var(--card);display:none}
 .nav-tabs button.has-new .dot{display:block}
 .app-footer{font-size:10px;color:var(--mute);padding:3px 10px calc(3px + env(safe-area-inset-bottom));border-top:1px solid var(--line);text-align:center}
 .app-footer b{color:var(--ac);font-weight:700}
+
 .tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:999px;background:var(--bg);color:var(--mute)}
 .hd{display:flex;align-items:center;gap:10px}
-.av{width:40px;height:40px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:800;font-size:15px;color:#fff;background:linear-gradient(135deg,var(--ac),var(--ac2));cursor:pointer}
-.av.an{background:linear-gradient(135deg,#8e7cff,#4a35b8);color:#fff;cursor:default}
-body.conf-mode .av.an{background:linear-gradient(135deg,var(--ac),color-mix(in srgb,var(--ac) 55%,#000))}
+.av{width:40px;height:40px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:800;font-size:15px;color:var(--acink);background:var(--ac);cursor:pointer}
+.av.an{background:#8B1A3D;color:#fff;cursor:default}
+body.night .av.an{background:#B0284F}
 .av.an svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:2}
 .ann{border-left:4px solid var(--ac)}
 .ann h3{margin:6px 0 0;font-size:18px;font-weight:800}
@@ -278,31 +302,35 @@ body.conf-mode .av.an{background:linear-gradient(135deg,var(--ac),color-mix(in s
 .pvid{width:100%;max-height:420px;border-radius:14px;margin:4px 0 6px;display:block;background:#000}
 .seg{display:flex;gap:6px;background:var(--card);padding:5px;border-radius:14px;border:1px solid var(--line);margin-bottom:12px;box-shadow:var(--sh);overflow-x:auto;scrollbar-width:none}
 .seg::-webkit-scrollbar{display:none}
-.seg button{flex:1;min-width:100px;background:none;border:0;padding:9px 8px;border-radius:10px;font-weight:600;color:var(--mute);font-size:13px;white-space:nowrap}
-.seg button.on{background:linear-gradient(135deg,var(--ac),var(--ac2));color:var(--acink)}
+.seg button{flex:1;min-width:100px;background:none;border:0;padding:9px 8px;border-radius:10px;font-weight:600;color:var(--mute);font-size:13px;white-space:nowrap;transition:background .15s,color .15s}
+.seg button.on{background:var(--ac);color:var(--acink)}
 .search-box{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:12px;box-shadow:var(--sh)}
 .search-box svg{width:18px;height:18px;fill:none;stroke:var(--mute);stroke-width:2;flex:none}
 .search-box input{border:0;background:transparent;padding:0;outline:0;font-size:14px}
 .bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
 .bcard{background:var(--card);border-radius:16px;overflow:hidden;box-shadow:var(--sh);border:1px solid var(--line);display:flex;flex-direction:column;animation:up .3s ease both}
-.bcard .bimg{width:100%;aspect-ratio:3/4;object-fit:cover;background:linear-gradient(135deg,#dbe6f7,#c8d8ef)}
-body.night .bcard .bimg{background:linear-gradient(135deg,#1a2d4d,#122845)}
+.bcard .bimg{width:100%;aspect-ratio:3/4;object-fit:cover;background:linear-gradient(135deg,#e9edf6,#d9e0ef)}
+body.night .bcard .bimg{background:linear-gradient(135deg,#1a2547,#243568)}
 .bcard .info{padding:10px 11px 12px}
 .bcard .bt{font-weight:800;font-size:14px;line-height:1.25}
 .bcard .ba{color:var(--mute);font-size:12px;margin-top:2px}
 .bcard .bp{margin-top:6px;color:var(--ac);font-weight:800;font-size:14px}
 .bcard .bseller{margin-top:8px;font-size:11.5px;color:var(--mute);display:flex;align-items:center;gap:6px;cursor:pointer}
-.bcard .bseller .dot{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;display:grid;place-items:center;font-size:10px;font-weight:800}
+.bcard .bseller .dot{width:22px;height:22px;border-radius:50%;background:var(--ac);color:var(--acink);display:grid;place-items:center;font-size:10px;font-weight:800}
 .pcard{background:var(--card);border-radius:16px;padding:14px;margin-bottom:10px;border:1px solid var(--line);box-shadow:var(--sh);display:flex;gap:12px;align-items:flex-start;animation:up .3s ease both}
-.pcard .pico{width:46px;height:56px;border-radius:10px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;display:grid;place-items:center;flex:none}
-.pcard .pico svg{width:24px;height:24px;fill:none;stroke:#fff;stroke-width:2}
+.pcard .pico{width:46px;height:56px;border-radius:10px;background:var(--ac);color:var(--acink);display:grid;place-items:center;flex:none}
+.pcard .pico svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2}
 .pcard .pmeta{flex:1;min-width:0}
 .pcard .pt{font-weight:800;font-size:15px}
 .pcard .pcat{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;background:color-mix(in srgb,var(--ac) 14%,transparent);color:var(--ac);margin-top:4px}
 .pcard .pd{color:var(--mute);font-size:13px;margin-top:3px;line-height:1.4}
 .pcard .pactions{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
 .pcard .pactions a,.pcard .pactions button{background:var(--bg);border:0;color:var(--ac);font-weight:600;font-size:13px;padding:6px 11px;border-radius:999px;text-decoration:none;cursor:pointer}
-.fab{position:fixed;right:16px;bottom:calc(96px + env(safe-area-inset-bottom));width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:0;font-size:30px;line-height:1;box-shadow:0 10px 26px color-mix(in srgb,var(--ac) 40%,transparent);cursor:pointer;z-index:22;display:grid;place-items:center;padding-bottom:5px}
+
+/* ============ FAB ============ */
+.fab{position:fixed;right:16px;bottom:calc(96px + env(safe-area-inset-bottom));width:54px;height:54px;border-radius:50%;background:var(--ac);color:var(--acink);border:0;font-size:30px;line-height:1;box-shadow:0 8px 22px color-mix(in srgb,var(--ac) 40%,transparent);cursor:pointer;z-index:22;display:grid;place-items:center;padding-bottom:5px}
+
+/* ============ SHEETS ============ */
 .sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:100;display:grid;place-items:end center;animation:fade .18s}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 .sheet{background:var(--card);border-radius:22px 22px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));width:100%;max-width:640px;animation:up2 .22s ease both;border-top:1px solid var(--line);max-height:88vh;overflow-y:auto}
@@ -316,14 +344,16 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#1a2d4d,#122845)}
 .sheet form{display:flex;flex-direction:column;gap:10px}
 .prog-wrap{margin-top:10px}
 .prog-bar{height:8px;border-radius:999px;background:var(--bg);overflow:hidden;border:1px solid var(--line)}
-.prog-fill{height:100%;width:0%;background:linear-gradient(135deg,var(--ac),var(--ac2));transition:width .2s ease;border-radius:999px}
+.prog-fill{height:100%;width:0%;background:var(--ac);transition:width .2s ease;border-radius:999px}
 .prog-text{font-size:12px;color:var(--mute);margin-top:5px;text-align:center}
+
+/* ============ CHAT ============ */
 .chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 210px);min-height:400px}
 .chat-head{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:10px;box-shadow:var(--sh)}
 .chat-head .back{background:none;border:0;color:var(--ac);font-weight:700;padding:4px 8px}
 .chat-body{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding:6px 2px}
 .msg{max-width:78%;padding:9px 13px;border-radius:16px;font-size:14.5px;line-height:1.4;word-break:break-word;white-space:pre-wrap}
-.msg.me{align-self:flex-end;background:linear-gradient(135deg,var(--ac),var(--ac2));color:var(--acink);border-bottom-right-radius:5px}
+.msg.me{align-self:flex-end;background:var(--ac);color:var(--acink);border-bottom-right-radius:5px}
 .msg.them{align-self:flex-start;background:var(--card);border:1px solid var(--line);border-bottom-left-radius:5px}
 .msg .mt{font-size:10.5px;opacity:.7;margin-top:3px;display:block}
 .chat-form{display:flex;gap:6px;padding-top:10px}
@@ -333,6 +363,8 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#1a2d4d,#122845)}
 .conv .cn{font-weight:700}
 .conv .cl{color:var(--mute);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .conv .cb{background:var(--ac);color:var(--acink);font-size:11px;font-weight:800;border-radius:999px;padding:2px 8px}
+
+/* ============ ADMIN ============ */
 .admin-toggle{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;background:linear-gradient(135deg,rgba(255,149,0,.14),rgba(255,0,110,.10));border:1px dashed rgba(255,90,60,.5);border-radius:14px;margin-bottom:12px;font-size:13px;flex-wrap:wrap}
 .admin-toggle b{color:#ff5a3c}
 .admin-toggle button{background:#ff5a3c;color:#fff;border:0;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700}
@@ -352,6 +384,8 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#1a2d4d,#122845)}
 .success-box .ic{width:70px;height:70px;border-radius:50%;background:color-mix(in srgb,#2ECC71 15%,transparent);color:#2ECC71;display:grid;place-items:center;font-size:38px;margin:0 auto 14px}
 .success-box h3{margin:0 0 8px;font-size:20px}
 .success-box p{color:var(--mute);font-size:14px;line-height:1.6;margin:0}
+
+/* ============ SETTINGS ============ */
 .settings-list{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
 .settings-item{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;text-decoration:none;color:var(--ink);box-shadow:var(--sh)}
 .settings-item:hover{background:color-mix(in srgb,var(--ac) 6%,var(--card))}
@@ -362,7 +396,9 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#1a2d4d,#122845)}
 .settings-item .arrow{color:var(--mute);font-size:18px;flex:none}
 .settings-item.danger .ico{background:color-mix(in srgb,#D42F4B 14%,transparent)}
 .settings-item.danger .txt b{color:var(--danger)}
-.avatar-big{width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,var(--ac),var(--ac2));color:var(--acink);display:grid;place-items:center;font-weight:800;font-size:26px;margin:0 auto 12px}
+.avatar-big{width:70px;height:70px;border-radius:50%;background:var(--ac);color:var(--acink);display:grid;place-items:center;font-weight:800;font-size:26px;margin:0 auto 12px}
+
+/* ============ COOKIE ============ */
 .cookie-banner{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);padding:14px;z-index:999;box-shadow:0 -4px 20px rgba(0,0,0,.12);display:none}
 .cookie-banner.show{display:block}
 .cookie-content{max-width:640px;margin:0 auto}
@@ -370,35 +406,12 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#1a2d4d,#122845)}
 .cookie-content a{color:var(--ac);font-weight:600}
 .cookie-actions{display:flex;gap:8px;align-items:center}
 
+/* ============ USER CARD (admin) ============ */
 .user-card{padding:12px 14px}
 .user-card-row{display:flex;gap:12px;align-items:center}
-.restrict-badge{
-  display:inline-flex;align-items:center;gap:4px;background:color-mix(in srgb,#FF9900 14%,transparent);
-  color:#ff9900;font-size:11px;font-weight:800;padding:3px 9px;border-radius:999px;margin-top:4px;
-}
-.restrict-badge.ban{
-  background:color-mix(in srgb,#D42F4B 14%,transparent);
-  color:var(--danger);
-}
-.restrict-badge.hist{
-  background:var(--bg);color:var(--mute);
-}
-
-/* ============ GECE MODU İNCE AYAR ============ */
-body.night header{border-bottom:1px solid rgba(74,144,226,.08)}
-body.night nav{border-top:1px solid rgba(74,144,226,.12)}
-body.night .card::before{
-  content:"";position:absolute;top:0;left:14px;right:14px;height:1px;
-  background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--ac) 35%,transparent),transparent);
-  pointer-events:none;border-radius:999px;
-}
-body.night .card{position:relative}
-body.night .nav-tabs button.on svg{filter:drop-shadow(0 0 5px color-mix(in srgb,var(--ac) 55%,transparent))}
-body.night ::-webkit-scrollbar{width:10px;height:10px}
-body.night ::-webkit-scrollbar-track{background:transparent}
-body.night ::-webkit-scrollbar-thumb{background:linear-gradient(#1F3A5E,#2A4A70);border-radius:999px;border:2px solid var(--bg)}
-body.night ::-webkit-scrollbar-thumb:hover{background:var(--ac)}
-body.night ::selection{background:color-mix(in srgb,var(--ac) 40%,transparent);color:#fff}
+.restrict-badge{display:inline-flex;align-items:center;gap:4px;background:color-mix(in srgb,#FF9900 14%,transparent);color:#ff9900;font-size:11px;font-weight:800;padding:3px 9px;border-radius:999px;margin-top:4px}
+.restrict-badge.ban{background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger)}
+.restrict-badge.hist{background:var(--bg);color:var(--mute)}
 </style>
 </head>
 <body>
@@ -540,37 +553,26 @@ window.openLegalDoc = function(kind){
       body: `
 <div style="line-height:1.85;font-size:14px;color:var(--mute);text-align:justify">
 <p style="margin:0 0 16px">İşbu Aydınlatma Metni, 6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") m.10 uyarınca, veri sorumlusu tarafından kişisel verilerinizin işlenmesine ilişkin olarak sizi bilgilendirmek amacıyla hazırlanmıştır. Uygulamamızı kullanmadan önce bu metni dikkatlice okumanızı ve içeriği anlamanızı rica ederiz.</p>
-
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">1. Veri Sorumlusunun Kimliği</h3>
 <p style="margin:0 0 16px">Bu uygulama kapsamında kişisel verileriniz, veri sorumlusu sıfatıyla Gelişim Vibe tarafından işlenmektedir. Gelişim Vibe, İstanbul Gelişim Üniversitesi öğrencileri tarafından öğrenciler için bağımsız olarak geliştirilmiş bir topluluk uygulamasıdır ve resmî bir üniversite uygulaması değildir. Uygulamanın geliştiricisi Emin Acar olup, kişisel verilerinizle ilgili her türlü soru, talep ve başvurunuz için ${CONTACT_EMAIL} adresinden bizimle iletişime geçebilirsiniz.</p>
-
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">2. İşlenen Kişisel Verileriniz</h3>
 <p style="margin:0 0 16px">Uygulamamıza kayıt olmanız ve hizmetlerimizi kullanmanız sırasında aşağıdaki kişisel verileriniz işlenmektedir: Kimlik verisi olarak adınız ve soyadınız; iletişim verisi olarak üniversite e-posta adresiniz; eğitim verisi olarak kayıt sırasında belirttiğiniz bölüm bilginiz; kullanıcı işlem verisi olarak uygulama içinde yaptığınız paylaşımlar, anonim itiraflar, yorumlar, beğeniler, birebir mesajlar, ikinci el kitap ilanları, yüklediğiniz PDF ders notları ve görsel/video içerikler; teknik veri olarak IP adresiniz, oturum bilgileriniz, cihaz ve tarayıcı bilgileriniz ile uygulama içi etkileşim kayıtlarınız; ve son olarak çerez verisi olarak Google AdSense ve iş ortakları tarafından yerleştirilen reklam ve analiz çerezleri işlenmektedir.</p>
-
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">3. Kişisel Verilerin İşlenme Amaçları</h3>
 <p style="margin:0 0 16px">Kişisel verileriniz, üyelik kaydınızın oluşturulması ve hesap yönetiminizin sağlanması, üniversite e-postanız üzerinden kimlik doğrulama ve doğrulama kodu (OTP) gönderimi, uygulama içi sosyal etkileşimlerin (paylaşım, yorum, mesaj, beğeni) sağlanması, ikinci el kitap ve ders notu paylaşım hizmetinin sunulması, anonim itiraf özelliğinin işletilmesi ve içerik moderasyonu, şikayet, ban ve kısıtlama süreçlerinin yürütülmesi, platform güvenliğinin sağlanması ve kötüye kullanımın önlenmesi, yasal yükümlülüklerin yerine getirilmesi, Google AdSense aracılığıyla kişiselleştirilmiş reklam gösterimi ve son olarak hizmet kalitesinin ölçülmesi ve geliştirilmesi amaçlarıyla işlenmektedir.</p>
-
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">4. Kişisel Verilerin İşlenmesinin Hukuki Sebepleri</h3>
 <p style="margin:0 0 16px">Kişisel verileriniz, KVKK m.5 kapsamında aşağıdaki hukuki sebeplere dayanılarak işlenmektedir: m.5/2(c) uyarınca "bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması" sebebiyle hesap oluşturma ve hizmet sunumu için; m.5/2(ç) uyarınca "veri sorumlusunun hukuki yükümlülüğünü yerine getirebilmesi için zorunlu olması" sebebiyle yasal kayıtlar için; m.5/2(f) uyarınca "ilgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması" sebebiyle platform güvenliği için; ve m.5/1 uyarınca Google AdSense gibi reklam çerezleri ve kişiselleştirilmiş reklam gösterimi için açık rızanıza dayanılarak işlenmektedir.</p>
-
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">5. Kişisel Verilerin Aktarılması</h3>
 <p style="margin:0 0 16px">Kişisel verileriniz, hizmetlerimizin teknik olarak çalışabilmesi amacıyla aşağıdaki hizmet sağlayıcılar aracılığıyla işlenmekte ve yurt dışındaki sunucularda saklanabilmektedir: Supabase Inc. (ABD/AB) kimlik doğrulama, veritabanı ve dosya depolama altyapısı için; Google LLC (ABD) Google AdSense reklam hizmeti ve analitik için; Cloudflare Inc. (ABD) CDN, güvenlik ve DDoS koruması için; ve nihayet web sitesi barındırma hizmeti sunan hosting sağlayıcıları için. Yurt dışına aktarım, KVKK m.9 kapsamında Standart Sözleşme Hükümleri (SCC) ve kayıt sırasında verdiğiniz açık rızanıza dayanılarak gerçekleştirilmektedir. Verileriniz ticari amaçlarla üçüncü taraflara satılmaz, kiralanmaz veya pazarlama listeleri için paylaşılmaz.</p>
-
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">6. Kişisel Verilerin Toplanma Yöntemi</h3>
 <p style="margin:0 0 16px">Kişisel verileriniz; kayıt formu, paylaşım/yorum/mesaj alanları, dosya yükleme araçları, çerezler ve otomatik sistem kayıtları aracılığıyla tamamen elektronik ortamda toplanmaktadır. Verilerinizin bir kısmı sizin doğrudan girişinizle (ad, e-posta, paylaşım içerikleri), bir kısmı ise platformun teknik işleyişi gereği otomatik olarak (IP adresi, oturum bilgileri, çerez verileri) toplanmaktadır.</p>
-
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">7. Saklama Süresi</h3>
 <p style="margin:0 0 16px">Hesap verileriniz, hesabınız aktif olduğu sürece saklanmaktadır. Hesabınızı "Hesabımı Sil" özelliği üzerinden sildiğinizde tüm paylaşımlarınız, mesajlarınız, yüklediğiniz dosyalar ve kişisel verileriniz anında ve kalıcı olarak silinmektedir. Yasal yükümlülükler gereği saklanması zorunlu olan kayıtlar (güvenlik logları, işlem kayıtları) ilgili mevzuatta belirtilen süre boyunca saklanmaktadır. Bununla birlikte, platform kurallarını ihlal ettiği için kalıcı olarak banlanan kullanıcıların e-posta adresleri, aynı mail adresi ile yeniden kayıt olunmasını engellemek amacıyla süresiz olarak saklanmaktadır.</p>
-
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">8. Veri Güvenliği</h3>
 <p style="margin:0 0 16px">Kişisel verileriniz, gerekli teknik ve idari güvenlik önlemleriyle korunmaktadır. Veri iletişimi SSL/TLS şifreleme ile sağlanmakta, veriler AES-256 standardında şifrelenerek saklanmaktadır. Supabase altyapısında uygulanan Row Level Security (RLS) politikaları ile kullanıcıların yalnızca kendi verilerine erişmesi sağlanmakta, şifreler güvenli biçimde hash işlemine tabi tutularak saklanmaktadır. Kullandığımız altyapı hizmeti Supabase, ISO 27001 ve SOC2 Type II sertifikalarına sahiptir ve düzenli olarak bağımsız güvenlik denetimlerinden geçmektedir.</p>
-
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">9. KVKK m.11 Kapsamındaki Haklarınız</h3>
 <p style="margin:0 0 16px">KVKK m.11 uyarınca, kişisel verilerinizle ilgili olarak şu haklara sahipsiniz: Kişisel verilerinizin işlenip işlenmediğini öğrenme, işlenmişse buna ilişkin bilgi talep etme, işlenme amacını ve amacına uygun kullanılıp kullanılmadığını öğrenme, yurt içinde veya yurt dışında verilerinizin aktarıldığı üçüncü kişileri bilme, eksik veya yanlış işlenmişse düzeltilmesini isteme, KVKK m.7 çerçevesinde silinmesini veya yok edilmesini isteme, aktarıldığı üçüncü kişilere yapılan işlemlerin bildirilmesini isteme, münhasıran otomatik sistemler ile analiz edilmesi nedeniyle aleyhinize bir sonucun ortaya çıkmasına itiraz etme ve kanuna aykırı işleme sebebiyle zarara uğramanız hâlinde zararın giderilmesini talep etme.</p>
-
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">10. Başvuru Yöntemi</h3>
 <p style="margin:0 0 16px">Yukarıda belirtilen haklarınızı kullanmak için ${CONTACT_EMAIL} adresine "KVKK Başvurusu" konu başlığıyla e-posta göndererek bizimle iletişime geçebilirsiniz. Başvurularınız, KVKK m.13 uyarınca en geç otuz (30) gün içinde ücretsiz olarak yanıtlanacaktır. Başvurunuzun reddedilmesi hâlinde, cevabı öğrendiğiniz tarihten itibaren otuz gün ve her hâlde başvuru tarihinden itibaren altmış gün içinde Kişisel Verileri Koruma Kuruluna şikâyette bulunma hakkınız saklıdır.</p>
-
 <div style="background:var(--bg);border-radius:12px;padding:14px 16px;margin-top:20px;border-left:3px solid var(--ac)">
 <p style="margin:0;font-size:13px;line-height:1.7"><b style="color:var(--ink)">📌 Önemli Not:</b> Uygulamamızı kullanmaya devam etmeniz ve kayıt sırasında ilgili onay kutusunu işaretlemeniz, bu Aydınlatma Metnini okuduğunuzu ve anladığınızı gösterir. Detaylı bilgi için uygulama içindeki Gizlilik Politikamızı ve Açık Rıza Metnimizi de inceleyebilirsiniz.</p>
 </div>
@@ -792,7 +794,7 @@ window.addEventListener('load', async () => {
 });
 
 async function boot(session){
-  if(!session){ me = null; $('#app').classList.add('hide'); $('#auth').classList.remove('hide'); document.body.classList.remove('conf-mode'); return; }
+  if(!session){ me = null; $('#app').classList.add('hide'); $('#auth').classList.remove('hide'); return; }
   const { data } = await sb.from('profiles').select('*').eq('id', session.user.id).single();
   if(!data) return say('Profil yüklenemedi.', 1);
   me = data;
@@ -814,9 +816,12 @@ function markSeen(t){ localStorage.setItem('seen_' + t, Date.now().toString()); 
 
 function show(t, opts){
   tab = t;
+  // ---- Section theme switching ----
+  if(t === 'conf') document.body.dataset.sec = 'conf';
+  else if(t === 'chat') document.body.dataset.sec = 'chat';
+  else document.body.dataset.sec = '';
+
   removeFab();
-  /* 🎨 İtiraf sayfasında kırmızı tema */
-  document.body.classList.toggle('conf-mode', t === 'conf');
   if(opts && 'chatWith' in opts){ chatWith = opts.chatWith; chatUser = opts.chatUser; }
   if(opts && 'libTab' in opts) libTab = opts.libTab;
   $$('.nav-tabs button').forEach(b => b.classList.toggle('on', b.dataset.t === t));
@@ -944,7 +949,7 @@ async function loadList(t){
     : '';
 
   const composerAvatar = conf
-    ? '<div class="cav cav-anon">👻</div>'
+    ? '<div class="cav" style="background:#8B1A3D">👻</div>'
     : '<div class="cav">' + esc(initials(me.first_name, me.last_name).toUpperCase() || '?') + '</div>';
 
   const composer =
@@ -1425,7 +1430,7 @@ async function loadFeedback(){
     ? '<h3 style="margin:16px 6px 8px;font-size:14px;color:var(--mute);font-weight:700">📥 TÜM GERİ BİLDİRİMLER</h3>' + listHtml
     : '<div style="margin-top:14px;padding:14px;background:var(--card);border-radius:14px;border:1px dashed var(--line);color:var(--mute);font-size:13px;text-align:center;line-height:1.5">ℹ️ Gönderdiğin öneri ve şikayetler sadece yönetici tarafından görülebilir.</div>');
   const ff = $('#ff');
-  const setType = t => { $('#ftype').value = t; ff.querySelectorAll('[data-ft]').forEach(x => { const on = x.dataset.ft === t; x.style.background = on ? 'linear-gradient(135deg,var(--ac),var(--ac2))' : 'var(--bg)'; x.style.color = on ? 'var(--acink)' : 'var(--mute)'; }); };
+  const setType = t => { $('#ftype').value = t; ff.querySelectorAll('[data-ft]').forEach(x => { const on = x.dataset.ft === t; x.style.background = on ? 'var(--ac)' : 'var(--bg)'; x.style.color = on ? 'var(--acink)' : 'var(--mute)'; }); };
   setType('öneri');
   ff.querySelectorAll('[data-ft]').forEach(b => b.onclick = () => setType(b.dataset.ft));
   ff.onsubmit = async e => {
@@ -1503,7 +1508,7 @@ function deleteAccount(){
         '<input id="delConfirm" maxlength="3" placeholder="SİL" autocomplete="off" style="text-align:center;font-size:20px;font-weight:800;letter-spacing:6px;text-transform:uppercase">' +
         '<div style="display:flex;gap:8px;margin-top:12px">' +
           '<button type="button" class="btn sheet-btn cancel" data-x="cancel" style="flex:1;margin:0">Vazgeç</button>' +
-          '<button type="submit" class="btn" style="flex:1;background:linear-gradient(135deg,#D42F4B,#a02040)">Hesabımı Sil</button>' +
+          '<button type="submit" class="btn" style="flex:1;background:#D42F4B">Hesabımı Sil</button>' +
         '</div>' +
       '</form>' +
     '</div>';
@@ -1932,6 +1937,7 @@ async function loadAdmin(){
   loadAdminReports();
 }
 
+/* ---- ŞİKAYETLER (sadece bekleyen) ---- */
 async function loadAdminReports(){
   const box = $('#adminView');
   const { data: reports, error } = await sb.from('reports').select('*').eq('status', 'pending').order('created_at',{ascending:false}).limit(100);
@@ -2083,6 +2089,7 @@ async function loadAdminReports(){
   };
 }
 
+/* ---- YASAKLILAR ---- */
 async function loadAdminBanned(){
   const box = $('#adminView');
 
@@ -2254,6 +2261,7 @@ async function loadAdminBanned(){
   };
 }
 
+/* ---- TÜM KULLANICILAR ---- */
 async function loadAdminAllUsers(){
   const box = $('#adminView');
   const { data, error } = await sb.from('profiles')
