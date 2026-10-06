@@ -2514,12 +2514,13 @@ async function loadChatView(){
   const nearBottom = () => body.scrollHeight - body.scrollTop - body.clientHeight < 120;
 
   try{
-    chatChannel = sb.channel('chat-' + me.id + '-' + other, { config: { broadcast: { self: false } } })
+    const roomId = [me.id, other].sort().join('-');
+    chatChannel = sb.channel('chat-' + roomId, { config: { broadcast: { self: false }, presence: { key: me.id } } })
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: 'receiver_id=eq.' + me.id }, () => refreshMessages(nearBottom()))
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: 'sender_id=eq.' + me.id }, () => refreshMessages(nearBottom()))
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'messages', filter: 'receiver_id=eq.' + me.id }, () => refreshMessages(nearBottom()))
       .on('broadcast', { event: 'typing' }, payload => {
-        if(payload.payload.user_id === other) showTypingIndicator();
+        if(payload.payload && payload.payload.user_id === other) showTypingIndicator();
       })
       .subscribe();
   }catch(_){}
@@ -2542,9 +2543,13 @@ async function loadChatView(){
   let typingSentAt = 0;
   chatInput.addEventListener('input', () => {
     const now = Date.now();
-    if(now - typingSentAt < 2000) return;
+    if(now - typingSentAt < 1500) return;
     typingSentAt = now;
-    if(chatChannel) try{ chatChannel.send({ type: 'broadcast', event: 'typing', payload: { user_id: me.id } }); }catch(_){}
+    if(chatChannel && chatChannel.state === 'joined'){
+      try{
+        chatChannel.send({ type: 'broadcast', event: 'typing', payload: { user_id: me.id, at: Date.now() } });
+      }catch(_){}
+    }
   });
 
   const sendMsg = async () => {
