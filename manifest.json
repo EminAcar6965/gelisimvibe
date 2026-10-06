@@ -1,19 +1,52 @@
 {
-  "name": "Gelişim Vibe",
+  "id": "/",
+  "name": "Gelişim Vibe — İGÜ Öğrenci Topluluğu",
   "short_name": "Gelişim Vibe",
-  "description": "İGÜ öğrenci topluluk uygulaması",
-  "start_url": "/",
+  "description": "İGÜ öğrencileri için sosyal topluluk: anonim itiraf gönder, 2. el kitap sat veya takas yap, ders notlarını PDF olarak paylaş, öğrenci arkadaşlarınla mesajlaş.",
+  "start_url": "/?utm_source=pwa",
   "scope": "/",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
   "orientation": "portrait",
   "background_color": "#EEF1F6",
   "theme_color": "#2C4A8E",
   "lang": "tr",
   "dir": "ltr",
-  "categories": ["social", "education"],
+  "categories": ["social", "education", "lifestyle"],
+  "prefer_related_applications": false,
   "icons": [
     { "src": "logo.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
     { "src": "logo.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Akış",
+      "short_name": "Akış",
+      "description": "Son paylaşımları gör",
+      "url": "/?tab=feed",
+      "icons": [{ "src": "logo.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "İtiraflar",
+      "short_name": "İtiraf",
+      "description": "Anonim itirafları oku",
+      "url": "/?tab=conf",
+      "icons": [{ "src": "logo.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Kitaplık",
+      "short_name": "Kitaplık",
+      "description": "Kitap ve PDF paylaşımları",
+      "url": "/?tab=library",
+      "icons": [{ "src": "logo.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Mesajlar",
+      "short_name": "Mesaj",
+      "description": "Öğrencilerle sohbet et",
+      "url": "/?tab=chat",
+      "icons": [{ "src": "logo.png", "sizes": "192x192" }]
+    }
   ]
 }
