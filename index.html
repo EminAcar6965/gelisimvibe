@@ -3365,7 +3365,7 @@ async function loadAdminAllUsers(){
   const selStart = existingSearch ? existingSearch.selectionStart : 0;
   const q = (window._userSearch || '').toLowerCase().trim();
 
-  const { data, error } = await sb.from('profiles').select('id,first_name,last_name,department,is_banned,is_restricted,restrict_count,ban_count,created_at').order('created_at', { ascending: false }).limit(1000);
+  const { data, error } = await sb.from('profiles').select('id,first_name,last_name,department,is_banned,is_restricted,is_admin,restrict_count,ban_count,created_at').order('created_at', { ascending: false }).limit(1000);
   if(error){
     const r2 = await sb.from('profiles').select('id,first_name,last_name,department,is_banned,is_restricted,restrict_count,created_at').order('created_at', { ascending: false }).limit(1000);
     if(r2.error){ box.innerHTML = '<div class="empty">' + esc(r2.error.message) + '</div>'; return; }
@@ -3384,8 +3384,10 @@ async function loadAdminAllUsers(){
     const countBadge = (rc > 0 || bc > 0) ? '<span style="margin-left:6px;font-size:11px"><span style="background:color-mix(in srgb,#FF9900 14%,transparent);color:#ff9900;font-weight:800;padding:2px 7px;border-radius:999px">⚠️ ' + rc + '</span> <span style="background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger);font-weight:800;padding:2px 7px;border-radius:999px">🚫 ' + bc + '</span></span>' : '';
     return '<article class="card user-card" data-uid="' + u.id + '"><div class="user-card-row">' +
      '<div class="av" style="' + avatarStyle(u.id) + ';cursor:default">' + esc(initials(u.first_name, u.last_name).toUpperCase() || '?') + '</div>' +
-     '<div style="flex:1;min-width:0"><div style="font-weight:800;font-size:15px">' + esc(u.first_name || '') + ' ' + esc(u.last_name || '') + (isAdminUser ? ' <span style="background:linear-gradient(135deg,#FFB020,#FF6B9D);color:#fff;font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:999px">👑 ADMIN</span>' : '') + countBadge + '</div><div class="dep">' + esc(u.department || '—') + '</div>' + ((rc>0||bc>0) ? '<div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap"><span class="restrict-badge">⚠️ ' + rc + '</span><span class="violation-badge">🚫 ' + bc + '</span></div>' : '') + '</div>' +
-     '<div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">' + status + '<button class="link" data-uedit="' + u.id + '" style="font-size:12px;padding:2px 6px">✏️ Düzenle</button></div>' +
+           '<div style="flex:1;min-width:0"><div style="font-weight:800;font-size:15px">' + esc(u.first_name || '') + ' ' + esc(u.last_name || '') + (isAdminUser ? ' <span style="background:linear-gradient(135deg,#FFB020,#FF6B9D);color:#fff;font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:999px">👑 ADMIN</span>' : '') + countBadge + '</div><div class="dep">' + esc(u.department || '—') + '</div>' + ((rc>0||bc>0) ? '<div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap"><span class="restrict-badge">⚠️ ' + rc + '</span><span class="violation-badge">🚫 ' + bc + '</span></div>' : '') + '</div>' +
+      '<div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">' + status + '<button class="link" data-uedit="' + u.id + '" style="font-size:12px;padding:2px 6px">✏️ Düzenle</button></div>' +
+    '</div></article>';
+    '<div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">' + status + '<button class="link" data-uedit="' + u.id + '" style="font-size:12px;padding:2px 6px">✏️ Düzenle</button></div>' +
     '</div></article>';
   }).join('');
 
