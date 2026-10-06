@@ -1942,10 +1942,21 @@ function openUserMenu(userId, userName){
     if(b.dataset.x === 'rep'){ el.remove(); report({ reported_user_id: userId }); }
     if(b.dataset.x === 'ban'){
       el.remove();
-      if(!confirm(userName + ' engellensin mi?')) return;
-      const { error } = await sb.from('profiles').update({ is_banned: true }).eq('id', userId);
-      if(error) return toast('Engellenemedi: ' + error.message, 'err');
-      toast('Kullanıcı engellendi.', 'ok');
+      if(!confirm(userName + ' kalıcı olarak banlansın mı?')) return;
+      if(!confirm('Son onay: Emin misin?')) return;
+      try{
+        let userEmail = null;
+        try{
+          const { data: prof } = await sb.from('profiles').select('ban_count, email').eq('id', userId).maybeSingle();
+          userEmail = prof?.email;
+          await sb.from('profiles').update({ ban_count: (prof?.ban_count || 0) + 1, is_banned: true }).eq('id', userId);
+          await sb.from('moderation_history').insert({ user_id: userId, action: 'ban', admin_id: me.id, reason: 'Admin kararı' });
+          if(userEmail){
+            try{ await sb.from('banned_emails').insert({ email: userEmail, reason: 'Admin kararı', banned_at: new Date().toISOString(), status: 'active' }); }catch(_){}
+          }
+        }catch(_){}
+        toast('Kullanıcı banlandı.', 'ok');
+      }catch(err){ toast('Hata: ' + err.message, 'err'); }
     }
   };
 }
@@ -3373,8 +3384,8 @@ async function loadAdminAllUsers(){
     const countBadge = (rc > 0 || bc > 0) ? '<span style="margin-left:6px;font-size:11px"><span style="background:color-mix(in srgb,#FF9900 14%,transparent);color:#ff9900;font-weight:800;padding:2px 7px;border-radius:999px">⚠️ ' + rc + '</span> <span style="background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger);font-weight:800;padding:2px 7px;border-radius:999px">🚫 ' + bc + '</span></span>' : '';
     return '<article class="card user-card" data-uid="' + u.id + '"><div class="user-card-row">' +
       '<div class="av" style="' + avatarStyle(u.id) + ';cursor:default">' + esc(initials(u.first_name, u.last_name).toUpperCase() || '?') + '</div>' +
-      '<div style="flex:1;min-width:0"><div style="font-weight:800;font-size:15px">' + esc(u.first_name || '') + ' ' + esc(u.last_name || '') + countBadge + '</div><div class="dep">' + esc(u.department || '—') + '</div>' + ((rc>0||bc>0) ? '<div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap"><span class="restrict-badge">⚠️ ' + rc + '</span><span class="violation-badge">🚫 ' + bc + '</span></div>' : '') + '</div>' +      '<div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">' + status + '<button class="link" data-uedit="' + u.id + '" style="font-size:12px;padding:2px 6px">✏️ Düzenle</button></div>' +
-    '</div></article>';
+      '<div style="flex:1;min-width:0"><div style="font-weight:800;font-size:15px">' + esc(u.first_name || '') + ' ' + esc(u.last_name || '') + (isAdminUser ? ' <span style="background:linear-gradient(135deg,#FFB020,#FF6B9D);color:#fff;font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:999px">👑 ADMIN</span>' : '') + countBadge + '</div>'
+      '</div></article>';
   }).join('');
 
   if(!existingSearch){
