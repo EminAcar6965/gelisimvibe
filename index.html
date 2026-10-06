@@ -183,7 +183,6 @@ input:focus,textarea:focus,select:focus{outline:0;border-color:var(--ac);box-sha
 .auth-footer{margin-top:6px;font-size:11px;color:var(--mute);text-align:center;letter-spacing:.3px}
 .auth-footer b{color:var(--ac)}
 
-/* HEADER - backdrop-filter kaldırıldı (mavi parıltı engellemek için) */
 header{position:sticky;top:0;z-index:15;background:var(--bg);display:flex;justify-content:space-between;align-items:center;padding:8px 14px;max-width:640px;margin:0 auto;gap:10px}
 .brand{display:flex;align-items:center;gap:9px;min-width:0}
 .brand .logo-svg{width:30px;height:30px;border-radius:8px;object-fit:contain;flex:none;background:#fff}
@@ -269,7 +268,6 @@ body.night .composer-anon-badge{background:#B0284F}
 .skel-line.w60{width:60%}.skel-line.w80{width:80%}.skel-line.w40{width:40%}
 @keyframes shine{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-/* NAV - backdrop-filter kaldırıldı */
 nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);display:flex;flex-direction:column;z-index:20}
 .nav-tabs{display:flex;width:100%;overflow-x:auto;scrollbar-width:none}
 .nav-tabs::-webkit-scrollbar{display:none}
@@ -381,7 +379,6 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2a2010,#3a2d15)}
 .conv .cl{color:var(--mute);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .conv .cb{background:var(--ac);color:var(--acink);font-size:11px;font-weight:800;border-radius:999px;padding:2px 8px}
 
-/* SWIPE TO REPLY */
 .msg-wrap{position:relative;display:flex;flex-direction:column;width:100%;transition:transform .18s ease}
 .msg-wrap.me{align-items:flex-end}
 .msg-wrap.them{align-items:flex-start}
@@ -437,7 +434,6 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2a2010,#3a2d15)}
 
 #view{transition:opacity .15s ease}
 
-/* ANON NUMBER BADGE */
 .anon-badge{
   display:inline-flex;align-items:center;gap:4px;
   background:linear-gradient(135deg,#4A2060,#B064E0);
@@ -445,14 +441,12 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2a2010,#3a2d15)}
   padding:3px 9px;border-radius:999px;letter-spacing:.4px;
 }
 
-/* NOTIFICATION TOGGLE */
 .toggle-wrap{display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg);border-radius:12px}
 .toggle-switch{position:relative;width:48px;height:28px;background:var(--line);border-radius:999px;cursor:pointer;transition:background-color .2s ease;flex:none}
 .toggle-switch::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;background:#fff;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
 .toggle-switch.on{background:var(--ac)}
 .toggle-switch.on::after{transform:translateX(20px)}
 
-/* HASHTAG BACK BUTTON */
 .hashtag-back{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-weight:700;font-size:13.5px;color:var(--ac);margin-bottom:12px;box-shadow:var(--sh);transition:transform .15s ease}
 .hashtag-back:active{transform:scale(.97)}
 
@@ -479,8 +473,6 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2a2010,#3a2d15)}
 .typing-ind i:nth-child(3){animation-delay:.3s}
 @keyframes typing{0%,60%,100%{opacity:.35;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
 
-/* ============ AD CARDS (Sponsor + AdSense) ============ */
-/* ============ AD CARDS — GLOW EDITION ============ */
 .ad-card{
   position:relative;overflow:hidden;
   background:
@@ -510,7 +502,6 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2a2010,#3a2d15)}
       0 2px 8px rgba(0,0,0,.05);
   }
 }
-/* Kayan shine (parıltı) */
 .ad-card::before{
   content:"";position:absolute;inset:0;
   background:linear-gradient(115deg,
@@ -530,7 +521,6 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2a2010,#3a2d15)}
   60%{background-position:-80% 0}
   100%{background-position:-80% 0}
 }
-/* Üstteki çizgi */
 .ad-card::after{
   content:"";position:absolute;top:0;left:0;right:0;height:3px;
   background:linear-gradient(90deg,#FFB020,#FF6B9D,#B064E0,#FFB020);
@@ -540,7 +530,6 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2a2010,#3a2d15)}
   border-radius:18px 18px 0 0;
 }
 @keyframes adShine{0%{background-position:0% 0}100%{background-position:300% 0}}
-/* Kart içeriği shine'ın üstünde kalsın */
 .ad-card > *{position:relative;z-index:2}
 .ad-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
 .ad-tag{
@@ -580,7 +569,6 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2a2010,#3a2d15)}
 .ad-cta:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(255,176,32,.7)}
 .ad-cta:active{transform:scale(.97)}
 
-/* AdSense — mavi ışıltı */
 .adsense-card{
   position:relative;overflow:hidden;
   background:
@@ -620,7 +608,6 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2a2010,#3a2d15)}
 }
 .adsense-card > *{position:relative;z-index:2}
 
-/* Dark mode */
 body.night .ad-card{
   background:
     radial-gradient(circle at 20% 0%,color-mix(in srgb,#FFB020 18%,transparent),transparent 55%),
@@ -635,12 +622,10 @@ body.night .ad-card::before{mix-blend-mode:screen;opacity:.55}
 body.night .adsense-card::before{mix-blend-mode:screen;opacity:.45}
 body.night .ad-img{border-color:color-mix(in srgb,#FFB020 35%,var(--line))}
 
-/* Erişilebilirlik */
 @media (prefers-reduced-motion: reduce){
   .ad-card,.ad-card::before,.ad-card::after,.ad-tag,.adsense-card,.adsense-card::before,.adsense-card::after{animation:none!important}
 }
 
-/* ============ ADVERTISE CTA ============ */
 .advertise-cta{
   display:flex;justify-content:space-between;align-items:center;gap:12px;
   background:
@@ -795,9 +780,8 @@ body,.card,.btn,.composer-new,.search-box,.settings-item,.conv,.cm-item,.seg,.sh
   </form>
   <p class="note" id="regNote" style="display:none">Kayıt olduktan sonra mailine doğrulama kodu gelir.</p>
   <p class="note">Bu uygulama bir öğrenci tarafından öğrenciler için geliştirilmiştir, resmi bir üniversite uygulaması değildir.</p>
-    <p class="auth-footer">Designed &amp; Developed by <b>Emin Acar</b></p>
+  <p class="auth-footer">Designed &amp; Developed by <b>Emin Acar</b></p>
 
-  <!-- SEO İÇERİK BLOĞU — Google botu okur, kullanıcıya da faydalı -->
   <div class="seo-content" style="max-width:680px;margin:32px auto 0;padding:20px;text-align:left;color:var(--mute);font-size:13.5px;line-height:1.75">
     <h2 style="font-size:17px;font-weight:800;color:var(--ink);margin:0 0 10px">Gelişim Vibe Nedir?</h2>
     <p style="margin:0 0 14px">
@@ -871,7 +855,7 @@ body,.card,.btn,.composer-new,.search-box,.settings-item,.conv,.cm-item,.seg,.sh
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ============================================================
-   GELİŞİM VIBE — v4.0
+   GELİŞİM VIBE — v4.1 (bug fix release)
    ============================================================ */
 const CONFIG = {
   SB_URL: 'https://ihkjmnogqhekvyroloeg.supabase.co',
@@ -895,6 +879,12 @@ const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid = () => (crypto?.randomUUID?.() || (Date.now().toString(36) + Math.random().toString(36).slice(2, 10)));
+// FIX: URL scheme guard against javascript: and other dangerous protocols
+const safeUrl = u => {
+  if(!u) return '';
+  const s = String(u).trim();
+  return /^https?:\/\//i.test(s) ? s : '';
+};
 
 const ago = d => {
   const m = (Date.now() - new Date(d)) / 6e4;
@@ -929,11 +919,12 @@ let annChannel = null;
 const notifEnabled = () => localStorage.getItem('notif_enabled') !== '0';
 const setNotifEnabled = (v) => localStorage.setItem('notif_enabled', v ? '1' : '0');
 
-const imgUrl   = p => sb.storage.from('images').getPublicUrl(p).data.publicUrl;
-const bookUrl  = p => sb.storage.from('books').getPublicUrl(p).data.publicUrl;
-const pdfUrl   = p => sb.storage.from('pdfs').getPublicUrl(p).data.publicUrl;
-const videoUrl = p => sb.storage.from('videos').getPublicUrl(p).data.publicUrl;
-const adImgUrl = p => sb.storage.from('ads').getPublicUrl(p).data.publicUrl;
+// FIX: null-safe public URL helpers
+const imgUrl   = p => p ? sb.storage.from('images').getPublicUrl(p).data.publicUrl : '';
+const bookUrl  = p => p ? sb.storage.from('books').getPublicUrl(p).data.publicUrl : '';
+const pdfUrl   = p => p ? sb.storage.from('pdfs').getPublicUrl(p).data.publicUrl : '';
+const videoUrl = p => p ? sb.storage.from('videos').getPublicUrl(p).data.publicUrl : '';
+const adImgUrl = p => p ? sb.storage.from('ads').getPublicUrl(p).data.publicUrl : '';
 
 const haptic = (ms=8) => { try{ navigator.vibrate && navigator.vibrate(ms); }catch(_){} };
 
@@ -979,11 +970,6 @@ const debounce = (fn, ms=300) => { let t; return function(){ const a = arguments
 /* ============== LINKIFY ============== */
 const HASHTAG_RE = /#([\p{L}\p{N}_]{2,50})/gu;
 const MENTION_RE = /@([\p{L}\p{N}._]{2,40})/gu;
-function extractHashtags(text){
-  const tags = new Set();
-  String(text||'').replace(HASHTAG_RE, (m, t) => { tags.add(t.toLowerCase()); return m; });
-  return [...tags];
-}
 const PLACEHOLDER_MARK = '\uE000';
 function linkify(text){
   if(!text) return '';
@@ -1175,37 +1161,25 @@ function openLegalDoc(kind){
   openSheet('<h4>' + d.title + '<button class="sheet-close" aria-label="Kapat">×</button></h4>' + d.body + '<button class="btn" style="margin-top:16px;width:100%" data-close>Anladım</button>');
 }
 
-/* ============== IMAGE UPLOAD ============== */
-async function uploadImg(file, bucket, onProgress, square){
-  bucket = bucket || 'images';
-  if(!file.type.startsWith('image/')) throw new Error('Sadece fotoğraf.');
-  if(file.size > 50e6) throw new Error('Fotoğraf max 50 MB.');
-  let blob = file, ext = (file.name.split('.').pop() || 'jpg').toLowerCase(), ct = file.type || 'image/jpeg';
-  try{
-    const info = await loadBitmapInfo(file);
-    const c = document.createElement('canvas');
-    const x = c.getContext('2d');
-    if(square){
-      const side = Math.min(info.width, info.height);
-      const size = Math.min(1200, side);
-      c.width = size; c.height = size;
-      const sx = (info.width - side) / 2;
-      const sy = (info.height - side) / 2;
-      x.fillStyle = '#fff'; x.fillRect(0, 0, size, size);
-      if(info.drawCrop) info.drawCrop(x, 0, 0, size, size, sx, sy, side, side);
-      else info.draw(x, size, size);
-    } else {
-      const k = Math.min(1, 1600 / Math.max(info.width, info.height));
-      c.width = Math.max(1, Math.round(info.width * k));
-      c.height = Math.max(1, Math.round(info.height * k));
-      x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height);
-      info.draw(x, c.width, c.height);
-    }
-    const j = await new Promise((r,jj)=>c.toBlob(b=>b?r(b):jj(new Error('Canvas')), 'image/jpeg', 0.85));
-    if(j){ blob = j; ext = 'jpg'; ct = 'image/jpeg'; }
-  }catch(e){}
-  const path = uid() + '.' + ext;
-  return xhrUpload(bucket, path, blob, ct, onProgress);
+/* ============== IMAGE / VIDEO / PDF UPLOAD ============== */
+// FIX: loadBitmapInfo was never defined — added helper used by uploadImg()
+function loadBitmapInfo(file){
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const info = {
+        width: img.naturalWidth,
+        height: img.naturalHeight,
+        draw: (ctx, w, h) => ctx.drawImage(img, 0, 0, w, h),
+        drawCrop: (ctx, dx, dy, dw, dh, sx, sy, sw, sh) => ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh)
+      };
+      URL.revokeObjectURL(url);
+      resolve(info);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Görsel okunamadı')); };
+    img.src = url;
+  });
 }
 async function getToken(){
   const { data: { session } } = await sb.auth.getSession();
@@ -1233,21 +1207,35 @@ function xhrUpload(bucket, path, blob, contentType, onProgress){
     xhr.send(blob);
   });
 }
-async function uploadImg(file, bucket, onProgress){
+// FIX: Unified uploadImg (square support preserved). Previously a duplicate definition
+// silently overwrote the original and dropped the `square` param.
+async function uploadImg(file, bucket, onProgress, square){
   bucket = bucket || 'images';
   if(!file.type.startsWith('image/')) throw new Error('Sadece fotoğraf.');
   if(file.size > 50e6) throw new Error('Fotoğraf max 50 MB.');
   let blob = file, ext = (file.name.split('.').pop() || 'jpg').toLowerCase(), ct = file.type || 'image/jpeg';
   try{
     const info = await loadBitmapInfo(file);
-    const k = Math.min(1, 1600 / Math.max(info.width, info.height));
     const c = document.createElement('canvas');
-    c.width = Math.max(1, Math.round(info.width * k)); c.height = Math.max(1, Math.round(info.height * k));
-    const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0,0,c.width,c.height);
-    info.draw(x, c.width, c.height);
-    const j = await new Promise((r,jj)=>c.toBlob(b=>b?r(b):jj(new Error('Canvas')), 'image/jpeg', 0.85));
+    const x = c.getContext('2d');
+    if(square){
+      const side = Math.min(info.width, info.height);
+      const size = Math.min(1200, side);
+      c.width = size; c.height = size;
+      const sx = (info.width - side) / 2;
+      const sy = (info.height - side) / 2;
+      x.fillStyle = '#fff'; x.fillRect(0, 0, size, size);
+      info.drawCrop(x, 0, 0, size, size, sx, sy, side, side);
+    } else {
+      const k = Math.min(1, 1600 / Math.max(info.width, info.height));
+      c.width = Math.max(1, Math.round(info.width * k));
+      c.height = Math.max(1, Math.round(info.height * k));
+      x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height);
+      info.draw(x, c.width, c.height);
+    }
+    const j = await new Promise((r, jj) => c.toBlob(b => b ? r(b) : jj(new Error('Canvas dönüşümü başarısız')), 'image/jpeg', 0.85));
     if(j){ blob = j; ext = 'jpg'; ct = 'image/jpeg'; }
-  }catch(e){}
+  }catch(e){ /* resize başarısız olduysa orijinali yükle */ }
   const path = uid() + '.' + ext;
   return xhrUpload(bucket, path, blob, ct, onProgress);
 }
@@ -1272,7 +1260,6 @@ async function uploadPdf(file, onProgress){
     if(err.message.includes('PDF')) throw err;
     throw new Error('PDF doğrulanamadı.');
   }
-  // PDF boyut sınırı YOK
   const path = uid() + '.pdf';
   return xhrUpload('pdfs', path, file, 'application/pdf', onProgress);
 }
@@ -1450,32 +1437,31 @@ window.addEventListener('load', async () => {
   }
 });
 
+// FIX: boot() was completely broken — it referenced undefined `data`/`err` and never
+// fetched the profile from the DB, so logins silently failed. Now it queries profiles.
 async function boot(session){
-  if(!session){ me = null; _bootedUserId = null; $('#app').classList.add('hide'); $('#auth').classList.remove('hide'); return; }
-  if(_bootedUserId === session.user.id && me) return;
-
-  // PWA shortcut: ?tab=chat gibi parametreyle gelindiyse o sekmeye git
+  if(!session){
+    me = null;
+    _bootedUserId = null;
+    $('#app').classList.add('hide');
+    $('#auth').classList.remove('hide');
+    return;
+  }
   const urlTab = new URLSearchParams(location.search).get('tab');
   if(urlTab && ['feed','chat','conf','library','ann','settings'].includes(urlTab)){
     try { sessionStorage.setItem('gv_tab', urlTab); } catch(_){}
     tab = urlTab;
   }
-
-  let data = null, err = null;
-  for(let i = 0; i < 3; i++){
-    const r = await sb.from('profiles').select('*').eq('id', session.user.id).maybeSingle();
-    if(r.data){ data = r.data; break; }
-    err = r.error;
-    await new Promise(res => setTimeout(res, 400));
-  }
-  if(!data){
+  const { data: profile, error } = await sb.from('profiles').select('*').eq('id', session.user.id).maybeSingle();
+  if(!profile){
+    console.error('[boot] profil yüklenemedi', error);
     say('Profil yüklenemedi. Lütfen sayfayı yenile.', 1);
-    if(err) console.error('[boot]', err);
     return;
   }
-  me = data;
+  me = profile;
   _bootedUserId = session.user.id;
-  $('#auth').classList.add('hide'); $('#app').classList.remove('hide');
+  $('#auth').classList.add('hide');
+  $('#app').classList.remove('hide');
   $('#adminTab').classList.toggle('hide', !me.is_admin);
   applyTheme();
   const savedTab = (() => { try { return sessionStorage.getItem('gv_tab'); } catch(_){ return null; } })();
@@ -1498,7 +1484,11 @@ $$('.nav-tabs button').forEach(b => b.onclick = () => {
   if(b.dataset.t !== 'chat'){ chatWith = null; chatUser = null; clearChatTimer(); clearChatChannel(); }
   show(b.dataset.t);
 });
-function clearChatTimer(){ if(chatTimer){ clearInterval(chatTimer); chatTimer = null; } }
+// FIX: clearChatTimer now actually clears the live chat refresh interval
+function clearChatTimer(){
+  if(chatTimer){ clearInterval(chatTimer); chatTimer = null; }
+  if(chatRefreshTimer){ clearInterval(chatRefreshTimer); chatRefreshTimer = null; }
+}
 function clearChatChannel(){ if(chatChannel){ try{ chatChannel.unsubscribe(); }catch(_){} chatChannel = null; } }
 function markSeen(t){ localStorage.setItem('seen_' + t, Date.now().toString()); const btn = document.querySelector('.nav-tabs button[data-t="' + t + '"]'); if(btn) btn.classList.remove('has-new'); }
 
@@ -1512,11 +1502,11 @@ function setSkeleton(t){
   }
 }
 
-/* ============== HIZLI GEÇİŞ (view transition kaldırıldı) ============== */
 async function show(t, opts){
   const my = ++_viewToken;
   if(feedUnsub){ try{ feedUnsub(); }catch(_){} feedUnsub = null; }
   clearChatChannel();
+  clearChatTimer(); // FIX: stop chat refresh interval when navigating away
   document.querySelectorAll('.emoji-picker, .hashtag-suggest').forEach(el => el.remove());
 
   tab = t;
@@ -1554,7 +1544,7 @@ async function show(t, opts){
   await doLoad();
 }
 
-/* ============== DUYURU REALTIME (bildirim için) ============== */
+/* ============== DUYURU REALTIME ============== */
 function subscribeAnnouncements(){
   try{
     if(annChannel){ try{ annChannel.unsubscribe(); }catch(_){} annChannel = null; }
@@ -1620,8 +1610,9 @@ setInterval(() => { if(me) checkNotifications(); }, 60000);
 
 /* ============== ADS ============== */
 function renderAdCard(ad){
+  const url = safeUrl(ad.link_url); // FIX: block javascript:/data: URLs
   const img = ad.image_path ? '<img class="ad-img" loading="lazy" decoding="async" src="' + adImgUrl(ad.image_path) + '" alt="">' : '';
-  const cta = ad.link_url ? '<a class="ad-cta" href="' + esc(ad.link_url) + '" target="_blank" rel="noopener">Daha fazla →</a>' : '';
+  const cta = url ? '<a class="ad-cta" href="' + esc(url) + '" target="_blank" rel="noopener">Daha fazla →</a>' : '';
   return '<article class="ad-card"><div class="ad-head"><span class="ad-tag">📢 SPONSOR</span><span style="color:var(--mute);font-size:10.5px">Sponsorlu içerik</span></div><div class="ad-title">' + esc(ad.title) + '</div>' + (ad.body ? '<div class="ad-body">' + esc(ad.body) + '</div>' : '') + img + cta + '</article>';
 }
 function renderAdSenseCard(){
@@ -1889,7 +1880,9 @@ async function loadList(t, append=false){
         head = '<span class="av an" title="Anonim">' + GHOST + '</span><div><span class="who" style="cursor:default">Anonim</span><div class="dep">' + ago(i.created_at) + '</div></div>';
       }
     } else {
-      head = '<span class="av" data-uid="' + i.user_id + '" data-name="' + esc(i.profiles.first_name + ' ' + i.profiles.last_name) + '" style="' + avatarStyle(i.user_id) + '">' + esc(initials(i.profiles.first_name, i.profiles.last_name).toUpperCase()) + '</span><div><span class="who" data-uid="' + i.user_id + '" data-name="' + esc(i.profiles.first_name + ' ' + i.profiles.last_name) + '">' + esc(i.profiles.first_name) + ' ' + esc(i.profiles.last_name) + '</span><div class="dep">' + esc(i.profiles.department) + ' · ' + ago(i.created_at) + '</div></div>';
+      // FIX: defensive access to i.profiles (null-safe when join fails)
+      const p = i.profiles || { first_name:'?', last_name:'', department:'' };
+      head = '<span class="av" data-uid="' + i.user_id + '" data-name="' + esc((p.first_name||'') + ' ' + (p.last_name||'')) + '" style="' + avatarStyle(i.user_id) + '">' + esc(initials(p.first_name, p.last_name).toUpperCase()) + '</span><div><span class="who" data-uid="' + i.user_id + '" data-name="' + esc((p.first_name||'') + ' ' + (p.last_name||'')) + '">' + esc(p.first_name) + ' ' + esc(p.last_name) + '</span><div class="dep">' + esc(p.department||'') + ' · ' + ago(i.created_at) + '</div></div>';
     }
     const media = (i.image_path ? '<a href="' + imgUrl(i.image_path) + '" target="_blank" rel="noopener"><img class="pimg" loading="lazy" decoding="async" src="' + imgUrl(i.image_path) + '" alt=""></a>' : '') + (i.video_path ? '<video class="pvid" controls playsinline preload="metadata" src="' + videoUrl(i.video_path) + '"></video>' : '');
     return '<article class="card" data-id="' + i.id + '"><div class="hd">' + head + '</div>' +
@@ -2126,7 +2119,7 @@ async function report(target){
   };
 }
 
-/* ============== YORUMLAR (anonim numaralandırma) ============== */
+/* ============== YORUMLAR ============== */
 function assignAnonNumbers(rows){
   const map = {};
   let next = 1;
@@ -2323,7 +2316,8 @@ function openBookForm(){
     const btn = $('#bf .btn'); btn.disabled = true;
     let image_path = null;
     const f = $('#bimg').files[0];
-    if(f){ try{ image_path = await uploadImg(f, 'ads', null, true); }catch(err){ btn.disabled = false; return toast('Görsel: ' + err.message, 'err'); } } 
+    // FIX: pass square=true so book covers are cropped 1:1 (was silently ignored before)
+    if(f){ try{ image_path = await uploadImg(f, 'ads', null, true); }catch(err){ btn.disabled = false; return toast('Görsel: ' + err.message, 'err'); } }
     const priceVal = $('#bp').value.trim();
     const priceNum = priceVal === '' ? null : Number(priceVal);
     const { error } = await sb.from('books').insert({ user_id: me.id, title: $('#bt').value.trim(), author: $('#ba').value.trim() || null, description: $('#bd').value.trim() || null, price: (priceNum != null && priceNum > 0) ? priceNum : null, image_path });
@@ -2521,7 +2515,7 @@ async function loadSettings(sub){
       '<div class="settings-item danger" data-open="delete"><div class="ico">🗑️</div><div class="txt"><b>Hesabımı Sil</b><small>Anında ve kalıcı olarak silinir</small></div><span class="arrow">›</span></div>' +
       '<div class="settings-item danger" data-open="logout"><div class="ico">🚪</div><div class="txt"><b>Çıkış Yap</b><small>Hesabından güvenli çıkış</small></div><span class="arrow">›</span></div>' +
     '</div>' +
-    '<div style="text-align:center;margin-top:22px;color:var(--mute);font-size:11px">Gelişim Vibe · v4.0<br>Designed &amp; Developed by <b style="color:var(--ac)">Emin Acar</b></div>';
+    '<div style="text-align:center;margin-top:22px;color:var(--mute);font-size:11px">Gelişim Vibe · v4.1<br>Designed &amp; Developed by <b style="color:var(--ac)">Emin Acar</b></div>';
   $('#view').onclick = async e => {
     const item = e.target.closest('[data-open]'); if(!item) return;
     const x = item.dataset.open;
@@ -2657,7 +2651,7 @@ async function loadInfo(){
 }
 
 /* =========================================================
-   CHAT (Realtime + Typing + Swipe-to-reply)
+   CHAT
    ========================================================= */
 async function loadChat(){
   removeFab(); clearChatTimer(); clearChatChannel();
@@ -2681,18 +2675,22 @@ async function loadChat(){
     return '<div class="conv" data-uid="' + id + '" data-name="' + esc(p.first_name + ' ' + p.last_name) + '"><span class="av" style="' + avatarStyle(id) + '">' + esc(initials(p.first_name, p.last_name).toUpperCase() || '?') + '</span><div class="cmid"><div class="cn">' + esc(p.first_name) + ' ' + esc(p.last_name) + '</div><div class="cl">' + esc(txt).slice(0,60) + '</div></div>' + (info.unread ? '<span class="cb">' + info.unread + '</span>' : '') + '</div>';
   }).join('');
   $('#view').innerHTML = (rows || '<div class="empty"><span class="em-ic">💬</span><div class="em-t">Henüz mesajın yok</div>Bir kullanıcının profiline dokunup mesaj gönderebilirsin.</div>') + (rows ? '<div class="empty" style="padding:12px;font-size:12px">💡 Bir sohbete uzun basarak silebilirsin</div>' : '');
-  $('#view').onclick = e => { const c = e.target.closest('.conv'); if(!c) return; haptic(6); show('chat', { chatWith: c.dataset.uid, chatUser: c.dataset.name }); };
-  let lpTimer = null;
-  const startLP = (e) => { const c = e.target.closest('.conv'); if(!c) return; clearTimeout(lpTimer); lpTimer = setTimeout(() => { haptic(20); openConvMenu(c.dataset.uid, c.dataset.name); }, 500); };
-  const cancelLP = () => { clearTimeout(lpTimer); lpTimer = null; };
-  const view = $('#view');
-  view.addEventListener('touchstart', startLP, { passive: true });
-  view.addEventListener('touchend', cancelLP);
-  view.addEventListener('touchmove', cancelLP);
-  view.addEventListener('mousedown', startLP);
-  view.addEventListener('mouseup', cancelLP);
-  view.addEventListener('mouseleave', cancelLP);
-  view.addEventListener('contextmenu', e => { const c = e.target.closest('.conv'); if(!c) return; e.preventDefault(); openConvMenu(c.dataset.uid, c.dataset.name); });
+
+  // FIX: bind listeners to each .conv element directly (previous approach leaked
+  // duplicate listeners on #view every time loadChat() ran).
+  $('#view').querySelectorAll('.conv').forEach(c => {
+    c.onclick = () => { haptic(6); show('chat', { chatWith: c.dataset.uid, chatUser: c.dataset.name }); };
+    let lp = null;
+    const startLP = () => { clearTimeout(lp); lp = setTimeout(() => { haptic(20); openConvMenu(c.dataset.uid, c.dataset.name); }, 500); };
+    const cancelLP = () => { clearTimeout(lp); };
+    c.addEventListener('touchstart', startLP, { passive: true });
+    c.addEventListener('touchend', cancelLP);
+    c.addEventListener('touchmove', cancelLP);
+    c.addEventListener('mousedown', startLP);
+    c.addEventListener('mouseup', cancelLP);
+    c.addEventListener('mouseleave', cancelLP);
+    c.addEventListener('contextmenu', e => { e.preventDefault(); openConvMenu(c.dataset.uid, c.dataset.name); });
+  });
 }
 function openConvMenu(otherId, otherName){
   const el = openSheet(
@@ -3037,7 +3035,7 @@ async function toggleReaction(mid, emoji){
 }
 
 /* =========================================================
-   ANNOUNCEMENTS + POLLS + VIEW COUNT
+   ANNOUNCEMENTS + POLLS
    ========================================================= */
 async function loadAnn(){
   removeFab();
@@ -3466,7 +3464,6 @@ async function loadAdminReports(){
   };
 }
 
-/* YASAKLILAR — ban/kısıt listesi */
 async function loadAdminBanned(){
   const box = $('#adminView');
 
@@ -3634,8 +3631,8 @@ async function loadAdminAllUsers(){
   const keepFocus = existingSearch && document.activeElement === existingSearch;
   const selStart = existingSearch ? existingSearch.selectionStart : 0;
   const q = (window._userSearch || '').toLowerCase().trim();
-    let { data, error } = await sb.from('profiles').select('id,first_name,last_name,department,is_banned,is_restricted,is_admin,restrict_count,ban_count,created_at').order('created_at', { ascending: false }).limit(1000);
-   if(error){
+  let { data, error } = await sb.from('profiles').select('id,first_name,last_name,department,is_banned,is_restricted,is_admin,restrict_count,ban_count,created_at').order('created_at', { ascending: false }).limit(1000);
+  if(error){
     const r2 = await sb.from('profiles').select('id,first_name,last_name,department,is_banned,is_restricted,restrict_count,created_at').order('created_at', { ascending: false }).limit(1000);
     if(r2.error){ box.innerHTML = '<div class="empty">' + esc(r2.error.message) + '</div>'; return; }
     data = r2.data;
@@ -3644,7 +3641,7 @@ async function loadAdminAllUsers(){
   const headerHtml = '<h3 style="margin:8px 6px;font-size:14px;color:var(--mute);font-weight:700">👥 TÜM KULLANICILAR (' + (data||[]).length + ')</h3>';
   const searchHtml = '<div class="search-box"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="usearch" placeholder="İsim, soyisim veya bölüm ara..." value="' + esc(window._userSearch || '') + '"></div>';
   const listHtml = filtered.map(u => {
-  const isAdminUser = !!u.is_admin;
+    const isAdminUser = !!u.is_admin;
     let status = '';
     if(u.is_banned) status = '<span class="tag" style="background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger)">🚫 BANLI</span>';
     else if(u.is_restricted) status = '<span class="tag" style="background:color-mix(in srgb,#FF9900 14%,transparent);color:#ff9900">⚠️ KISITLI</span>';
@@ -3652,8 +3649,8 @@ async function loadAdminAllUsers(){
     const bc = u.ban_count || 0;
     const countBadge = (rc > 0 || bc > 0) ? '<span style="margin-left:6px;font-size:11px"><span style="background:color-mix(in srgb,#FF9900 14%,transparent);color:#ff9900;font-weight:800;padding:2px 7px;border-radius:999px">⚠️ ' + rc + '</span> <span style="background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger);font-weight:800;padding:2px 7px;border-radius:999px">🚫 ' + bc + '</span></span>' : '';
     return '<article class="card user-card" data-uid="' + u.id + '"><div class="user-card-row">' +
-     '<div class="av" style="' + avatarStyle(u.id) + ';cursor:default">' + esc(initials(u.first_name, u.last_name).toUpperCase() || '?') + '</div>' +
-           '<div style="flex:1;min-width:0"><div style="font-weight:800;font-size:15px">' + esc(u.first_name || '') + ' ' + esc(u.last_name || '') + (isAdminUser ? ' <span style="background:linear-gradient(135deg,#FFB020,#FF6B9D);color:#fff;font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:999px">👑 ADMIN</span>' : '') + countBadge + '</div><div class="dep">' + esc(u.department || '—') + '</div>' + ((rc>0||bc>0) ? '<div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap"><span class="restrict-badge">⚠️ ' + rc + '</span><span class="violation-badge">🚫 ' + bc + '</span></div>' : '') + '</div>' +
+      '<div class="av" style="' + avatarStyle(u.id) + ';cursor:default">' + esc(initials(u.first_name, u.last_name).toUpperCase() || '?') + '</div>' +
+      '<div style="flex:1;min-width:0"><div style="font-weight:800;font-size:15px">' + esc(u.first_name || '') + ' ' + esc(u.last_name || '') + (isAdminUser ? ' <span style="background:linear-gradient(135deg,#FFB020,#FF6B9D);color:#fff;font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:999px">👑 ADMIN</span>' : '') + countBadge + '</div><div class="dep">' + esc(u.department || '—') + '</div>' + ((rc>0||bc>0) ? '<div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap"><span class="restrict-badge">⚠️ ' + rc + '</span><span class="violation-badge">🚫 ' + bc + '</span></div>' : '') + '</div>' +
       '<div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">' + status + '<button class="link" data-uedit="' + u.id + '" style="font-size:12px;padding:2px 6px">✏️ Düzenle</button></div>' +
     '</div></article>';
   }).join('');
@@ -3744,14 +3741,15 @@ async function loadAdminAds(){
     return '<article class="card" data-adid="' + a.id + '" data-active="' + (a.active ? '1' : '0') + '" style="' + (a.active ? '' : 'opacity:.55') + '"><div style="display:flex;justify-content:space-between;align-items:center"><span class="ad-tag">📢 SPONSOR</span>' + status + '</div>' + img + '<div class="body" style="font-weight:800;font-size:15px;margin:6px 0 2px">' + esc(a.title) + '</div>' + (a.body ? '<div class="dep">' + esc(a.body) + '</div>' : '') + '<div class="acts"><button data-adact="toggle">' + (a.active ? 'Pasif yap' : 'Aktif yap') + '</button><button data-adact="del" style="color:var(--danger)">Sil</button></div></article>';
   }).join('') || '<div class="empty">Henüz sponsor reklamı yok.</div>';
   box.innerHTML = adsenseInfo + form + '<h3 style="margin:16px 6px 8px;font-size:14px;color:var(--mute);font-weight:700">SPONSOR REKLAMLARIN</h3>' + list;
+  // FIX: pass square=true so ad banner is force-cropped to 1:1 (per UI hint)
   $('#adimg').onchange = () => { const f = $('#adimg').files[0], pv = $('#adimgpv'); if(!f){ pv.classList.add('hide'); return; } pv.innerHTML = '<img src="' + URL.createObjectURL(f) + '" alt="" style="aspect-ratio:1/1;object-fit:cover;width:100%;max-height:none"><button type="button" aria-label="Kaldır">×</button>'; pv.classList.remove('hide'); pv.querySelector('button').onclick = () => { $('#adimg').value = ''; pv.classList.add('hide'); }; };
   $('#adf').onsubmit = async e => {
     e.preventDefault();
     const btn = $('#adf .btn'); btn.disabled = true;
     let image_path = null;
     const f = $('#adimg').files[0];
-    if(f){ try{ image_path = await uploadImg(f, 'ads'); }catch(err){ btn.disabled = false; return toast('Görsel: ' + err.message, 'err'); } }
-    const { error } = await sb.from('ads').insert({ title: $('#adt').value.trim(), body: $('#adb').value.trim() || null, link_url: $('#adl').value.trim() || null, image_path, active: true });
+    if(f){ try{ image_path = await uploadImg(f, 'ads', null, true); }catch(err){ btn.disabled = false; return toast('Görsel: ' + err.message, 'err'); } }
+    const { error } = await sb.from('ads').insert({ title: $('#adt').value.trim(), body: $('#adb').value.trim() || null, link_url: safeUrl($('#adl').value.trim()) || null, image_path, active: true });
     btn.disabled = false;
     if(error) return toast('Kayıt: ' + error.message, 'err');
     adsCache = null;
