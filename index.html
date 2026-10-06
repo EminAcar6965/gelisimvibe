@@ -4,16 +4,49 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://pagead2.googlesyndication.com https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net https://*.adtrafficquality.google; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https: wss:; frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://*.adtrafficquality.google https://www.google.com https://*.google.com; object-src 'none'; base-uri 'self'">
-<title>Gelişim Vibe</title>
+<title>Gelişim Vibe — İGÜ Öğrenci Topluluğu</title>
+<meta name="description" content="Gelişim Vibe — İstanbul Gelişim Üniversitesi öğrencileri için sosyal topluluk uygulaması. Paylaşım, itiraf, kitap takası, PDF paylaşımı ve mesajlaşma.">
+<meta name="keywords" content="Gelişim Vibe, Gelişim Üniversitesi, İGÜ, öğrenci, topluluk, sosyal, kitap, pdf, itiraf">
+<meta name="robots" content="index, follow">
 <meta name="theme-color" content="#2C4A8E">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Gelişim Vibe">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Gelişim Vibe">
+<meta property="og:title" content="Gelişim Vibe — İGÜ Öğrenci Topluluğu">
+<meta property="og:description" content="İstanbul Gelişim Üniversitesi öğrencileri için sosyal topluluk uygulaması.">
+<meta property="og:image" content="logo.png">
+<meta property="og:image:width" content="1024">
+<meta property="og:image:height" content="1024">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Gelişim Vibe">
+<meta name="twitter:description" content="İGÜ öğrencileri için sosyal topluluk uygulaması.">
+<meta name="twitter:image" content="logo.png">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="apple-touch-icon" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Gelişim Vibe",
+  "alternateName": ["GelişimVibe", "Gelisim Vibe", "Gelişim Vibe İGÜ"],
+  "url": "https://gelisimvibe.com",
+  "logo": "https://gelisimvibe.com/logo.png",
+  "image": "https://gelisimvibe.com/logo.png",
+  "description": "İstanbul Gelişim Üniversitesi öğrencileri için sosyal topluluk uygulaması.",
+  "applicationCategory": "SocialNetworkingApplication",
+  "operatingSystem": "Web, Android, iOS",
+  "inLanguage": "tr-TR",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "TRY" },
+  "publisher": { "@type": "Organization", "name": "Gelişim Vibe", "logo": { "@type": "ImageObject", "url": "https://gelisimvibe.com/logo.png" } }
+}
+</script>
 <style>
 :root{
   --bg:#EEF1F6;--card:#fff;--ink:#101B33;--mute:#66708A;--line:#DDE2EC;
@@ -27,31 +60,17 @@ body.night{
   --ac:#6E8CFF;--acink:#0A1230;--ac2:#8AA5FF;--danger:#E85B76;
   --sh:0 6px 20px rgba(0,0,0,.45);
 }
-body[data-sec="library"]{
-  --bg:#FBF4E0;--card:#fff;--ink:#1A1200;--mute:#7A6533;--line:#EBD9A8;
-  --ac:#B8860B;--acink:#fff;--ac2:#D4A017;
-  --sh:0 1px 2px rgba(26,18,0,.04),0 6px 18px rgba(26,18,0,.07);
-}
-body.night[data-sec="library"]{
-  --bg:#1A1408;--card:#261D0C;--ink:#FFF4D6;--mute:#C9A961;--line:#3D2F14;
-  --ac:#FFC857;--acink:#1A1200;--ac2:#FFD580;--danger:#FF7B8E;
-}
+body[data-sec="library"]{--bg:#FBF4E0;--card:#fff;--ink:#1A1200;--mute:#7A6533;--line:#EBD9A8;--ac:#B8860B;--acink:#fff;--ac2:#D4A017;--sh:0 1px 2px rgba(26,18,0,.04),0 6px 18px rgba(26,18,0,.07);}
+body.night[data-sec="library"]{--bg:#1A1408;--card:#261D0C;--ink:#FFF4D6;--mute:#C9A961;--line:#3D2F14;--ac:#FFC857;--acink:#1A1200;--ac2:#FFD580;--danger:#FF7B8E;}
 body[data-sec="library"] .btn,body[data-sec="library"] .composer-submit,body[data-sec="library"] .fab{color:var(--acink)}
 body[data-sec="library"] .pcat{background:color-mix(in srgb,var(--ac) 14%,transparent);color:var(--ac)}
 body[data-sec="library"] .pico{background:linear-gradient(135deg,var(--ac),var(--ac2))}
-body[data-sec="ann"]{
-  --bg:#EFF3F9;--card:#fff;--ink:#0A1428;--mute:#546B8A;--line:#D5DEEB;
-  --ac:#1E3A8A;--acink:#fff;--ac2:#2E4AA0;
-}
-body.night[data-sec="ann"]{
-  --bg:#0A1226;--card:#121C36;--ink:#E5ECFF;--mute:#8098C0;--line:#1F2C4E;
-  --ac:#6E8CFF;--acink:#0A1226;--ac2:#8AA5FF;--danger:#FF7B8E;
-}
+body[data-sec="ann"]{--bg:#EFF3F9;--card:#fff;--ink:#0A1428;--mute:#546B8A;--line:#D5DEEB;--ac:#1E3A8A;--acink:#fff;--ac2:#2E4AA0;}
+body.night[data-sec="ann"]{--bg:#0A1226;--card:#121C36;--ink:#E5ECFF;--mute:#8098C0;--line:#1F2C4E;--ac:#6E8CFF;--acink:#0A1226;--ac2:#8AA5FF;--danger:#FF7B8E;}
 body[data-sec="ann"] .ann{background:linear-gradient(180deg,color-mix(in srgb,var(--ac) 3%,var(--card)),var(--card));position:relative;overflow:hidden}
 body[data-sec="ann"] .ann::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--ac),color-mix(in srgb,var(--ac) 40%,transparent));border-radius:18px 0 0 18px}
 body[data-sec="ann"] .badge{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;letter-spacing:1.2px;border:0}
 body[data-sec="ann"] .ann h3{font-size:19px;padding-bottom:8px;border-bottom:1px dashed var(--line);margin-bottom:6px}
-
 .ann-form{background:var(--card);border-radius:20px;border:1px solid var(--line);box-shadow:var(--sh);margin-bottom:14px;overflow:hidden}
 .ann-form-head{display:flex;align-items:center;gap:12px;padding:16px 18px 12px;background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 8%,var(--card)),var(--card));border-bottom:1px solid var(--line)}
 .ann-form-seal{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--ac),var(--ac2));display:grid;place-items:center;flex:none;color:#fff;font-size:22px;border:2px solid color-mix(in srgb,#fff 20%,transparent)}
@@ -75,54 +94,81 @@ body[data-sec="ann"] .ann h3{font-size:19px;padding-bottom:8px;border-bottom:1px
 .ann-poll-box{background:color-mix(in srgb,var(--ac) 4%,var(--bg));border:1px dashed color-mix(in srgb,var(--ac) 40%,var(--line));border-radius:14px;padding:14px;margin-top:12px}
 .ann-poll-box h5{margin:0 0 10px;font-size:11.5px;font-weight:800;color:var(--ac);letter-spacing:1.2px;text-transform:uppercase}
 
+/* ============ CONFESSION - SPARKLE ============ */
 body[data-sec="conf"]{
   --bg:#140A1F;--card:#1E1230;--ink:#EDE4FF;--mute:#9B8AB8;--line:#33204A;
   --ac:#B064E0;--acink:#fff;--ac2:#C88AF0;--danger:#FF5580;
   background:radial-gradient(ellipse 80% 50% at 50% 0,color-mix(in srgb,#B064E0 12%,transparent),transparent 70%),var(--bg);
+  position:relative;
 }
 body.night[data-sec="conf"]{
   --bg:#0A0510;--card:#150A20;--ink:#F0E5FF;--mute:#A890C0;--line:#2A1540;
   --ac:#C080FF;--acink:#1A0A2A;--ac2:#D8A0FF;--danger:#FF7B8E;
 }
-body[data-sec="conf"] .card{background:linear-gradient(180deg,color-mix(in srgb,#B064E0 4%,var(--card)),var(--card));border:1px solid color-mix(in srgb,var(--ac) 18%,var(--line))}
+/* Confession sparkle overlay */
+body[data-sec="conf"] #view::before{
+  content:"";
+  position:fixed;inset:0;
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 18%, rgba(200,138,240,.85), transparent 60%),
+    radial-gradient(1px 1px at 78% 32%, rgba(176,100,224,.75), transparent 60%),
+    radial-gradient(2px 2px at 45% 62%, rgba(216,160,255,.7), transparent 60%),
+    radial-gradient(1px 1px at 88% 78%, rgba(200,138,240,.6), transparent 60%),
+    radial-gradient(1.5px 1.5px at 22% 88%, rgba(216,160,255,.65), transparent 60%),
+    radial-gradient(1px 1px at 62% 12%, rgba(176,100,224,.7), transparent 60%),
+    radial-gradient(1.2px 1.2px at 34% 42%, rgba(200,138,240,.5), transparent 60%),
+    radial-gradient(1px 1px at 92% 52%, rgba(216,160,255,.55), transparent 60%);
+  pointer-events:none;z-index:1;
+  animation:sparkleTwinkle 4.5s ease-in-out infinite alternate;
+}
+@keyframes sparkleTwinkle{
+  0%{opacity:.45;transform:scale(1)}
+  50%{opacity:.85;transform:scale(1.02)}
+  100%{opacity:.6;transform:scale(1)}
+}
+body[data-sec="conf"] #view{position:relative;z-index:2}
+body[data-sec="conf"] .card{
+  background:linear-gradient(180deg,color-mix(in srgb,#B064E0 4%,var(--card)),var(--card));
+  border:1px solid color-mix(in srgb,var(--ac) 18%,var(--line));
+  position:relative;overflow:hidden;
+}
+body[data-sec="conf"] .card::after{
+  content:"✨";
+  position:absolute;top:8px;right:10px;
+  font-size:14px;opacity:.55;
+  animation:sparkleFloat 3s ease-in-out infinite;
+}
+@keyframes sparkleFloat{
+  0%,100%{opacity:.35;transform:translateY(0) rotate(0deg)}
+  50%{opacity:.9;transform:translateY(-4px) rotate(12deg)}
+}
 body[data-sec="conf"] .av.an{background:linear-gradient(135deg,#4A2060,#2A1040);border:1px solid color-mix(in srgb,var(--ac) 40%,transparent);color:var(--ac)}
 body[data-sec="conf"] .composer-new{background:linear-gradient(180deg,color-mix(in srgb,#B064E0 6%,var(--card)),var(--card));border:1px solid color-mix(in srgb,var(--ac) 25%,var(--line))}
 body[data-sec="conf"] .btn,body[data-sec="conf"] .composer-submit{background:linear-gradient(135deg,var(--ac),var(--ac2))}
+body[data-sec="conf"] .composer-anon-badge{
+  background:linear-gradient(135deg,#4A2060,#B064E0) !important;
+  box-shadow:0 0 14px rgba(176,100,224,.35);
+}
 
-body[data-sec="chat"]{
-  --bg:#ECF5F0;--card:#fff;--ink:#0A1A12;--mute:#5E7D6E;--line:#D5E5DC;
-  --ac:#0F6B4A;--acink:#fff;--ac2:#158A60;
-}
-body.night[data-sec="chat"]{
-  --bg:#0A1D16;--card:#122B21;--ink:#E5F8EE;--mute:#88B5A2;--line:#1F4233;
-  --ac:#2EE594;--acink:#0A1A12;--ac2:#52EDAB;
-}
-body[data-sec="settings"]{
-  --bg:#F4F6F8;--card:#fff;--ink:#1A202C;--mute:#718096;--line:#E2E8F0;
-  --ac:#4A5568;--acink:#fff;--ac2:#5F6B7E;
-}
-body.night[data-sec="settings"]{
-  --bg:#0F1419;--card:#1A2028;--ink:#E2E8F0;--mute:#8899AC;--line:#2D3748;
-  --ac:#A0AEC0;--acink:#0F1419;--ac2:#B8C4D4;
-}
+body[data-sec="chat"]{--bg:#ECF5F0;--card:#fff;--ink:#0A1A12;--mute:#5E7D6E;--line:#D5E5DC;--ac:#0F6B4A;--acink:#fff;--ac2:#158A60;}
+body.night[data-sec="chat"]{--bg:#0A1D16;--card:#122B21;--ink:#E5F8EE;--mute:#88B5A2;--line:#1F4233;--ac:#2EE594;--acink:#0A1A12;--ac2:#52EDAB;}
+body[data-sec="settings"]{--bg:#F4F6F8;--card:#fff;--ink:#1A202C;--mute:#718096;--line:#E2E8F0;--ac:#4A5568;--acink:#fff;--ac2:#5F6B7E;}
+body.night[data-sec="settings"]{--bg:#0F1419;--card:#1A2028;--ink:#E2E8F0;--mute:#8899AC;--line:#2D3748;--ac:#A0AEC0;--acink:#0F1419;--ac2:#B8C4D4;}
 body[data-sec="admin"]{
   font-family:'JetBrains Mono',ui-monospace,'Courier New',monospace;
   --bg:#F0F7F2;--card:#fff;--ink:#0A1A10;--mute:#4D6B58;--line:#D4E5DA;
   --ac:#00994D;--acink:#fff;--ac2:#00B85C;
   background:repeating-linear-gradient(0deg,transparent 0,transparent 2px,color-mix(in srgb,var(--ac) 2%,transparent) 2px,color-mix(in srgb,var(--ac) 2%,transparent) 3px),radial-gradient(ellipse 60% 40% at 50% 0,color-mix(in srgb,var(--ac) 6%,transparent),transparent 70%),var(--bg);
 }
-body.night[data-sec="admin"]{
-  --bg:#050805;--card:#0A100A;--ink:#B8FFCE;--mute:#6B8E78;--line:#142014;
-  --ac:#00FF88;--acink:#050805;--ac2:#5CFFAA;--danger:#FF5577;
-}
-body[data-sec="admin"] header{border-bottom:1px solid color-mix(in srgb,var(--ac) 30%,transparent);background:color-mix(in srgb,var(--bg) 92%,transparent)}
+body.night[data-sec="admin"]{--bg:#050805;--card:#0A100A;--ink:#B8FFCE;--mute:#6B8E78;--line:#142014;--ac:#00FF88;--acink:#050805;--ac2:#5CFFAA;--danger:#FF5577;}
+body[data-sec="admin"] header{border-bottom:1px solid color-mix(in srgb,var(--ac) 30%,transparent);background:var(--bg)}
 body[data-sec="admin"] .card{background:linear-gradient(180deg,color-mix(in srgb,var(--ac) 4%,var(--card)),var(--card));border:1px solid color-mix(in srgb,var(--ac) 25%,var(--line))}
 body[data-sec="admin"] .btn{background:linear-gradient(135deg,var(--ac),var(--ac2));font-family:inherit;font-weight:800;letter-spacing:.5px}
 body[data-sec="admin"] .tag{background:color-mix(in srgb,var(--ac) 10%,transparent);color:var(--ac);border:1px solid color-mix(in srgb,var(--ac) 40%,transparent);font-family:inherit}
 
 *{box-sizing:border-box}
 html,body{margin:0;height:100%}
-body{font-family:'Bricolage Grotesque',system-ui,sans-serif;background:var(--bg);color:var(--ink);transition:background .25s,color .25s;padding-top:env(safe-area-inset-top);-webkit-font-smoothing:antialiased}
+body{font-family:'Bricolage Grotesque',system-ui,sans-serif;background:var(--bg);color:var(--ink);transition:background .25s,color .25s;padding-top:env(safe-area-inset-top);-webkit-font-smoothing:antialiased;overflow-x:hidden}
 button,input,textarea,select{font:inherit;color:inherit}
 button{cursor:pointer}
 :focus-visible{outline:2px solid var(--ac);outline-offset:2px}
@@ -135,7 +181,7 @@ button{cursor:pointer}
 input,textarea,select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
 textarea{resize:none;min-height:84px}
 input:focus,textarea:focus,select:focus{outline:0;border-color:var(--ac);box-shadow:0 0 0 3px color-mix(in srgb,var(--ac) 18%,transparent)}
-.btn{background:var(--ac);color:var(--acink);border:0;border-radius:12px;padding:12px 16px;font-weight:600}
+.btn{background:var(--ac);color:var(--acink);border:0;border-radius:12px;padding:12px 16px;font-weight:600;transition:transform .12s ease,filter .15s ease}
 .btn.sm{padding:8px 14px;border-radius:999px}
 .btn:active{transform:scale(.97)}
 .btn[disabled]{opacity:.5}
@@ -146,21 +192,23 @@ input:focus,textarea:focus,select:focus{outline:0;border-color:var(--ac);box-sha
 .auth-footer{margin-top:6px;font-size:11px;color:var(--mute);text-align:center;letter-spacing:.3px}
 .auth-footer b{color:var(--ac)}
 
-header{position:sticky;top:0;z-index:15;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;justify-content:space-between;align-items:center;padding:8px 14px;max-width:640px;margin:0 auto;gap:10px}
+/* HEADER - backdrop-filter kaldırıldı (mavi parıltı engellemek için) */
+header{position:sticky;top:0;z-index:15;background:var(--bg);display:flex;justify-content:space-between;align-items:center;padding:8px 14px;max-width:640px;margin:0 auto;gap:10px}
 .brand{display:flex;align-items:center;gap:9px;min-width:0}
 .brand .logo-svg{width:30px;height:30px;border-radius:8px;object-fit:contain;flex:none;background:#fff}
 .brand b{font-size:17px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .header-actions{display:flex;align-items:center;gap:2px;flex:none}
 .icon-btn{background:none;border:0;font-size:19px;padding:6px 8px;border-radius:10px;line-height:1;display:grid;place-items:center}
 
-.card{background:var(--card);border-radius:18px;padding:14px;margin-bottom:10px;border:1px solid var(--line);box-shadow:var(--sh);animation:up .25s ease both}
-@keyframes up{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.card{background:var(--card);border-radius:18px;padding:14px;margin-bottom:10px;border:1px solid var(--line);box-shadow:var(--sh);animation:up .3s cubic-bezier(.16,1,.3,1) both}
+@keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .who{font-weight:600;cursor:pointer}
 .who:hover{color:var(--ac)}
 .dep,.time{color:var(--mute);font-size:13px}
 .body{margin:8px 0;white-space:pre-wrap;word-break:break-word;line-height:1.45}
 .acts{display:flex;gap:4px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:6px;margin-top:4px}
-.acts button{background:none;border:0;color:var(--mute);padding:6px 10px;border-radius:999px;font-size:14px}
+.acts button{background:none;border:0;color:var(--mute);padding:6px 10px;border-radius:999px;font-size:14px;transition:color .15s ease,background-color .15s ease}
+.acts button:hover{background:color-mix(in srgb,var(--ac) 8%,transparent)}
 .acts button.on{color:var(--ac);font-weight:600}
 .cm{border-top:1px solid var(--line);margin-top:8px;padding-top:10px;display:flex;flex-direction:column;gap:8px}
 .cm-item{background:var(--bg);border-radius:12px;padding:9px 12px;display:flex;flex-direction:column;gap:3px;word-break:break-word}
@@ -187,7 +235,8 @@ body.night .cm-name .anon{color:#E15A78}
 .composer-preview button{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff;font-size:16px;z-index:2}
 .composer-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:12px;border-top:1px solid var(--line);margin-top:10px;flex-wrap:wrap}
 .composer-tools{display:flex;gap:6px;align-items:center}
-.composer-tool{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:var(--ac);background:color-mix(in srgb,var(--ac) 10%,var(--bg));border:0}
+.composer-tool{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:var(--ac);background:color-mix(in srgb,var(--ac) 10%,var(--bg));border:0;transition:transform .15s ease,background-color .15s ease}
+.composer-tool:active{transform:scale(.9)}
 .composer-tool svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .composer-right{display:flex;align-items:center;gap:10px;margin-left:auto}
 .composer-counter{font-size:12px;color:var(--mute);font-weight:700}
@@ -229,13 +278,14 @@ body.night .composer-anon-badge{background:#B0284F}
 .skel-line.w60{width:60%}.skel-line.w80{width:80%}.skel-line.w40{width:40%}
 @keyframes shine{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-nav{position:fixed;bottom:0;left:0;right:0;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line);display:flex;flex-direction:column;z-index:20}
+/* NAV - backdrop-filter kaldırıldı */
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);display:flex;flex-direction:column;z-index:20}
 .nav-tabs{display:flex;width:100%;overflow-x:auto;scrollbar-width:none}
 .nav-tabs::-webkit-scrollbar{display:none}
-.nav-tabs button{flex:1;min-width:54px;background:none;border:0;padding:8px 4px 7px;color:var(--mute);font-weight:600;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9.5px;position:relative;transition:color .2s,transform .15s}
-.nav-tabs button:active{transform:scale(.92)}
-.nav-tabs svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.nav-tabs button.on svg{stroke-width:2.4}
+.nav-tabs button{flex:1;min-width:54px;background:none;border:0;padding:8px 4px 7px;color:var(--mute);font-weight:600;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9.5px;position:relative;transition:color .18s ease,transform .12s ease}
+.nav-tabs button:active{transform:scale(.9)}
+.nav-tabs svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s ease}
+.nav-tabs button.on svg{stroke-width:2.4;transform:translateY(-1px) scale(1.05)}
 .nav-tabs button[data-t="feed"]{--nc:#2C4A8E}
 .nav-tabs button[data-t="chat"]{--nc:#0F6B4A}
 .nav-tabs button[data-t="conf"]{--nc:#7C3AED}
@@ -252,7 +302,8 @@ body.night .nav-tabs button[data-t="library"]{--nc:#FFC857}
 body.night .nav-tabs button[data-t="settings"]{--nc:#A0AEC0}
 body.night .nav-tabs button[data-t="admin"]{--nc:#00FF88}
 .nav-tabs .dot{position:absolute;top:4px;right:calc(50% - 13px);width:7px;height:7px;border-radius:50%;background:#F03E3E;border:1.5px solid var(--card);display:none}
-.nav-tabs button.has-new .dot{display:block}
+.nav-tabs button.has-new .dot{display:block;animation:pulseDot 1.4s ease-in-out infinite}
+@keyframes pulseDot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.3);opacity:.7}}
 .app-footer{font-size:10px;color:var(--mute);padding:3px 10px calc(3px + env(safe-area-inset-bottom));border-top:1px solid var(--line);text-align:center}
 .app-footer b{color:var(--ac);font-weight:700}
 
@@ -277,7 +328,8 @@ body.night .av.an{background:#B0284F}
 .search-box svg{width:18px;height:18px;fill:none;stroke:var(--mute);stroke-width:2;flex:none}
 .search-box input{border:0;background:transparent;padding:0;outline:0;font-size:14px}
 .bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
-.bcard{background:var(--card);border-radius:16px;overflow:hidden;box-shadow:var(--sh);border:1px solid var(--line);display:flex;flex-direction:column}
+.bcard{background:var(--card);border-radius:16px;overflow:hidden;box-shadow:var(--sh);border:1px solid var(--line);display:flex;flex-direction:column;transition:transform .2s ease,box-shadow .2s ease}
+.bcard:hover{transform:translateY(-2px)}
 .bcard .bimg{width:100%;aspect-ratio:3/4;object-fit:cover;background:linear-gradient(135deg,#f0e6cc,#e0d0a0)}
 body.night .bcard .bimg{background:linear-gradient(135deg,#2a2010,#3a2d15)}
 .bcard .info{padding:10px 11px 12px}
@@ -296,11 +348,12 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2a2010,#3a2d15)}
 .pcard .pactions{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
 .pcard .pactions a,.pcard .pactions button{background:var(--bg);border:0;color:var(--ac);font-weight:600;font-size:13px;padding:6px 11px;border-radius:999px;text-decoration:none;cursor:pointer}
 
-.fab{position:fixed;right:16px;bottom:calc(96px + env(safe-area-inset-bottom));width:54px;height:54px;border-radius:50%;background:var(--ac);color:var(--acink);border:0;font-size:30px;box-shadow:0 8px 22px color-mix(in srgb,var(--ac) 40%,transparent);z-index:22;display:grid;place-items:center;padding-bottom:5px}
+.fab{position:fixed;right:16px;bottom:calc(96px + env(safe-area-inset-bottom));width:54px;height:54px;border-radius:50%;background:var(--ac);color:var(--acink);border:0;font-size:30px;box-shadow:0 8px 22px color-mix(in srgb,var(--ac) 40%,transparent);z-index:22;display:grid;place-items:center;padding-bottom:5px;transition:transform .18s cubic-bezier(.34,1.56,.64,1)}
+.fab:active{transform:scale(.92)}
 
 .sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:100;display:grid;place-items:end center;animation:fade .16s}
 @keyframes fade{from{opacity:0}to{opacity:1}}
-.sheet{background:var(--card);border-radius:22px 22px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));width:100%;max-width:640px;animation:up2 .2s ease both;border-top:1px solid var(--line);max-height:88vh;overflow-y:auto}
+.sheet{background:var(--card);border-radius:22px 22px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));width:100%;max-width:640px;animation:up2 .24s cubic-bezier(.16,1,.3,1) both;border-top:1px solid var(--line);max-height:88vh;overflow-y:auto}
 @keyframes up2{from{transform:translateY(100%)}to{transform:none}}
 .sheet h4{margin:0 0 12px;font-size:16px;display:flex;align-items:center;gap:10px;justify-content:space-between}
 .sheet-close{background:none;border:0;font-size:22px;color:var(--mute);padding:4px 8px}
@@ -316,8 +369,8 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2a2010,#3a2d15)}
 .chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 210px);height:calc(100dvh - 210px);min-height:400px}
 .chat-head{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:10px;box-shadow:var(--sh)}
 .chat-head .back{background:none;border:0;color:var(--ac);font-weight:700;padding:4px 8px}
-.chat-body{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding:6px 2px;position:relative}
-.msg{max-width:78%;padding:10px 14px;font-size:14.5px;line-height:1.4;word-break:break-word;white-space:pre-wrap;border-radius:20px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.chat-body{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding:6px 2px;position:relative;-webkit-overflow-scrolling:touch}
+.msg{max-width:78%;padding:10px 14px;font-size:14.5px;line-height:1.4;word-break:break-word;white-space:pre-wrap;border-radius:20px;box-shadow:0 1px 2px rgba(0,0,0,.05);transition:transform .2s cubic-bezier(.34,1.56,.64,1)}
 .msg.me{align-self:flex-end;background:linear-gradient(135deg,var(--ac),var(--ac2));color:var(--acink);border-bottom-right-radius:6px}
 .msg.them{align-self:flex-start;background:var(--card);border:1px solid var(--line);border-bottom-left-radius:6px}
 .msg .mt{display:flex;align-items:center;gap:4px;justify-content:flex-end;margin-top:4px;font-size:10.5px;opacity:.75}
@@ -330,24 +383,115 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2a2010,#3a2d15)}
 .msg img.msg-img{max-width:100%;max-height:280px;object-fit:cover;border-radius:12px;display:block;margin:-4px 0 4px;cursor:pointer}
 .chat-form{display:flex;gap:6px;padding-top:10px;align-items:flex-end}
 .chat-form input{flex:1}
-.conv{display:flex;gap:12px;align-items:center;padding:12px;background:var(--card);border-radius:14px;margin-bottom:8px;border:1px solid var(--line);cursor:pointer;box-shadow:var(--sh);user-select:none}
+.conv{display:flex;gap:12px;align-items:center;padding:12px;background:var(--card);border-radius:14px;margin-bottom:8px;border:1px solid var(--line);cursor:pointer;box-shadow:var(--sh);user-select:none;transition:transform .15s ease,background-color .15s ease}
+.conv:hover{background:color-mix(in srgb,var(--ac) 5%,var(--card))}
 .conv .cmid{flex:1;min-width:0}
 .conv .cn{font-weight:700}
 .conv .cl{color:var(--mute);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .conv .cb{background:var(--ac);color:var(--acink);font-size:11px;font-weight:800;border-radius:999px;padding:2px 8px}
 
-.admin-toggle{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;background:linear-gradient(135deg,rgba(255,149,0,.14),rgba(255,0,110,.10));border:1px dashed rgba(255,90,60,.5);border-radius:14px;margin-bottom:12px;font-size:13px;flex-wrap:wrap}
-.admin-toggle b{color:#ff5a3c}
-.admin-toggle button{background:#ff5a3c;color:#fff;border:0;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700}
-.ad-card{background:linear-gradient(135deg,color-mix(in srgb,var(--ad) 12%,var(--card)),var(--card));border:1px dashed color-mix(in srgb,var(--ad) 50%,var(--line));border-radius:18px;padding:14px;margin-bottom:10px;box-shadow:var(--sh)}
-.ad-card .ad-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:11px}
-.ad-card .ad-tag{display:inline-flex;align-items:center;gap:4px;background:var(--ad);color:#000;font-weight:800;letter-spacing:.6px;font-size:10px;padding:3px 8px;border-radius:999px}
-.ad-card .ad-title{font-weight:800;font-size:16px}
-.ad-card .ad-body{font-size:14px;opacity:.85;margin:6px 0;line-height:1.45;white-space:pre-wrap;word-break:break-word}
-.ad-card .ad-img{width:100%;max-height:320px;object-fit:cover;border-radius:12px;margin:6px 0;display:block}
-.ad-card .ad-cta{display:inline-block;margin-top:8px;background:var(--ad);color:#000;font-weight:700;padding:9px 16px;border-radius:999px;text-decoration:none;font-size:13.5px}
-.adsense-card{background:linear-gradient(135deg,color-mix(in srgb,var(--g) 10%,var(--card)),var(--card));border:1px dashed color-mix(in srgb,var(--g) 50%,var(--line))}
-.advertise-cta{display:flex;justify-content:space-between;align-items:center;gap:12px;background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 8%,var(--card)),var(--card));border:1px dashed var(--ac);border-radius:16px;padding:14px;margin-top:10px;flex-wrap:wrap}
+/* SWIPE TO REPLY */
+.msg-wrap{position:relative;display:flex;flex-direction:column;width:100%;transition:transform .18s ease}
+.msg-wrap.me{align-items:flex-end}
+.msg-wrap.them{align-items:flex-start}
+.swipe-hint{position:absolute;top:50%;transform:translateY(-50%);font-size:18px;opacity:0;transition:opacity .15s ease;pointer-events:none}
+.swipe-hint.left{left:8px}
+.swipe-hint.right{right:8px}
+.msg-wrap.swiping .swipe-hint{opacity:1}
+.msg-reaction{position:absolute;bottom:-12px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:1px 7px;font-size:12px;box-shadow:0 2px 8px rgba(0,0,0,.12);z-index:2;cursor:pointer;user-select:none}
+.msg-wrap.me .msg-reaction{right:8px}
+.msg-wrap.them .msg-reaction{left:8px}
+
+.reply-preview{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--bg);border-radius:10px;margin-bottom:6px;border-left:3px solid var(--ac);font-size:13px;animation:up .2s ease both}
+.reply-preview .rp-txt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--mute)}
+.reply-preview button{background:none;border:0;color:var(--mute);font-size:16px;padding:2px 6px}
+
+.chat-img-btn{width:38px;height:38px;border-radius:50%;background:color-mix(in srgb,var(--ac) 10%,var(--bg));border:0;display:grid;place-items:center;color:var(--ac);flex:none}
+.chat-img-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2}
+
+.emoji-picker{display:grid;grid-template-columns:repeat(8,1fr);gap:2px;max-height:200px;overflow-y:auto;padding:8px;background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:8px;box-shadow:var(--sh)}
+.emoji-picker button{background:none;border:0;font-size:20px;padding:5px;border-radius:8px;cursor:pointer;line-height:1}
+.emoji-picker button:hover{background:var(--bg)}
+
+.msg-actions-sheet{display:flex;gap:6px;justify-content:center;padding:6px 0;flex-wrap:wrap}
+.msg-actions-sheet button{background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:13.5px;font-weight:600;display:inline-flex;align-items:center;gap:6px}
+
+.admin-dash{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+.admin-stat{background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 8%,var(--card)),var(--card));border:1px solid color-mix(in srgb,var(--ac) 25%,var(--line));border-radius:16px;padding:14px;position:relative;overflow:hidden}
+.admin-stat .n{font-size:24px;font-weight:800;letter-spacing:-1px;color:var(--ac);line-height:1.1}
+.admin-stat .l{font-size:11.5px;color:var(--mute);letter-spacing:.5px;margin-top:4px;text-transform:uppercase;font-weight:700}
+.admin-stat::after{content:"";position:absolute;right:-20px;top:-20px;width:80px;height:80px;border-radius:50%;background:color-mix(in srgb,var(--ac) 10%,transparent)}
+
+.admin-nav-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.admin-nav-card{background:var(--card);border:1px solid color-mix(in srgb,var(--ac) 25%,var(--line));border-radius:14px;padding:16px;text-align:left;display:flex;flex-direction:column;gap:6px;cursor:pointer;color:var(--ink);font-family:inherit;transition:transform .15s ease,background-color .15s ease}
+.admin-nav-card:hover{background:color-mix(in srgb,var(--ac) 6%,var(--card));transform:translateY(-1px)}
+.admin-nav-card .ico{font-size:24px}
+.admin-nav-card .ttl{font-weight:800;font-size:14px}
+.admin-nav-card .sub{font-size:11px;color:var(--mute)}
+
+.bulk-bar{background:color-mix(in srgb,var(--ac) 12%,var(--card));border:1px solid var(--ac);border-radius:12px;padding:8px 12px;margin-bottom:10px;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;flex-wrap:wrap}
+.bulk-bar button{background:var(--ac);color:var(--acink);border:0;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:700}
+.report-check{width:18px;height:18px;accent-color:var(--ac);flex:none;cursor:pointer}
+.view-count{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:800;color:var(--ac);background:color-mix(in srgb,var(--ac) 12%,transparent);padding:3px 8px;border-radius:999px}
+
+.offline-banner{position:fixed;top:calc(56px + env(safe-area-inset-top));left:14px;right:14px;background:#ff9900;color:#000;padding:8px 12px;border-radius:10px;font-size:12.5px;font-weight:700;text-align:center;z-index:40;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+
+.emoji-bar{display:flex;gap:4px;padding:6px 0;flex-wrap:wrap}
+.tag-hint{display:inline-block;font-size:11px;color:var(--mute);background:var(--bg);border-radius:999px;padding:3px 10px;margin-top:4px;border:1px solid var(--line)}
+.tag-hint b{color:var(--ac)}
+
+#view{transition:opacity .15s ease}
+
+/* ANON NUMBER BADGE */
+.anon-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  background:linear-gradient(135deg,#4A2060,#B064E0);
+  color:#fff;font-size:11px;font-weight:800;
+  padding:3px 9px;border-radius:999px;letter-spacing:.4px;
+}
+
+/* NOTIFICATION TOGGLE */
+.toggle-wrap{display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg);border-radius:12px}
+.toggle-switch{position:relative;width:48px;height:28px;background:var(--line);border-radius:999px;cursor:pointer;transition:background-color .2s ease;flex:none}
+.toggle-switch::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;background:#fff;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
+.toggle-switch.on{background:var(--ac)}
+.toggle-switch.on::after{transform:translateX(20px)}
+
+/* HASHTAG BACK BUTTON */
+.hashtag-back{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-weight:700;font-size:13.5px;color:var(--ac);margin-bottom:12px;box-shadow:var(--sh);transition:transform .15s ease}
+.hashtag-back:active{transform:scale(.97)}
+
+.tag-link{color:var(--ac);font-weight:700;text-decoration:none;cursor:pointer;padding:0 2px;border-radius:6px;background:color-mix(in srgb,var(--ac) 10%,transparent)}
+.mention-link{color:var(--ac);font-weight:700;text-decoration:none;cursor:pointer;background:color-mix(in srgb,var(--ac) 10%,transparent);padding:1px 5px;border-radius:6px}
+.hashtag-suggest{position:absolute;left:0;right:0;bottom:calc(100% + 4px);background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.15);max-height:180px;overflow-y:auto;z-index:50}
+.hashtag-suggest button{display:block;width:100%;text-align:left;background:none;border:0;padding:10px 14px;font-size:14px;color:var(--ink);cursor:pointer}
+.hashtag-suggest button:hover,.hashtag-suggest button.on{background:color-mix(in srgb,var(--ac) 10%,var(--card))}
+.hashtag-suggest .cnt{color:var(--mute);font-size:11.5px;margin-left:6px}
+
+.hashtag-header{background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 8%,var(--card)),var(--card));border-radius:16px;padding:16px;margin-bottom:14px;border:1px solid var(--line);box-shadow:var(--sh)}
+.hashtag-header h2{margin:0 0 4px;font-size:22px;font-weight:800}
+.hashtag-header .sub{color:var(--mute);font-size:13.5px}
+.hashtag-header .stat{margin-top:10px;display:flex;gap:14px;font-size:13px;flex-wrap:wrap}
+.hashtag-header .stat b{color:var(--ac)}
+
+.date-sep{text-align:center;margin:12px 0 6px;position:relative}
+.date-sep span{background:var(--bg);color:var(--mute);font-size:11.5px;font-weight:700;padding:3px 12px;border-radius:999px;position:relative;z-index:1}
+.date-sep::before{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:var(--line);z-index:0}
+
+.typing-ind{display:inline-flex;gap:3px;padding:10px 14px;background:var(--card);border:1px solid var(--line);border-radius:20px;border-bottom-left-radius:6px;align-self:flex-start;animation:up .2s ease both}
+.typing-ind i{width:7px;height:7px;border-radius:50%;background:var(--mute);animation:typing 1.2s ease-in-out infinite}
+.typing-ind i:nth-child(2){animation-delay:.15s}
+.typing-ind i:nth-child(3){animation-delay:.3s}
+@keyframes typing{0%,60%,100%{opacity:.35;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
+
+/* ADVERTISE CTA - vurgulu */
+.advertise-cta{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  background:linear-gradient(135deg,color-mix(in srgb,#FFB020 18%,var(--card)),color-mix(in srgb,#FF6B9D 8%,var(--card)));
+  border:1px dashed #FFB020;border-radius:16px;padding:14px;margin-top:10px;flex-wrap:wrap;
+  position:relative;overflow:hidden
+}
+.advertise-cta::before{content:"✨";position:absolute;top:-4px;right:8px;font-size:20px;opacity:.6;animation:sparkleFloat 2.5s ease-in-out infinite}
 .advertise-cta .info{flex:1;min-width:180px}
 .advertise-cta b{font-size:14.5px;display:block;margin-bottom:2px}
 .advertise-cta .dep{font-size:12px}
@@ -357,8 +501,9 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2a2010,#3a2d15)}
 .success-box p{color:var(--mute);font-size:14px;line-height:1.6;margin:0}
 
 .settings-list{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
-.settings-item{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;text-decoration:none;color:var(--ink);box-shadow:var(--sh)}
+.settings-item{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;text-decoration:none;color:var(--ink);box-shadow:var(--sh);transition:background-color .15s ease,transform .12s ease}
 .settings-item:hover{background:color-mix(in srgb,var(--ac) 6%,var(--card))}
+.settings-item:active{transform:scale(.99)}
 .settings-item .ico{width:36px;height:36px;border-radius:10px;background:color-mix(in srgb,var(--ac) 14%,transparent);display:grid;place-items:center;font-size:18px;flex:none}
 .settings-item .txt{flex:1;min-width:0}
 .settings-item .txt b{display:block;font-size:14.5px;font-weight:700}
@@ -379,6 +524,7 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2a2010,#3a2d15)}
 .user-card{padding:12px 14px}
 .user-card-row{display:flex;gap:12px;align-items:center}
 .restrict-badge{display:inline-flex;align-items:center;gap:4px;background:color-mix(in srgb,#FF9900 14%,transparent);color:#ff9900;font-size:11px;font-weight:800;padding:3px 9px;border-radius:999px;margin-top:4px}
+.violation-badge{display:inline-flex;align-items:center;gap:4px;background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger);font-size:11px;font-weight:800;padding:3px 9px;border-radius:999px;margin-top:4px}
 
 #toast-container{position:fixed;bottom:calc(120px + env(safe-area-inset-bottom));right:14px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;width:auto;max-width:calc(100% - 28px);align-items:flex-end;max-height:60vh;overflow-y:auto}
 .toast{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:12px 14px;box-shadow:0 12px 30px rgba(0,0,0,.18);font-size:13.5px;font-weight:600;line-height:1.4;opacity:0;transform:translateX(20px) scale(.96);transition:opacity .25s,transform .25s cubic-bezier(.34,1.56,.64,1);display:flex;align-items:flex-start;gap:10px;pointer-events:auto;max-width:340px}
@@ -401,78 +547,6 @@ body,.card,.btn,.composer-new,.search-box,.settings-item,.conv,.cm-item,.seg,.sh
 @keyframes pop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
 #splash b{display:block;margin-top:14px;font-size:18px;font-weight:800;text-align:center}
 #splash small{display:block;margin-top:4px;color:var(--mute);font-size:11px;text-align:center;letter-spacing:.5px}
-
-.tag-link{color:var(--ac);font-weight:700;text-decoration:none;cursor:pointer;padding:0 2px;border-radius:6px;background:color-mix(in srgb,var(--ac) 10%,transparent)}
-.mention-link{color:var(--ac);font-weight:700;text-decoration:none;cursor:pointer;background:color-mix(in srgb,var(--ac) 10%,transparent);padding:1px 5px;border-radius:6px}
-.hashtag-suggest{position:absolute;left:0;right:0;bottom:calc(100% + 4px);background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.15);max-height:180px;overflow-y:auto;z-index:50}
-.hashtag-suggest button{display:block;width:100%;text-align:left;background:none;border:0;padding:10px 14px;font-size:14px;color:var(--ink);cursor:pointer}
-.hashtag-suggest button:hover,.hashtag-suggest button.on{background:color-mix(in srgb,var(--ac) 10%,var(--card))}
-.hashtag-suggest .cnt{color:var(--mute);font-size:11.5px;margin-left:6px}
-
-.hashtag-header{background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 8%,var(--card)),var(--card));border-radius:16px;padding:16px;margin-bottom:14px;border:1px solid var(--line);box-shadow:var(--sh)}
-.hashtag-header h2{margin:0 0 4px;font-size:22px;font-weight:800}
-.hashtag-header .sub{color:var(--mute);font-size:13.5px}
-.hashtag-header .stat{margin-top:10px;display:flex;gap:14px;font-size:13px;flex-wrap:wrap}
-.hashtag-header .stat b{color:var(--ac)}
-
-.date-sep{text-align:center;margin:12px 0 6px;position:relative}
-.date-sep span{background:var(--bg);color:var(--mute);font-size:11.5px;font-weight:700;padding:3px 12px;border-radius:999px;position:relative;z-index:1}
-.date-sep::before{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:var(--line);z-index:0}
-
-.typing-ind{display:inline-flex;gap:3px;padding:10px 14px;background:var(--card);border:1px solid var(--line);border-radius:20px;border-bottom-left-radius:6px;align-self:flex-start}
-.typing-ind i{width:7px;height:7px;border-radius:50%;background:var(--mute);animation:typing 1.2s ease-in-out infinite}
-.typing-ind i:nth-child(2){animation-delay:.15s}
-.typing-ind i:nth-child(3){animation-delay:.3s}
-@keyframes typing{0%,60%,100%{opacity:.35;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
-
-.msg-wrap{position:relative;display:flex;flex-direction:column;width:100%}
-.msg-wrap.me{align-items:flex-end}
-.msg-wrap.them{align-items:flex-start}
-.msg-reaction{position:absolute;bottom:-12px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:1px 7px;font-size:12px;box-shadow:0 2px 8px rgba(0,0,0,.12);z-index:2;cursor:pointer;user-select:none}
-.msg-wrap.me .msg-reaction{right:8px}
-.msg-wrap.them .msg-reaction{left:8px}
-
-.reply-preview{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--bg);border-radius:10px;margin-bottom:6px;border-left:3px solid var(--ac);font-size:13px}
-.reply-preview .rp-txt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--mute)}
-.reply-preview button{background:none;border:0;color:var(--mute);font-size:16px;padding:2px 6px}
-
-.chat-img-btn{width:38px;height:38px;border-radius:50%;background:color-mix(in srgb,var(--ac) 10%,var(--bg));border:0;display:grid;place-items:center;color:var(--ac);flex:none}
-.chat-img-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2}
-
-.emoji-picker{display:grid;grid-template-columns:repeat(8,1fr);gap:2px;max-height:200px;overflow-y:auto;padding:8px;background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:8px;box-shadow:var(--sh)}
-.emoji-picker button{background:none;border:0;font-size:20px;padding:5px;border-radius:8px;cursor:pointer;line-height:1}
-.emoji-picker button:hover{background:var(--bg)}
-
-.msg-actions-sheet{display:flex;gap:6px;justify-content:center;padding:6px 0;flex-wrap:wrap}
-.msg-actions-sheet button{background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:13.5px;font-weight:600;display:inline-flex;align-items:center;gap:6px}
-
-.admin-dash{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
-.admin-stat{background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 8%,var(--card)),var(--card));border:1px solid color-mix(in srgb,var(--ac) 25%,var(--line));border-radius:16px;padding:14px;position:relative;overflow:hidden}
-.admin-stat .n{font-size:24px;font-weight:800;letter-spacing:-1px;color:var(--ac);line-height:1.1}
-.admin-stat .l{font-size:11.5px;color:var(--mute);letter-spacing:.5px;margin-top:4px;text-transform:uppercase;font-weight:700}
-.admin-stat::after{content:"";position:absolute;right:-20px;top:-20px;width:80px;height:80px;border-radius:50%;background:color-mix(in srgb,var(--ac) 10%,transparent)}
-
-.admin-nav-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.admin-nav-card{background:var(--card);border:1px solid color-mix(in srgb,var(--ac) 25%,var(--line));border-radius:14px;padding:16px;text-align:left;display:flex;flex-direction:column;gap:6px;cursor:pointer;color:var(--ink);font-family:inherit}
-.admin-nav-card:hover{background:color-mix(in srgb,var(--ac) 6%,var(--card))}
-.admin-nav-card .ico{font-size:24px}
-.admin-nav-card .ttl{font-weight:800;font-size:14px}
-.admin-nav-card .sub{font-size:11px;color:var(--mute)}
-
-.bulk-bar{background:color-mix(in srgb,var(--ac) 12%,var(--card));border:1px solid var(--ac);border-radius:12px;padding:8px 12px;margin-bottom:10px;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;flex-wrap:wrap}
-.bulk-bar button{background:var(--ac);color:var(--acink);border:0;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:700}
-.report-check{width:18px;height:18px;accent-color:var(--ac);flex:none;cursor:pointer}
-.view-count{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:800;color:var(--ac);background:color-mix(in srgb,var(--ac) 12%,transparent);padding:3px 8px;border-radius:999px}
-
-.offline-banner{position:fixed;top:calc(56px + env(safe-area-inset-top));left:14px;right:14px;background:#ff9900;color:#000;padding:8px 12px;border-radius:10px;font-size:12.5px;font-weight:700;text-align:center;z-index:40;box-shadow:0 4px 14px rgba(0,0,0,.15)}
-
-.emoji-bar{display:flex;gap:4px;padding:6px 0;flex-wrap:wrap}
-.tag-hint{display:inline-block;font-size:11px;color:var(--mute);background:var(--bg);border-radius:999px;padding:3px 10px;margin-top:4px;border:1px solid var(--line)}
-.tag-hint b{color:var(--ac)}
-
-/* View container için yumuşak geçiş */
-#view{transition:opacity .12s ease}
-#view.fading{opacity:.5}
 </style>
 </head>
 <body>
@@ -496,7 +570,7 @@ body,.card,.btn,.composer-new,.search-box,.settings-item,.conv,.cm-item,.seg,.sh
 </div>
 
 <section id="auth">
-  <img id="logo" src="logo.png" alt="Logo">
+  <img id="logo" src="logo.png" alt="Gelişim Vibe Logo">
   <h1>Gelişim Vibe</h1>
   <form id="authForm">
     <input id="em" type="email" placeholder="okul mailin (isim.soyisim@ogr.gelisim.edu.tr)" autocomplete="email" required>
@@ -555,7 +629,7 @@ body,.card,.btn,.composer-new,.search-box,.settings-item,.conv,.cm-item,.seg,.sh
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ============================================================
-   GELİŞİM VIBE — v3.0
+   GELİŞİM VIBE — v4.0
    ============================================================ */
 const CONFIG = {
   SB_URL: 'https://ihkjmnogqhekvyroloeg.supabase.co',
@@ -563,13 +637,15 @@ const CONFIG = {
   ADSENSE_CLIENT: 'ca-pub-7174104301389071',
   ADSENSE_SLOT: '0000000000',
   ADSENSE_EVERY: 8,
-  CONTACT_WHATSAPP: '905XXXXXXXXX',
+  CONTACT_PHONE: '05521152106',
+  CONTACT_PHONE_WA: '905521152106',
   CONTACT_EMAIL: 'reklam@gelisimvibe.com',
   DOMAIN: '@ogr.gelisim.edu.tr',
   EDGE_FN: 'clever-responder',
-  FEED_MAX: 200
+  FEED_MAX: 200,
+  NOTIF_ICON: 'logo.png'
 };
-const { SB_URL, SB_KEY, ADSENSE_CLIENT, ADSENSE_SLOT, ADSENSE_EVERY, CONTACT_WHATSAPP, CONTACT_EMAIL, DOMAIN, EDGE_FN } = CONFIG;
+const { SB_URL, SB_KEY, ADSENSE_CLIENT, ADSENSE_SLOT, ADSENSE_EVERY, CONTACT_PHONE, CONTACT_PHONE_WA, CONTACT_EMAIL, DOMAIN, EDGE_FN, NOTIF_ICON } = CONFIG;
 const ADSENSE_ENABLED = !ADSENSE_SLOT.startsWith('0000');
 
 const sb = supabase.createClient(SB_URL, SB_KEY);
@@ -605,6 +681,11 @@ let adsCache = null;
 let chatChannel = null, chatRefreshTimer = null, typingTimer = null;
 let adminView = 'dashboard';
 let _bootedUserId = null;
+let annChannel = null;
+
+/* Notification preference */
+const notifEnabled = () => localStorage.getItem('notif_enabled') !== '0';
+const setNotifEnabled = (v) => localStorage.setItem('notif_enabled', v ? '1' : '0');
 
 const imgUrl   = p => sb.storage.from('images').getPublicUrl(p).data.publicUrl;
 const bookUrl  = p => sb.storage.from('books').getPublicUrl(p).data.publicUrl;
@@ -653,7 +734,7 @@ window.addEventListener('unhandledrejection', e => {
 
 const debounce = (fn, ms=300) => { let t; return function(){ const a = arguments, ctx = this; clearTimeout(t); t = setTimeout(() => fn.apply(ctx, a), ms); }; };
 
-/* ============== LINKIFY (FIXED) ============== */
+/* ============== LINKIFY ============== */
 const HASHTAG_RE = /#([\p{L}\p{N}_]{2,50})/gu;
 const MENTION_RE = /@([\p{L}\p{N}._]{2,40})/gu;
 function extractHashtags(text){
@@ -661,7 +742,7 @@ function extractHashtags(text){
   String(text||'').replace(HASHTAG_RE, (m, t) => { tags.add(t.toLowerCase()); return m; });
   return [...tags];
 }
-const PLACEHOLDER_MARK = '\uE000'; // private-use char
+const PLACEHOLDER_MARK = '\uE000';
 function linkify(text){
   if(!text) return '';
   const tags = [], mentions = [];
@@ -680,10 +761,9 @@ function linkify(text){
 const EMOJIS = ['😀','😂','🥰','😎','🤔','😴','😭','😡','🥳','🤯','👍','👎','❤️','🔥','💯','✨','🎉','🎂','☕','🍕','📚','💻','🎧','⚽','🌙','☀️','🌈','💧','🌸','🚀','👻','💀','🤝','🙏','👀','💪','🤙','✌️','🫶','💙'];
 const REACTIONS = ['❤️','😂','😮','😢','👍','🔥'];
 
-/* ============== AVATAR (contrast fix) ============== */
+/* ============== AVATAR ============== */
 const avatarHue = id => { let h = 0; const s = String(id||''); for(let i=0;i<s.length;i++) h = (h*31 + s.charCodeAt(i)) >>> 0; return h % 360; };
 function avatarStyle(id){
-  // Yüksek kontrast için 35% lightness + beyaz text (WCAG AA)
   const h = avatarHue(id);
   return `background:hsl(${h} 62% 38%);color:#fff`;
 }
@@ -727,30 +807,42 @@ async function requestPushPermission(){
   if(Notification.permission === 'denied') return false;
   try{
     const p = await Notification.requestPermission();
-    if(p === 'granted' && 'serviceWorker' in navigator){
-      try{
-        const reg = await navigator.serviceWorker.ready;
-        // Görsel bildirim göster (push subscription server gerektirir, en azından foreground çalışsın)
-        reg.showNotification('Bildirimler açıldı! 🔔', { body: 'Yeni mesaj ve duyurulardan haberdar olacaksın.', icon: 'logo.png', badge: 'logo.png' });
-      }catch(_){}
+    if(p === 'granted'){
+      setNotifEnabled(true);
+      if('serviceWorker' in navigator){
+        try{
+          const reg = await navigator.serviceWorker.ready;
+          reg.showNotification('Bildirimler açıldı! 🔔', { body: 'Yeni mesaj ve duyurulardan haberdar olacaksın.', icon: NOTIF_ICON, badge: NOTIF_ICON });
+        }catch(_){}
+      }
     }
     return p === 'granted';
   }catch(_){ return false; }
 }
 function showSystemNotification(title, body, opts={}){
+  if(!notifEnabled()) return;
   if(!('Notification' in window) || Notification.permission !== 'granted') return;
   try{
+    const options = {
+      body,
+      icon: NOTIF_ICON,
+      badge: NOTIF_ICON,
+      tag: opts.tag || 'gv-' + Date.now(),
+      data: opts.data || {},
+      renotify: true,
+      silent: false
+    };
     if(navigator.serviceWorker && navigator.serviceWorker.controller){
-      navigator.serviceWorker.ready.then(reg => reg.showNotification(title, {
-        body, icon: 'logo.png', badge: 'logo.png', tag: opts.tag || 'gv', data: opts.data || {}
-      })).catch(() => {
-        const n = new Notification(title, { body, icon: 'logo.png', tag: opts.tag || 'gv' });
-        setTimeout(() => { try{ n.close(); }catch(_){} }, 7000);
+      navigator.serviceWorker.ready.then(reg => reg.showNotification(title, options)).catch(() => {
+        try{
+          const n = new Notification(title, options);
+          setTimeout(() => { try{ n.close(); }catch(_){} }, 8000);
+        }catch(_){}
       });
       return;
     }
-    const n = new Notification(title, { body, icon: 'logo.png', badge: 'logo.png', tag: opts.tag || 'gv' });
-    setTimeout(() => { try{ n.close(); }catch(_){} }, 7000);
+    const n = new Notification(title, options);
+    setTimeout(() => { try{ n.close(); }catch(_){} }, 8000);
     n.onclick = () => { window.focus(); n.close(); };
   }catch(_){}
 }
@@ -820,7 +912,7 @@ function openLegalDoc(kind){
 <div style="line-height:1.85;font-size:14px;color:var(--mute);text-align:justify">
 <p style="margin:0 0 16px">İşbu Aydınlatma Metni, 6698 sayılı KVKK m.10 uyarınca hazırlanmıştır.</p>
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">1. Veri Sorumlusu</h3>
-<p>Gelişim Vibe · ${CONTACT_EMAIL}</p>
+<p>Gelişim Vibe · Tel: ${CONTACT_PHONE}</p>
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">2. İşlenen Veriler</h3>
 <p>Ad, soyad, e-posta, bölüm, paylaşımlar, mesajlar, medya, IP, çerez verisi.</p>
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">3. Amaçlar</h3>
@@ -828,13 +920,13 @@ function openLegalDoc(kind){
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">4. Aktarım</h3>
 <p>Supabase (ABD/AB), Google LLC (ABD), Cloudflare Inc. (ABD). SCC + açık rıza ile.</p>
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">5. Haklarınız</h3>
-<p>Erişme, düzeltme, silme, itiraz. Başvuru: <b>${CONTACT_EMAIL}</b>.</p>
+<p>Erişme, düzeltme, silme, itiraz. Başvuru: <b>${CONTACT_PHONE}</b>.</p>
 <div style="background:var(--bg);border-radius:12px;padding:14px;margin-top:20px;border-left:3px solid var(--ac)"><p style="margin:0;font-size:13px"><b>Onay kutusunu işaretlemeniz bu metni okuduğunuzu gösterir.</b></p></div>
 </div>`},
     riza:{title:`✅ Açık Rıza Metni`,body:`
 <div style="line-height:1.85;font-size:14px;color:var(--mute);text-align:justify">
 <p>KVKK m.5 ve m.9 uyarınca; e-posta, ad-soyad, bölüm bilgimin işlenmesine; paylaşımlarımın saklanmasına; Google AdSense kişiselleştirilmiş reklam çerezlerine; ve yurt dışı aktarıma açık rıza veriyorum.</p>
-<p>Rızamı <b>${CONTACT_EMAIL}</b> adresine yazarak geri çekebilirim.</p>
+<p>Rızamı <b>${CONTACT_PHONE}</b> üzerinden geri çekebilirim.</p>
 </div>`}
   };
   const d = docs[kind]; if(!d) return;
@@ -884,16 +976,16 @@ function xhrUpload(bucket, path, blob, contentType, onProgress){
 async function uploadImg(file, bucket, onProgress){
   bucket = bucket || 'images';
   if(!file.type.startsWith('image/')) throw new Error('Sadece fotoğraf.');
-  if(file.size > 20e6) throw new Error('Fotoğraf max 20 MB.');
+  if(file.size > 50e6) throw new Error('Fotoğraf max 50 MB.');
   let blob = file, ext = (file.name.split('.').pop() || 'jpg').toLowerCase(), ct = file.type || 'image/jpeg';
   try{
     const info = await loadBitmapInfo(file);
-    const k = Math.min(1, 1280 / Math.max(info.width, info.height));
+    const k = Math.min(1, 1600 / Math.max(info.width, info.height));
     const c = document.createElement('canvas');
     c.width = Math.max(1, Math.round(info.width * k)); c.height = Math.max(1, Math.round(info.height * k));
     const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0,0,c.width,c.height);
     info.draw(x, c.width, c.height);
-    const j = await new Promise((r,jj)=>c.toBlob(b=>b?r(b):jj(new Error('Canvas')), 'image/jpeg', 0.82));
+    const j = await new Promise((r,jj)=>c.toBlob(b=>b?r(b):jj(new Error('Canvas')), 'image/jpeg', 0.85));
     if(j){ blob = j; ext = 'jpg'; ct = 'image/jpeg'; }
   }catch(e){}
   const path = uid() + '.' + ext;
@@ -901,7 +993,7 @@ async function uploadImg(file, bucket, onProgress){
 }
 async function uploadVideo(file, onProgress){
   if(!file.type.startsWith('video/')) throw new Error('Sadece video.');
-  if(file.size > 60e6) throw new Error('Video max 60 MB.');
+  if(file.size > 200e6) throw new Error('Video max 200 MB.');
   const ext = (file.name.split('.').pop() || 'mp4').toLowerCase();
   const path = uid() + '.' + ext;
   return xhrUpload('videos', path, file, file.type || 'video/mp4', onProgress);
@@ -911,7 +1003,6 @@ async function uploadPdf(file, onProgress){
   const isPdfName = lower.endsWith('.pdf');
   const isPdfType = file.type === 'application/pdf' || file.type === 'application/x-pdf' || file.type === '' || file.type === 'application/octet-stream';
   if(!isPdfName && !isPdfType) throw new Error('Sadece PDF seçebilirsin.');
-  // Magic-byte kontrolü: ilk 5 byte "%PDF-"
   try{
     const head = await file.slice(0, 5).arrayBuffer();
     const bytes = new Uint8Array(head);
@@ -921,6 +1012,7 @@ async function uploadPdf(file, onProgress){
     if(err.message.includes('PDF')) throw err;
     throw new Error('PDF doğrulanamadı.');
   }
+  // PDF boyut sınırı YOK
   const path = uid() + '.pdf';
   return xhrUpload('pdfs', path, file, 'application/pdf', onProgress);
 }
@@ -1006,7 +1098,7 @@ $('#authForm').onsubmit = async e => {
 
 function showOtpScreen(email, password){
   const form = $('#authForm');
-  form.onsubmit = null; // eski handler'ı temizle
+  form.onsubmit = null;
   form.innerHTML = `
     <p style="text-align:center;color:var(--mute);font-size:13.5px;line-height:1.6;margin:0 0 12px">
       <b style="color:var(--ink)">${esc(email)}</b> adresine<br>doğrulama kodu gönderdik.<br>
@@ -1041,7 +1133,6 @@ function showOtpScreen(email, password){
   };
 }
 
-// Global click delegator
 document.addEventListener('click', e => {
   const legal = e.target.closest('[data-legal]');
   if(legal){ e.preventDefault(); openLegalDoc(legal.dataset.legal); return; }
@@ -1059,7 +1150,6 @@ document.addEventListener('click', e => {
     const sheet = e.target.closest('.sheet-bg');
     if(sheet) sheet.remove();
   }
-  // Linkify #/mention delegation
   const ht = e.target.closest('[data-hashtag]');
   if(ht){ e.preventDefault(); show('hashtag', { hashtag: ht.dataset.hashtag }); return; }
   const mt = e.target.closest('[data-mention]');
@@ -1128,6 +1218,7 @@ async function boot(session){
   }
   show(tab);
   checkNotifications();
+  subscribeAnnouncements();
 }
 sb.auth.getSession().then(({ data }) => boot(data.session));
 sb.auth.onAuthStateChange((ev, s) => {
@@ -1153,9 +1244,9 @@ function setSkeleton(t){
   }
 }
 
+/* ============== HIZLI GEÇİŞ (view transition kaldırıldı) ============== */
 async function show(t, opts){
   const my = ++_viewToken;
-  // Realtime & timer cleanup
   if(feedUnsub){ try{ feedUnsub(); }catch(_){} feedUnsub = null; }
   clearChatChannel();
   document.querySelectorAll('.emoji-picker, .hashtag-suggest').forEach(el => el.remove());
@@ -1165,7 +1256,6 @@ async function show(t, opts){
   try { sessionStorage.setItem('gv_tab', t); } catch(_){}
   document.body.dataset.sec = SEC_MAP[t] || '';
   removeFab();
-  // Admin tab toggle
   if(me) $('#adminTab').classList.toggle('hide', !me.is_admin);
   if(opts && 'chatWith' in opts){ chatWith = opts.chatWith; chatUser = opts.chatUser; }
   if(opts && 'libTab' in opts) libTab = opts.libTab;
@@ -1193,22 +1283,31 @@ async function show(t, opts){
     }
   };
 
-  if(document.startViewTransition){
-    try{
-      const vt = document.startViewTransition(doLoad);
-      if(vt && vt.finished) vt.finished.catch(()=>{});
-    }catch(_){ await doLoad(); }
-  } else {
-    // Yumuşak opacity geçişi
-    const v = $('#view');
-    v.classList.add('fading');
-    setTimeout(() => { v.classList.remove('fading'); }, 60);
-    await doLoad();
-  }
+  await doLoad();
+}
+
+/* ============== DUYURU REALTIME (bildirim için) ============== */
+function subscribeAnnouncements(){
+  try{
+    if(annChannel){ try{ annChannel.unsubscribe(); }catch(_){} annChannel = null; }
+    annChannel = sb.channel('ann-stream')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'announcements' }, payload => {
+        const a = payload.new || {};
+        const seenAnn = +(localStorage.getItem('seen_ann')||0);
+        const created = new Date(a.created_at || Date.now()).getTime();
+        if(created > seenAnn){
+          showSystemNotification('📢 ' + (a.title || 'Yeni Duyuru'), (a.content || '').slice(0, 140), { tag: 'ann-' + (a.id||'') });
+          const btn = document.querySelector('.nav-tabs button[data-t="ann"]');
+          if(btn) btn.classList.add('has-new');
+          if(tab === 'ann') loadAnn();
+        }
+      })
+      .subscribe();
+  }catch(_){}
 }
 
 async function checkNotifications(){
-  if(Date.now() - lastNotifCheck < 60000) return;
+  if(Date.now() - lastNotifCheck < 45000) return;
   lastNotifCheck = Date.now();
   try{
     const now = Date.now();
@@ -1224,7 +1323,7 @@ async function checkNotifications(){
     const seenAnn = +(localStorage.getItem('seen_ann')||0), seenFeed = +(localStorage.getItem('seen_feed')||0);
     const seenLib = +(localStorage.getItem('seen_library')||0), seenConf = +(localStorage.getItem('seen_conf')||0);
     const [a,p,bd,pf,c] = await Promise.all([
-      sb.from('announcements').select('created_at,title').order('created_at',{ascending:false}).limit(1),
+      sb.from('announcements').select('created_at,title,content,id').order('created_at',{ascending:false}).limit(1),
       sb.from('posts').select('created_at').order('created_at',{ascending:false}).limit(1),
       sb.from('books').select('created_at').order('created_at',{ascending:false}).limit(1),
       sb.from('pdfs').select('created_at').order('created_at',{ascending:false}).limit(1),
@@ -1240,10 +1339,16 @@ async function checkNotifications(){
     setDot('feed', hasFeed);
     setDot('library', hasLib);
     setDot('conf', hasConf);
-    if(hasAnn && a.data[0]) showSystemNotification('📢 Yeni Duyuru', a.data[0].title || 'Yeni bir duyuru paylaşıldı');
+    if(hasAnn && a.data[0]){
+      const lastShown = localStorage.getItem('last_ann_shown');
+      if(lastShown !== String(a.data[0].id)){
+        localStorage.setItem('last_ann_shown', String(a.data[0].id));
+        showSystemNotification('📢 ' + (a.data[0].title || 'Yeni Duyuru'), (a.data[0].content||'').slice(0,140), { tag: 'ann-' + a.data[0].id });
+      }
+    }
   }catch(e){}
 }
-setInterval(() => { if(me) checkNotifications(); }, 90000);
+setInterval(() => { if(me) checkNotifications(); }, 60000);
 
 /* ============== ADS ============== */
 function renderAdCard(ad){
@@ -1268,7 +1373,7 @@ function initAdSense(){
   }, 400);
 }
 function renderAdvertiseCTA(){
-  return '<div class="advertise-cta"><div class="info"><b>📢 İşletmen mi var?</b><div class="dep">Gelişim Vibe\'da reklam ver, İGÜ öğrencilerine ulaş.</div></div><button class="btn sm" data-advertise>Reklam Ver</button></div>';
+  return '<div class="advertise-cta"><div class="info"><b>📢 Burada reklam verebilirsiniz!</b><div class="dep">İGÜ öğrencilerine ulaşmak için tıkla · Tel: ' + CONTACT_PHONE + '</div></div><button class="btn sm" data-advertise>Reklam Ver</button></div>';
 }
 document.addEventListener('click', e => {
   if(e.target.closest('[data-advertise]')) openAdvertiseSheet();
@@ -1276,6 +1381,7 @@ document.addEventListener('click', e => {
 function openAdvertiseSheet(){
   const el = openSheet(
     '<h4>📢 Reklam Ver<button class="sheet-close" aria-label="Kapat">×</button></h4>' +
+    '<div style="background:linear-gradient(135deg,#FFB020 18%,transparent);border:1px dashed #FFB020;border-radius:12px;padding:12px;margin-bottom:14px"><b style="font-size:13.5px">📞 Hemen Ara:</b> <a href="tel:' + CONTACT_PHONE + '" style="color:var(--ac);font-weight:800;font-size:15px;text-decoration:none">' + CONTACT_PHONE + '</a></div>' +
     '<p style="color:var(--mute);font-size:13.5px;line-height:1.5;margin:0 0 14px">Formu doldur, yönetici ekibimiz en kısa sürede sana ulaşsın.</p>' +
     '<form id="adreqForm">' +
     '<label style="font-size:13px;font-weight:600;color:var(--mute)">Ne reklamı vereceksin?</label>' +
@@ -1358,7 +1464,6 @@ async function loadList(t, append=false){
   const pageSize = 20;
   const from = feedPage * pageSize, to = from + pageSize - 1;
 
-  // 1. Ana içerik sorgusu
   const mainRes = await sb.from(table).select(selectCols).order('created_at',{ascending:false}).range(from, to);
   const newItems = mainRes.data || [], error = mainRes.error;
   if(error) { $('#view').innerHTML = '<div class="empty">Yüklenemedi: ' + esc(error.message) + '</div>'; return; }
@@ -1371,7 +1476,6 @@ async function loadList(t, append=false){
     feedItems = newItems;
   }
 
-  // 2. Likes sadece mevcut postlar için
   const ids = (feedItems||[]).map(i => i.id);
   let likes = [];
   if(ids.length){
@@ -1379,7 +1483,6 @@ async function loadList(t, append=false){
     likes = data || [];
   }
 
-  // 3. Ads cache'ten (append'te yeniden çekme)
   let ads = [];
   if(!conf){
     if(append && adsCache) ads = adsCache;
@@ -1662,13 +1765,15 @@ async function loadHashtag(){
     ...confs.map(c => ({ type:'conf', data:c, t:new Date(c.created_at).getTime() }))
   ].sort((a,b) => b.t - a.t);
 
+  const backBtn = '<button class="hashtag-back" data-back-feed>← Akışa Dön</button>';
   const header = '<div class="hashtag-header"><h2>#' + esc(tag) + '</h2><div class="sub">Bu etiketle paylaşılan içerikler</div><div class="stat"><span><b>' + fmtNum(total) + '</b> içerik</span><span><b>' + fmtNum(posts.length) + '</b> gönderi</span><span><b>' + fmtNum(confs.length) + '</b> itiraf</span><span><b>' + fmtNum(anns.length) + '</b> duyuru</span></div></div>';
 
-  $('#view').innerHTML = header + (total
+  $('#view').innerHTML = backBtn + header + (total
     ? all.map(x => x.type === 'ann' ? annCard(x.data) : x.type === 'post' ? postCard(x.data) : confCard(x.data)).join('')
     : '<div class="empty"><span class="em-ic">🔍</span><div class="em-t">Henüz bu etiketle içerik yok</div>İlk sen kullan!</div>');
 
   $('#view').onclick = e => {
+    if(e.target.closest('[data-back-feed]')){ show('feed'); return; }
     const u = e.target.closest('[data-uid]');
     if(u && u.dataset.uid !== me.id){ openUserMenu(u.dataset.uid, u.dataset.name); return; }
   };
@@ -1753,7 +1858,19 @@ async function report(target){
   };
 }
 
-/* ============== YORUMLAR ============== */
+/* ============== YORUMLAR (anonim numaralandırma) ============== */
+function assignAnonNumbers(rows){
+  // Her thread için ilk görünen user_id -> 1, 2, 3...
+  const map = {};
+  let next = 1;
+  const out = rows.map(c => {
+    if(!c.user_id) return c;
+    if(!map[c.user_id]) map[c.user_id] = next++;
+    return { ...c, _anonNo: map[c.user_id] };
+  });
+  return out;
+}
+
 async function loadCommentsCommon(box, opts){
   const { table, fkColumn, id, anonTable, useRealConf, reporterKey } = opts;
   let rows = [];
@@ -1762,17 +1879,21 @@ async function loadCommentsCommon(box, opts){
     rows = (data||[]).map(c => ({ ...c, _real: c.profiles, _mine: c.user_id === me.id }));
   } else if(anonTable){
     const { data } = await sb.from(anonTable).select('*').eq(fkColumn, id).order('id');
-    rows = (data||[]).map(c => ({ ...c, _anon: c.anon_no, _mine: c.is_mine }));
+    rows = (data||[]).map(c => ({ ...c, _mine: c.is_mine }));
   } else {
     const { data } = await sb.from(table).select('id,content,user_id,created_at,profiles(first_name,last_name)').eq(fkColumn, id).order('id');
     rows = (data||[]).map(c => ({ ...c, _real: c.profiles, _mine: c.user_id === me.id }));
   }
   const isConf = !!anonTable;
+  // Confessions için anon numaraları ataması
+  if(isConf){ rows = assignAnonNumbers(rows); }
+
   const itemsHtml = rows.map(c => {
     let nameHtml;
-    if(isConf && c._anon) nameHtml = '<span class="cm-name"><span class="anon">👻 Anonim ' + c._anon + '</span></span>';
+    if(isConf && c._anonNo) nameHtml = '<span class="cm-name"><span class="anon">👻 Anonim ' + c._anonNo + '</span></span>';
     else if(isConf && c._real) nameHtml = '<span class="cm-name" data-uid="' + c.user_id + '" data-name="' + esc((c._real.first_name||'') + ' ' + (c._real.last_name||'')) + '" style="color:#ff5a3c">🔒 ' + esc(c._real.first_name) + ' ' + esc(c._real.last_name) + '</span>';
-    else nameHtml = '<span class="cm-name who" data-uid="' + c.user_id + '" data-name="' + esc((c._real && c._real.first_name || '') + ' ' + (c._real && c._real.last_name || '')) + '">' + esc(c._real && c._real.first_name || '') + ' ' + esc(c._real && c._real.last_name || '') + '</span>';
+    else if(!isConf && c._real) nameHtml = '<span class="cm-name who" data-uid="' + c.user_id + '" data-name="' + esc((c._real.first_name||'') + ' ' + (c._real.last_name||'')) + '">' + esc(c._real.first_name) + ' ' + esc(c._real.last_name) + '</span>';
+    else nameHtml = '<span class="cm-name">Anonim</span>';
     return '<div class="cm-item" data-cid="' + c.id + '"><div class="cm-head">' + nameHtml + '<span class="cm-time">' + ago(c.created_at) + '</span></div><div class="cm-text">' + linkify(c.content) + '</div><div class="cm-acts"><button data-r="' + c.id + '">Şikayet</button>' + ((c._mine || me.is_admin) ? '<button data-d="' + c.id + '">Sil</button>' : '') + '</div></div>';
   }).join('');
   box.innerHTML = (itemsHtml || '<div style="color:var(--mute);font-size:13px;text-align:center;padding:8px">Henüz yorum yok.</div>') + '<form><textarea maxlength="1000" placeholder="Yorum yaz..." required></textarea><button class="btn sm">Gönder</button></form>';
@@ -1882,7 +2003,6 @@ async function loadBooks(){
     const d = e.target.closest('button[data-bdel]');
     if(d && confirm('Kitap silinsin mi?')){ await sb.from('books').delete().eq('id', +d.dataset.bdel); loadBooks(); }
   };
-  // Search input focus kaybını önlemek için listeyi ayrı render et
   window._booksData = items;
   function refreshBooksList(){
     const q2 = bookSearch.toLowerCase().trim();
@@ -1895,8 +2015,6 @@ async function loadBooks(){
       const prof = b.profiles || {first_name:'?',last_name:'',department:''};
       return '<article class="bcard" data-id="' + b.id + '">' + img + '<div class="info"><div class="bt">' + esc(b.title) + '</div>' + (b.author ? '<div class="ba">' + esc(b.author) + '</div>' : '') + (b.description ? '<div class="ba" style="margin-top:4px;line-height:1.4">' + esc(b.description) + '</div>' : '') + '<div class="bp">' + price + '</div><div class="bseller" data-uid="' + b.user_id + '" data-name="' + esc(prof.first_name + ' ' + prof.last_name) + '"><span class="dot" style="' + avatarStyle(b.user_id) + '">' + esc(initials(prof.first_name, prof.last_name).toUpperCase()) + '</span><span>' + esc(prof.first_name) + ' ' + esc(prof.last_name) + '</span></div>' + (canDel ? '<div style="margin-top:8px"><button class="link" data-bdel="' + b.id + '" style="padding:0;font-size:12px;color:var(--danger)">Sil</button></div>' : '') + '</div></article>';
     }).join('');
-    const container = document.getElementById('booksGridWrap') || document.getElementById('libView');
-    // Fallback: sadece search box'ın kardeşi olan bgrid'i güncelle
     const grid = document.querySelector('#libView .bgrid');
     const emptyEl = document.querySelector('#libView .empty');
     if(listHtml){
@@ -1984,6 +2102,7 @@ function openPdfForm(){
     '<input id="pcat" maxlength="80" placeholder="Bölüm / Kategori" required>' +
     '<textarea id="pd" maxlength="600" placeholder="Açıklama (opsiyonel)"></textarea>' +
     '<label style="display:flex;align-items:center;gap:8px;padding:10px;border:1px solid var(--line);border-radius:10px;color:var(--ac);font-weight:600;cursor:pointer"><span id="plabel">📄 PDF seç</span><input type="file" id="pfile" accept="application/pdf,.pdf" hidden></label>' +
+    '<div style="font-size:11.5px;color:var(--mute);margin-top:4px">ℹ️ PDF boyut sınırı yok.</div>' +
     '<div class="prog-wrap hide" id="pdfProg"><div class="prog-bar"><div class="prog-fill" id="pdfFill"></div></div><div class="prog-text" id="pdfText">Yükleniyor... %0</div></div>' +
     '<button class="btn">Yükle</button></form>'
   );
@@ -2017,7 +2136,7 @@ function addFab(handler){
 function removeFab(){ if(fabEl){ fabEl.remove(); fabEl = null; fabHandler = null; } }
 
 /* =========================================================
-   FEEDBACK (with photo)
+   FEEDBACK
    ========================================================= */
 async function loadFeedback(){
   removeFab();
@@ -2083,7 +2202,7 @@ async function loadFeedback(){
 }
 
 /* =========================================================
-   SETTINGS (tema kaldırıldı, geri butonu, tutarlı)
+   SETTINGS
    ========================================================= */
 function settingsHeader(title, backTo = 'main'){
   return '<button class="settings-back" data-back="' + backTo + '">← Ayarlara Dön</button><h2 style="margin:0 0 14px;font-size:20px">' + title + '</h2>';
@@ -2100,6 +2219,13 @@ async function loadSettings(sub){
   if(sub === 'notif') return loadNotificationSettings();
   const initials_ = initials(me.first_name, me.last_name).toUpperCase();
   const notifPerm = ('Notification' in window) ? Notification.permission : 'desteklenmiyor';
+  const notifUser = notifEnabled();
+  let notifLabel;
+  if(notifPerm === 'granted' && notifUser) notifLabel = '✅ Açık';
+  else if(!notifUser) notifLabel = '🔕 Kapalı';
+  else if(notifPerm === 'denied') notifLabel = '🚫 Reddedildi';
+  else notifLabel = 'İzin verilmedi';
+
   $('#view').innerHTML =
     '<div class="card" style="text-align:center">' +
       '<div class="avatar-big" style="' + avatarStyle(me.id) + '">' + esc(initials_) + '</div>' +
@@ -2109,14 +2235,14 @@ async function loadSettings(sub){
     '</div>' +
     '<div class="settings-list">' +
       '<div class="settings-item" data-open="password"><div class="ico">🔑</div><div class="txt"><b>Şifre Değiştir</b><small>Hesabının şifresini güncelle</small></div><span class="arrow">›</span></div>' +
-      '<div class="settings-item" data-open="notif"><div class="ico">🔔</div><div class="txt"><b>Bildirimler</b><small>' + (notifPerm === 'granted' ? '✅ Açık' : (notifPerm === 'denied' ? '🚫 Reddedildi' : 'İzin verilmedi')) + '</small></div><span class="arrow">›</span></div>' +
+      '<div class="settings-item" data-open="notif"><div class="ico">🔔</div><div class="txt"><b>Bildirimler</b><small>' + notifLabel + '</small></div><span class="arrow">›</span></div>' +
       '<div class="settings-item" data-open="info"><div class="ico">ℹ️</div><div class="txt"><b>Bilgi</b><small>Hakkımızda, Gizlilik, İletişim</small></div><span class="arrow">›</span></div>' +
       '<div class="settings-item" data-open="feedback"><div class="ico">💡</div><div class="txt"><b>Öneri & Şikayet</b><small>Uygulamayı geliştirmemize yardımcı ol</small></div><span class="arrow">›</span></div>' +
-      '<div class="settings-item" data-open="advertise"><div class="ico">📢</div><div class="txt"><b>Reklam Ver</b><small>İşletmeni İGÜ öğrencilerine tanıt</small></div><span class="arrow">›</span></div>' +
+      '<div class="settings-item" data-open="advertise"><div class="ico">📢</div><div class="txt"><b>Reklam Ver</b><small>Tel: ' + CONTACT_PHONE + '</small></div><span class="arrow">›</span></div>' +
       '<div class="settings-item danger" data-open="delete"><div class="ico">🗑️</div><div class="txt"><b>Hesabımı Sil</b><small>Anında ve kalıcı olarak silinir</small></div><span class="arrow">›</span></div>' +
       '<div class="settings-item danger" data-open="logout"><div class="ico">🚪</div><div class="txt"><b>Çıkış Yap</b><small>Hesabından güvenli çıkış</small></div><span class="arrow">›</span></div>' +
     '</div>' +
-    '<div style="text-align:center;margin-top:22px;color:var(--mute);font-size:11px">Gelişim Vibe · v3.0<br>Designed &amp; Developed by <b style="color:var(--ac)">Emin Acar</b></div>';
+    '<div style="text-align:center;margin-top:22px;color:var(--mute);font-size:11px">Gelişim Vibe · v4.0<br>Designed &amp; Developed by <b style="color:var(--ac)">Emin Acar</b></div>';
   $('#view').onclick = async e => {
     const item = e.target.closest('[data-open]'); if(!item) return;
     const x = item.dataset.open;
@@ -2131,16 +2257,33 @@ async function loadSettings(sub){
 }
 
 async function loadNotificationSettings(){
-  const cur = ('Notification' in window) ? Notification.permission : 'desteklenmiyor';
+  const perm = ('Notification' in window) ? Notification.permission : 'desteklenmiyor';
+  const userOn = notifEnabled();
   $('#view').innerHTML = settingsHeader('🔔 Bildirimler') +
     '<div class="card">' +
       '<p style="margin:0 0 12px;font-size:13.5px;line-height:1.6;color:var(--mute)">Yeni duyurular, mesajlar ve etkileşimler için bildirim al.</p>' +
-      '<div style="display:flex;flex-direction:column;gap:10px">' +
-        '<div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg);border-radius:12px"><div><b style="font-size:14px">Durum</b><div style="font-size:12px;color:var(--mute)">Tarayıcı bildirim izni</div></div><span style="font-weight:800;color:' + (cur === 'granted' ? 'var(--ok)' : (cur === 'denied' ? 'var(--danger)' : 'var(--mute)')) + '">' + (cur === 'granted' ? '✅ Açık' : (cur === 'denied' ? '🚫 Reddedildi' : '❌ Kapalı')) + '</span></div>' +
-        (cur !== 'granted' ? '<button class="btn" id="reqNotifBtn">🔔 Bildirimlere İzin Ver</button>' : '<button class="btn" id="testNotifBtn" style="background:var(--bg);color:var(--ink)">🔔 Test Bildirimi Gönder</button>') +
-        (cur === 'denied' ? '<p style="font-size:12px;color:var(--mute);margin:0;line-height:1.5">İzin reddedilmiş. Tarayıcı ayarlarından sıfırlaman gerekebilir.</p>' : '') +
+      '<div class="toggle-wrap" style="margin-bottom:10px">' +
+        '<div style="flex:1"><b style="font-size:14px">Bildirimleri Aç</b><div style="font-size:12px;color:var(--mute)">Uygulama içi ve sistem bildirimleri</div></div>' +
+        '<div class="toggle-switch ' + (userOn ? 'on' : '') + '" id="notifSwitch" role="switch" aria-checked="' + userOn + '"></div>' +
+      '</div>' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg);border-radius:12px">' +
+        '<div><b style="font-size:14px">Tarayıcı İzni</b><div style="font-size:12px;color:var(--mute)">Sistem bildirimleri</div></div>' +
+        '<span style="font-weight:800;color:' + (perm === 'granted' ? 'var(--ok)' : (perm === 'denied' ? 'var(--danger)' : 'var(--mute)')) + '">' + (perm === 'granted' ? '✅ Açık' : (perm === 'denied' ? '🚫 Reddedildi' : '❌ Kapalı')) + '</span>' +
+      '</div>' +
+      '<div style="margin-top:10px;display:flex;flex-direction:column;gap:8px">' +
+        (perm !== 'granted' ? '<button class="btn" id="reqNotifBtn">🔔 Tarayıcı İzni Ver</button>' : '<button class="btn" id="testNotifBtn" style="background:var(--bg);color:var(--ink)">🔔 Test Bildirimi Gönder</button>') +
+        (perm === 'denied' ? '<p style="font-size:12px;color:var(--mute);margin:0;line-height:1.5">İzin reddedilmiş. Tarayıcı ayarlarından sıfırlaman gerekebilir.</p>' : '') +
       '</div>' +
     '</div>';
+  const sw = $('#notifSwitch');
+  if(sw) sw.onclick = () => {
+    const newVal = !notifEnabled();
+    setNotifEnabled(newVal);
+    sw.classList.toggle('on', newVal);
+    sw.setAttribute('aria-checked', String(newVal));
+    toast(newVal ? 'Bildirimler açıldı 🔔' : 'Bildirimler kapatıldı 🔕', newVal ? 'ok' : 'info');
+    if(newVal && perm !== 'granted') requestPushPermission();
+  };
   const rb = $('#reqNotifBtn');
   if(rb) rb.onclick = async () => {
     const ok = await requestPushPermission();
@@ -2221,8 +2364,8 @@ async function loadInfo(){
   removeFab();
   $('#view').innerHTML = settingsHeader('ℹ️ Bilgi') + '<div class="seg"><button data-it="about" class="on">ℹ️ Hakkımızda</button><button data-it="privacy">🔒 Gizlilik</button><button data-it="contact">📬 İletişim</button></div><div id="infoView"></div>';
   const about = '<article class="card"><h2 style="margin:0 0 10px;font-size:20px">ℹ️ Hakkımızda</h2><p style="line-height:1.7;color:var(--mute);font-size:14.5px"><b style="color:var(--ink)">Gelişim Vibe</b>, İstanbul Gelişim Üniversitesi öğrencileri tarafından <b>öğrenciler için</b> geliştirilmiş bir topluluk uygulamasıdır.</p><div style="background:var(--bg);border-radius:12px;padding:14px;margin-top:14px"><div style="font-weight:800;margin-bottom:6px">📌 Neler Yapabilirsin?</div><ul style="margin:0;padding-left:20px;line-height:1.8;color:var(--mute);font-size:14px"><li>Akışta paylaşım yap (#etiket kullan)</li><li>Anonim itiraf gönder</li><li>2. el kitap sat / takas yap</li><li>Ders notlarını PDF olarak paylaş</li><li>Mesajlaş, emoji reaksiyon ver</li></ul></div><div style="background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 10%,transparent),transparent);border-radius:12px;padding:14px;margin-top:14px;border:1px dashed var(--ac)"><div style="font-weight:800;margin-bottom:6px">📜 Yasal Uyarı</div><p style="margin:0;color:var(--mute);font-size:13px;line-height:1.6">Bu uygulama <b>resmi bir üniversite uygulaması değildir</b>.</p></div></article>';
-  const privacy = '<article class="card"><h2 style="margin:0 0 10px;font-size:20px">🔒 Gizlilik Politikası</h2><div style="line-height:1.75;font-size:14.5px"><h3 style="font-size:15px;margin:16px 0 6px">1. Veri Sorumlusu</h3><p style="margin:0;color:var(--mute)">Gelişim Vibe · <b>' + CONTACT_EMAIL + '</b></p><h3 style="font-size:15px;margin:16px 0 6px">2. Çerezler</h3><p style="margin:0;color:var(--mute)">Google AdSense kişiselleştirilmiş reklam için çerez kullanır; onay sonrası yüklenir.</p><h3 style="font-size:15px;margin:16px 0 6px">3. KVKK m.11 Haklarınız</h3><p style="margin:0;color:var(--mute)">Başvuru: <b>' + CONTACT_EMAIL + '</b></p></div></article>';
-  const contact = '<article class="card"><h2 style="margin:0 0 10px;font-size:20px">📬 İletişim</h2><div style="display:flex;flex-direction:column;gap:10px;margin-top:16px"><a href="mailto:' + CONTACT_EMAIL + '" class="sheet-btn"><span style="font-size:22px">📧</span><div><div style="font-weight:700">E-posta</div><div style="color:var(--mute);font-size:13px">' + CONTACT_EMAIL + '</div></div></a><a href="https://wa.me/' + CONTACT_WHATSAPP + '" target="_blank" rel="noopener" class="sheet-btn"><span style="font-size:22px">💬</span><div><div style="font-weight:700">WhatsApp</div><div style="color:var(--mute);font-size:13px">Hızlı yanıt</div></div></a></div></article>';
+  const privacy = '<article class="card"><h2 style="margin:0 0 10px;font-size:20px">🔒 Gizlilik Politikası</h2><div style="line-height:1.75;font-size:14.5px"><h3 style="font-size:15px;margin:16px 0 6px">1. Veri Sorumlusu</h3><p style="margin:0;color:var(--mute)">Gelişim Vibe · Tel: <b>' + CONTACT_PHONE + '</b></p><h3 style="font-size:15px;margin:16px 0 6px">2. Çerezler</h3><p style="margin:0;color:var(--mute)">Google AdSense kişiselleştirilmiş reklam için çerez kullanır; onay sonrası yüklenir.</p><h3 style="font-size:15px;margin:16px 0 6px">3. KVKK m.11 Haklarınız</h3><p style="margin:0;color:var(--mute)">Başvuru: <b>' + CONTACT_PHONE + '</b></p></div></article>';
+  const contact = '<article class="card"><h2 style="margin:0 0 10px;font-size:20px">📬 İletişim</h2><div style="display:flex;flex-direction:column;gap:10px;margin-top:16px"><a href="tel:' + CONTACT_PHONE + '" class="sheet-btn"><span style="font-size:22px">📞</span><div><div style="font-weight:700">Telefon</div><div style="color:var(--mute);font-size:13px">' + CONTACT_PHONE + '</div></div></a><a href="https://wa.me/' + CONTACT_PHONE_WA + '" target="_blank" rel="noopener" class="sheet-btn"><span style="font-size:22px">💬</span><div><div style="font-weight:700">WhatsApp</div><div style="color:var(--mute);font-size:13px">' + CONTACT_PHONE + '</div></div></a></div></article>';
   const setView = v => {
     $('#view').querySelectorAll('.seg button').forEach(x => x.classList.toggle('on', x.dataset.it === v));
     $('#infoView').innerHTML = v === 'about' ? about : v === 'privacy' ? privacy : contact;
@@ -2235,7 +2378,7 @@ async function loadInfo(){
 }
 
 /* =========================================================
-   CHAT (Realtime + Typing Indicator)
+   CHAT (Realtime + Typing + Swipe-to-reply)
    ========================================================= */
 async function loadChat(){
   removeFab(); clearChatTimer(); clearChatChannel();
@@ -2323,7 +2466,9 @@ function renderMessages(list){
     const replyHtml = m.reply_to ? '<div class="reply-quote"><b>' + esc(m.reply_to.name || 'Yanıt') + '</b>' + esc((m.reply_to.content || '').slice(0,80)) + '</div>' : '';
     const imgHtml = m.image_path ? '<img class="msg-img" loading="lazy" src="' + imgUrl(m.image_path) + '" alt="" data-img="' + imgUrl(m.image_path) + '">' : '';
     const reactBar = reactions.length ? '<div class="msg-reaction" data-mid="' + m.id + '">' + reactHtml + '</div>' : '';
-    out.push('<div class="msg-wrap ' + (mine ? 'me' : 'them') + '"><div class="msg ' + (mine ? 'me' : 'them') + '" data-mid="' + m.id + '" title="' + esc(fullDate(m.created_at)) + '">' + replyHtml + imgHtml + (m.content ? esc(m.content) : '') + '<div class="mt">' + ago(m.created_at) + ' ' + tick + '</div></div>' + reactBar + '</div>');
+    out.push('<div class="msg-wrap ' + (mine ? 'me' : 'them') + '" data-mid="' + m.id + '" data-mine="' + (mine?'1':'0') + '" data-content="' + esc((m.content||'').slice(0,100)) + '">' +
+      '<div class="swipe-hint ' + (mine?'right':'left') + '">↩️</div>' +
+      '<div class="msg ' + (mine ? 'me' : 'them') + '" data-mid="' + m.id + '" title="' + esc(fullDate(m.created_at)) + '">' + replyHtml + imgHtml + (m.content ? esc(m.content) : '') + '<div class="mt">' + ago(m.created_at) + ' ' + tick + '</div></div>' + reactBar + '</div>');
   }
   return out.join('');
 }
@@ -2357,7 +2502,6 @@ async function loadChatView(){
 
   const chatInput = $('#chatInput');
 
-  // ==== Realtime subscription ====
   let lastMsgCount = (msgs||[]).length;
   const refreshMessages = async (wasNear) => {
     const { data } = await sb.from('messages').select('*').or('and(sender_id.eq.' + me.id + ',receiver_id.eq.' + other + '),and(sender_id.eq.' + other + ',receiver_id.eq.' + me.id + ')').order('created_at').limit(500);
@@ -2365,6 +2509,7 @@ async function loadChatView(){
     if(data.length !== lastMsgCount){
       lastMsgCount = data.length;
       body.innerHTML = renderMessages(data);
+      attachSwipeHandlers(body, other);
       if(wasNear) body.scrollTop = body.scrollHeight;
       await sb.from('messages').update({ read_at: new Date().toISOString() }).eq('receiver_id', me.id).eq('sender_id', other).is('read_at', null);
       if(!wasNear){
@@ -2374,6 +2519,7 @@ async function loadChatView(){
     }
   };
   const nearBottom = () => body.scrollHeight - body.scrollTop - body.clientHeight < 120;
+
   try{
     chatChannel = sb.channel('chat-' + me.id + '-' + other, { config: { broadcast: { self: false } } })
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: 'receiver_id=eq.' + me.id }, () => refreshMessages(nearBottom()))
@@ -2384,7 +2530,6 @@ async function loadChatView(){
       })
       .subscribe();
   }catch(_){}
-  // Fallback polling (Realtime çalışmazsa diye) - 15 sn
   chatRefreshTimer = setInterval(() => { if(tab === 'chat' && chatWith) refreshMessages(nearBottom()); }, 15000);
 
   function showTypingIndicator(){
@@ -2401,7 +2546,6 @@ async function loadChatView(){
     typingTimer = setTimeout(() => { ind && ind.remove(); }, 3000);
   }
 
-  // Typing gönder
   let typingSentAt = 0;
   chatInput.addEventListener('input', () => {
     const now = Date.now();
@@ -2435,7 +2579,6 @@ async function loadChatView(){
     chatInput.disabled = false;
     const { error } = await sb.from('messages').insert(row);
     if(error) return toast(error.message, 'err');
-    // Realtime kendisi günceller ama garanti olsun
     setTimeout(() => refreshMessages(true), 200);
   };
   $('#chatForm').onsubmit = e => { e.preventDefault(); sendMsg(); };
@@ -2506,6 +2649,76 @@ async function loadChatView(){
       };
     }
   });
+
+  // SWIPE TO REPLY
+  attachSwipeHandlers(body, other);
+}
+
+/* ============ SWIPE TO REPLY ============ */
+function attachSwipeHandlers(body, otherId){
+  const wraps = body.querySelectorAll('.msg-wrap');
+  wraps.forEach(wrap => {
+    if(wrap._swipeBound) return;
+    wrap._swipeBound = true;
+    let startX = 0, startY = 0, curX = 0, dragging = false, decided = false, horizontal = false;
+    const onStart = (e) => {
+      const t = e.touches ? e.touches[0] : e;
+      startX = t.clientX; startY = t.clientY; curX = startX;
+      dragging = true; decided = false; horizontal = false;
+      wrap.style.transition = 'none';
+    };
+    const onMove = (e) => {
+      if(!dragging) return;
+      const t = e.touches ? e.touches[0] : e;
+      const dx = t.clientX - startX;
+      const dy = t.clientY - startY;
+      if(!decided){
+        if(Math.abs(dx) > 8 || Math.abs(dy) > 8){
+          decided = true;
+          horizontal = Math.abs(dx) > Math.abs(dy);
+        } else return;
+      }
+      if(!horizontal) return;
+      const mine = wrap.dataset.mine === '1';
+      // mine → sağa doğru kaydırınca yanıtla (WhatsApp değil ama pratik)
+      // them → sola doğru kaydırınca yanıtla
+      const delta = mine ? -dx : dx;
+      if(delta > 0){
+        const off = Math.min(80, delta);
+        curX = off;
+        wrap.style.transform = 'translateX(' + (mine ? -off : off) + 'px)';
+        wrap.classList.add('swiping');
+        if(e.cancelable) e.preventDefault();
+      }
+    };
+    const onEnd = () => {
+      if(!dragging) return;
+      dragging = false;
+      wrap.style.transition = '';
+      if(curX > 55){
+        const mid = +wrap.dataset.mid;
+        const content = wrap.dataset.content || '';
+        const mine = wrap.dataset.mine === '1';
+        chatReplyTo = { id: mid, content, name: mine ? 'Kendi mesajın' : 'Karşı taraf' };
+        const rp = document.getElementById('replyPreview');
+        if(rp){
+          rp.innerHTML = '<div class="reply-preview"><div class="rp-txt"><b style="color:var(--ac)">Yanıt</b><br>' + esc(content) + '</div><button type="button">×</button></div>';
+          rp.querySelector('button').onclick = () => { chatReplyTo = null; rp.innerHTML = ''; };
+        }
+        document.getElementById('chatInput')?.focus();
+      }
+      wrap.style.transform = '';
+      wrap.classList.remove('swiping');
+      curX = 0;
+    };
+    wrap.addEventListener('touchstart', onStart, { passive: true });
+    wrap.addEventListener('touchmove', onMove, { passive: false });
+    wrap.addEventListener('touchend', onEnd);
+    wrap.addEventListener('touchcancel', onEnd);
+    wrap.addEventListener('mousedown', onStart);
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onEnd);
+  });
 }
 
 function openMsgActions(mid, preview, mine, other){
@@ -2541,6 +2754,7 @@ async function toggleReaction(mid, emoji){
   const { error } = await sb.rpc('toggle_message_reaction', { p_msg_id: mid, p_emoji: emoji });
   if(error) toast('Tepki eklenemedi: ' + error.message, 'err');
 }
+
 /* =========================================================
    ANNOUNCEMENTS + POLLS + VIEW COUNT
    ========================================================= */
@@ -2641,12 +2855,16 @@ async function loadAnn(){
         if(days > 0) poll.expires_at = new Date(Date.now() + days * 86400000).toISOString();
       }
 
-      const row = { title: $('#at').value.trim(), content: $('#ac').value.trim() };
+      const title = $('#at').value.trim();
+      const row = { title, content: $('#ac').value.trim() };
       if(image_path) row.image_path = image_path;
       if(video_path) row.video_path = video_path;
       if(poll) row.poll = poll;
-      const { error } = await sb.from('announcements').insert(row);
+      const { data: inserted, error } = await sb.from('announcements').insert(row).select().single();
       if(error){ btn.disabled = false; return toast(error.message, 'err'); }
+      // Anında bildirim gönder
+      showSystemNotification('📢 ' + title, (row.content || '').slice(0, 140), { tag: 'ann-' + (inserted?.id || Date.now()) });
+      toast('Duyuru yayınlandı 📢', 'ok');
       loadAnn();
     };
   }
@@ -2736,7 +2954,7 @@ function renderAnnForm(){
         '<label class="ann-tool-btn" title="Video ekle"><svg viewBox="0 0 24 24"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>Video<input type="file" id="avid" accept="video/*" hidden></label>' +
         '<label class="ann-tool-btn" id="apollToggleBtn" title="Anket ekle"><svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>Anket<input type="checkbox" id="apollOn" hidden></label>' +
       '</div>' +
-      '<button type="submit" class="ann-publish"><svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>Yayınla</button>' +
+      '<button type="submit" class="ann-publish"><svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>Yayınla & Bildir</button>' +
     '</div>' +
   '</form>';
 }
@@ -2772,14 +2990,14 @@ async function loadAnnComments(box, annId){
 }
 
 /* =========================================================
-   ADMIN PANEL (seg kaldırıldı — hızlı aksiyonlar dashboard'da)
+   ADMIN PANEL
    ========================================================= */
 async function loadAdmin(){
   removeFab();
-  window._rep = {}; // report cache temizle
+  window._rep = {};
   if(adminView === 'dashboard') return loadAdminDashboard();
   const backBtn = '<button class="settings-back" data-admin-back>← Panele Dön</button>';
-  const titles = { reports:'🚩 Şikayetler', banned:'🚫 Yasaklılar', users:'👥 Kullanıcılar', ads:'📢 Reklamlar', requests:'📥 Talepler' };
+  const titles = { reports:'🚩 Şikayetler', banned:'🚫 Yasaklılar & Skor', users:'👥 Kullanıcılar', ads:'📢 Reklamlar', requests:'📥 Talepler' };
   $('#view').innerHTML = backBtn + '<h2 style="margin:0 0 14px;font-size:20px">' + (titles[adminView] || 'Admin') + '</h2><div id="adminView"><div class="empty">Yükleniyor...</div></div>';
   $('#view').querySelector('[data-admin-back]').onclick = () => { adminView = 'dashboard'; loadAdmin(); };
   const fns = { reports: loadAdminReports, banned: loadAdminBanned, users: loadAdminAllUsers, ads: loadAdminAds, requests: loadAdminRequests };
@@ -2811,7 +3029,7 @@ async function loadAdminDashboard(){
     '<h3 style="margin:18px 6px 10px;font-size:14px;color:var(--mute);font-weight:700">⚡ HIZLI AKSİYONLAR</h3>' +
     '<div class="admin-nav-grid">' +
       '<button class="admin-nav-card" data-go="reports"><span class="ico">🚩</span><span class="ttl">Şikayetler</span><span class="sub">' + (pending.count||0) + ' bekleyen</span></button>' +
-      '<button class="admin-nav-card" data-go="banned"><span class="ico">🚫</span><span class="ttl">Yasaklılar</span><span class="sub">Ban ve kısıtlamalar</span></button>' +
+      '<button class="admin-nav-card" data-go="banned"><span class="ico">🚫</span><span class="ttl">Yasaklılar & Skor</span><span class="sub">Ban/kısıt geçmişi</span></button>' +
       '<button class="admin-nav-card" data-go="users"><span class="ico">👥</span><span class="ttl">Kullanıcılar</span><span class="sub">' + (totalUsers.count||0) + ' kayıtlı</span></button>' +
       '<button class="admin-nav-card" data-go="ads"><span class="ico">📢</span><span class="ttl">Reklamlar</span><span class="sub">Sponsor yönetimi</span></button>' +
       '<button class="admin-nav-card" data-go="requests"><span class="ico">📥</span><span class="ttl">Talepler</span><span class="sub">Reklam başvuruları</span></button>' +
@@ -2846,7 +3064,7 @@ async function loadAdminReports(){
   reports.forEach(r => { if(r.reporter_id) userIds.add(r.reporter_id); if(r.reported_user_id) userIds.add(r.reported_user_id); });
   let profMap = {};
   if(userIds.size){
-    const {data:ps} = await sb.from('profiles').select('id,first_name,last_name,department,is_banned,is_restricted,restrict_count').in('id', [...userIds]);
+    const {data:ps} = await sb.from('profiles').select('id,first_name,last_name,department,is_banned,is_restricted,restrict_count,ban_count').in('id', [...userIds]);
     (ps||[]).forEach(p => profMap[p.id] = p);
   }
   const postIds = reports.filter(r => r.post_id).map(r => r.post_id);
@@ -2876,7 +3094,7 @@ async function loadAdminReports(){
     if(r.reported_user_id && !kind) label = '👤 Kullanıcı';
     else if(kind) label = ({ posts:'📝 Paylaşım', confessions:'👻 İtiraf', comments:'💬 Yorum', confession_comments:'👻 İtiraf yorumu' })[kind] || 'İçerik';
     const bodyText = (r.reported_user_id && !kind)
-      ? '<b>' + esc(reported ? (reported.first_name + ' ' + reported.last_name) : 'Silinmiş') + '</b>'
+      ? '<b>' + esc(reported ? (reported.first_name + ' ' + reported.last_name) : 'Silinmiş') + '</b>' + (reported?.restrict_count ? ' · ⚠️ ' + reported.restrict_count + ' kısıt' : '') + (reported?.ban_count ? ' · 🚫 ' + reported.ban_count + ' ban' : '')
       : esc(content || '(silinmiş)');
     let actions = '<button data-x="skip" style="color:var(--mute)">🚮 Yoksay</button>';
     if(kind) actions += '<button data-x="del" style="color:var(--mute)">🗑️ İçeriği Sil</button>';
@@ -2932,6 +3150,8 @@ async function loadAdminReports(){
         const { data: prof } = await sb.from('profiles').select('restrict_count').eq('id', rep.uid).maybeSingle();
         const newCount = (prof?.restrict_count || 0) + 1;
         await sb.from('profiles').update({ is_restricted: true, restrict_count: newCount }).eq('id', rep.uid);
+        // moderation history (varsa)
+        try{ await sb.from('moderation_history').insert({ user_id: rep.uid, action: 'restrict', admin_id: me.id, reason: 'Şikayet üzerine kısıtlama' }); }catch(_){}
       }
       await sb.from('reports').delete().eq('id', rid);
       toast('Kullanıcı kısıtlandı.', 'ok');
@@ -2959,53 +3179,105 @@ async function loadAdminReports(){
   };
 }
 
+/* YASAKLILAR — artık ban_count & restrict_count skorlarıyla */
 async function loadAdminBanned(){
   const box = $('#adminView');
   let profiles = [];
-  try { const r = await sb.from('profiles').select('*').or('is_restricted.eq.true,restrict_count.gt.0,is_banned.eq.true').order('first_name'); profiles = r.data || []; } catch(e){}
+  try {
+    // Banned veya restricted olan VEYA geçmişinde skoru olanları getir
+    const r = await sb.from('profiles').select('*').or('is_restricted.eq.true,restrict_count.gt.0,is_banned.eq.true,ban_count.gt.0').order('first_name');
+    profiles = r.data || [];
+    // Fallback: ban_count alanı yoksa tümünü çek
+    if(r.error){
+      const r2 = await sb.from('profiles').select('*').or('is_restricted.eq.true,restrict_count.gt.0,is_banned.eq.true').order('first_name');
+      profiles = r2.data || [];
+    }
+  } catch(e){
+    try{ const r3 = await sb.from('profiles').select('*').or('is_restricted.eq.true,is_banned.eq.true'); profiles = r3.data || []; }catch(_){}
+  }
   let bannedEmails = [];
   try { const r = await sb.from('banned_emails').select('*').order('banned_at', { ascending: false }); bannedEmails = r.data || []; } catch(e){}
+  let moderationHistory = [];
+  try { const r = await sb.from('moderation_history').select('*').order('created_at', { ascending: false }).limit(200); moderationHistory = r.data || []; } catch(e){}
+
   const isEmailActive = b => !b.status || b.status === 'active';
+
   const rowsProfiles = (profiles||[]).map(u => {
     const isBanned = !!u.is_banned;
     const isRestricted = !!u.is_restricted;
     const rc = u.restrict_count || 0;
+    const bc = u.ban_count || 0;
+    const score = (rc * 1) + (bc * 5);
     let statusHtml;
     if(isBanned) statusHtml = '<span class="tag" style="background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger)">🚫 BANLI</span>';
     else if(isRestricted) statusHtml = '<span class="tag" style="background:color-mix(in srgb,#FF9900 14%,transparent);color:#ff9900">⚠️ KISITLI</span>';
     else statusHtml = '<span class="tag" style="background:var(--bg);color:var(--mute)">📜 GEÇMİŞ</span>';
-    const badges = rc > 0 ? '<span class="restrict-badge">⚠️ ' + rc + ' kez kısıtlandı</span>' : '';
+
     let btn = '';
     if(isBanned) btn = '<button data-uid="' + u.id + '" data-act="unban" style="color:#2ecc71">✅ Banı Kaldır</button>';
     else if(isRestricted) btn = '<button data-uid="' + u.id + '" data-act="unrestrict" style="color:#2ecc71">✅ Kısıtlamayı Kaldır</button><button data-uid="' + u.id + '" data-act="ban" style="color:var(--danger)">🚫 Banla</button>';
     else btn = '<button data-uid="' + u.id + '" data-act="ban" style="color:var(--danger)">🚫 Banla</button>';
-    return '<article class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap"><div style="flex:1;min-width:0"><b style="font-size:15px">' + esc(u.first_name) + ' ' + esc(u.last_name) + '</b><div class="dep">' + esc(u.department||'') + '</div><div style="margin-top:4px">' + badges + '</div></div>' + statusHtml + '</div><div class="acts">' + btn + '</div></article>';
+
+    const userHistory = moderationHistory.filter(h => h.user_id === u.id).slice(0, 5);
+    const historyHtml = userHistory.length ? '<details style="margin-top:8px"><summary style="cursor:pointer;font-size:12px;color:var(--mute)">📜 Geçmiş (' + userHistory.length + ')</summary><div style="margin-top:6px;display:flex;flex-direction:column;gap:4px">' + userHistory.map(h => '<div style="font-size:11.5px;color:var(--mute);padding:4px 8px;background:var(--bg);border-radius:8px">' + (h.action === 'ban' ? '🚫 Ban' : h.action === 'restrict' ? '⚠️ Kısıt' : h.action === 'unban' ? '✅ Ban kaldırıldı' : '✅ Kısıt kaldırıldı') + ' · ' + (h.reason||'') + ' · ' + ago(h.created_at) + '</div>').join('') + '</div></details>' : '';
+
+    return '<article class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap"><div style="flex:1;min-width:0"><b style="font-size:15px">' + esc(u.first_name) + ' ' + esc(u.last_name) + '</b><div class="dep">' + esc(u.department||'') + '</div><div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap"><span class="restrict-badge">⚠️ ' + rc + ' kısıtlama</span><span class="violation-badge">🚫 ' + bc + ' ban</span><span class="tag" style="background:color-mix(in srgb,var(--ac) 14%,transparent);color:var(--ac);font-weight:800">🏆 Skor: ' + score + '</span></div></div>' + statusHtml + '</div>' + historyHtml + '<div class="acts">' + btn + '</div></article>';
   }).join('');
+
   const rowsEmails = (bannedEmails||[]).map(b => {
     const active = isEmailActive(b);
     const statusHtml = active ? '<span class="tag" style="background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger)">🚫 BANLI</span>' : '<span class="tag" style="background:var(--bg);color:var(--mute)">✅ KALDIRILDI</span>';
     const btn = active ? '<button data-email="' + esc(b.email) + '" data-act="unbanEmail" style="color:#2ecc71">✅ Banı Kaldır</button>' : '';
     return '<article class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap"><div style="min-width:0;flex:1"><b style="font-size:13px;word-break:break-all">' + esc(b.email) + '</b><div class="dep">' + esc(new Date(b.banned_at).toLocaleString('tr-TR')) + ' · ' + esc(b.reason||'') + '</div></div>' + statusHtml + '</div>' + (btn ? '<div class="acts">' + btn + '</div>' : '') + '</article>';
   }).join('');
+
   const total = (profiles||[]).length + (bannedEmails||[]).length;
-  if(!total){ box.innerHTML = '<div class="empty"><span class="em-ic">✅</span><div class="em-t">Temiz</div>Banlı veya kısıtlı kullanıcı yok.</div>'; return; }
-  box.innerHTML = '<h3 style="margin:8px 6px;font-size:14px;color:var(--mute);font-weight:700">🚫 YASAKLILAR (' + total + ')</h3>' + rowsProfiles + rowsEmails;
+  const scoreInfo = '<div class="card" style="background:linear-gradient(135deg,color-mix(in srgb,#FFB020 12%,var(--card)),var(--card));border:1px dashed #FFB020"><b style="font-size:13.5px">🏆 Skor Sistemi</b><div style="font-size:12.5px;color:var(--mute);margin-top:6px;line-height:1.6">1 kısıtlama = 1 puan · 1 ban = 5 puan<br>Toplam skor: <b style="color:var(--ac)">' + (profiles||[]).reduce((acc, u) => acc + (u.restrict_count||0) + (u.ban_count||0)*5, 0) + '</b></div></div>';
+
+  if(!total){ box.innerHTML = scoreInfo + '<div class="empty"><span class="em-ic">✅</span><div class="em-t">Temiz</div>Banlı veya kısıtlı kullanıcı yok.</div>'; return; }
+  box.innerHTML = scoreInfo + '<h3 style="margin:8px 6px;font-size:14px;color:var(--mute);font-weight:700">🚫 YASAKLILAR & SKOR (' + total + ')</h3>' + rowsProfiles + rowsEmails;
+
   box.onclick = async e => {
     const b = e.target.closest('button[data-act]'); if(!b) return;
     const act = b.dataset.act;
-    if(act === 'unrestrict'){ if(!confirm('Kısıtlama kaldırılsın mı?')) return; await sb.from('profiles').update({ is_restricted: false }).eq('id', b.dataset.uid); loadAdminBanned(); return; }
-    if(act === 'unban'){ if(!confirm('Ban kaldırılsın mı?')) return; await sb.from('profiles').update({ is_banned: false, is_restricted: false }).eq('id', b.dataset.uid); loadAdminBanned(); return; }
-    if(act === 'unbanEmail'){ if(!confirm(b.dataset.email + ' ban kaldırılsın mı?')) return; try{ await sb.from('banned_emails').update({ status:'lifted', unbanned_at: new Date().toISOString() }).eq('email', b.dataset.email); }catch(_){ await sb.from('banned_emails').delete().eq('email', b.dataset.email); } loadAdminBanned(); return; }
+    if(act === 'unrestrict'){
+      if(!confirm('Kısıtlama kaldırılsın mı?')) return;
+      await sb.from('profiles').update({ is_restricted: false }).eq('id', b.dataset.uid);
+      try{ await sb.from('moderation_history').insert({ user_id: b.dataset.uid, action: 'unrestrict', admin_id: me.id }); }catch(_){}
+      loadAdminBanned();
+      return;
+    }
+    if(act === 'unban'){
+      if(!confirm('Ban kaldırılsın mı?')) return;
+      await sb.from('profiles').update({ is_banned: false, is_restricted: false }).eq('id', b.dataset.uid);
+      try{ await sb.from('moderation_history').insert({ user_id: b.dataset.uid, action: 'unban', admin_id: me.id }); }catch(_){}
+      loadAdminBanned();
+      return;
+    }
+    if(act === 'unbanEmail'){
+      if(!confirm(b.dataset.email + ' ban kaldırılsın mı?')) return;
+      try{ await sb.from('banned_emails').update({ status:'lifted', unbanned_at: new Date().toISOString() }).eq('email', b.dataset.email); }
+      catch(_){ await sb.from('banned_emails').delete().eq('email', b.dataset.email); }
+      loadAdminBanned();
+      return;
+    }
     if(act === 'ban'){
       if(!confirm('KALICI BAN? Hesabı silinir ve bir daha kayıt olamaz!')) return;
       if(!confirm('Son onay: Emin misin?')) return;
       b.disabled = true; b.textContent = 'İşleniyor...';
+      const uid = b.dataset.uid;
       try{
+        // Skoru arttır ve moderation history kaydet (profil silinebilir, önce kaydet)
+        try{
+          const { data: prof } = await sb.from('profiles').select('ban_count').eq('id', uid).maybeSingle();
+          await sb.from('profiles').update({ ban_count: (prof?.ban_count || 0) + 1 }).eq('id', uid);
+          await sb.from('moderation_history').insert({ user_id: uid, action: 'ban', admin_id: me.id, reason: 'Admin kararı' });
+        }catch(_){}
         const { data: { session } } = await sb.auth.getSession();
         const res = await fetch(SB_URL + '/functions/v1/' + EDGE_FN, {
           method: 'POST',
           headers: { 'Authorization': 'Bearer ' + session.access_token, 'apikey': SB_KEY, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ targetUserId: b.dataset.uid, ban: true, reason: 'Admin kararı' })
+          body: JSON.stringify({ targetUserId: uid, ban: true, reason: 'Admin kararı' })
         });
         const j = await res.json().catch(()=>({}));
         if(!res.ok) throw new Error(j.error || 'Ban başarısız');
@@ -3022,8 +3294,12 @@ async function loadAdminAllUsers(){
   const selStart = existingSearch ? existingSearch.selectionStart : 0;
   const q = (window._userSearch || '').toLowerCase().trim();
 
-  const { data, error } = await sb.from('profiles').select('id,first_name,last_name,department,is_banned,is_restricted,restrict_count,created_at').order('created_at', { ascending: false }).limit(1000);
-  if(error){ box.innerHTML = '<div class="empty">' + esc(error.message) + '</div>'; return; }
+  const { data, error } = await sb.from('profiles').select('id,first_name,last_name,department,is_banned,is_restricted,restrict_count,ban_count,created_at').order('created_at', { ascending: false }).limit(1000);
+  if(error){
+    const r2 = await sb.from('profiles').select('id,first_name,last_name,department,is_banned,is_restricted,restrict_count,created_at').order('created_at', { ascending: false }).limit(1000);
+    if(r2.error){ box.innerHTML = '<div class="empty">' + esc(r2.error.message) + '</div>'; return; }
+    data = r2.data;
+  }
   const filtered = q ? (data||[]).filter(u => ((u.first_name||'') + ' ' + (u.last_name||'') + ' ' + (u.department||'')).toLowerCase().includes(q)) : (data||[]);
 
   const headerHtml = '<h3 style="margin:8px 6px;font-size:14px;color:var(--mute);font-weight:700">👥 TÜM KULLANICILAR (' + (data||[]).length + ')</h3>';
@@ -3033,10 +3309,12 @@ async function loadAdminAllUsers(){
     if(u.is_banned) status = '<span class="tag" style="background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger)">🚫 BANLI</span>';
     else if(u.is_restricted) status = '<span class="tag" style="background:color-mix(in srgb,#FF9900 14%,transparent);color:#ff9900">⚠️ KISITLI</span>';
     const rc = u.restrict_count || 0;
-    const rcBadge = rc > 0 ? '<div class="restrict-badge">⚠️ ' + rc + ' kez kısıtlandı</div>' : '';
+    const bc = u.ban_count || 0;
+    const score = rc + bc*5;
+    const scoreBadge = (rc > 0 || bc > 0) ? '<span class="tag" style="margin-left:6px;background:color-mix(in srgb,var(--ac) 14%,transparent);color:var(--ac);font-weight:800">🏆 ' + score + '</span>' : '';
     return '<article class="card user-card" data-uid="' + u.id + '"><div class="user-card-row">' +
       '<div class="av" style="' + avatarStyle(u.id) + ';cursor:default">' + esc(initials(u.first_name, u.last_name).toUpperCase() || '?') + '</div>' +
-      '<div style="flex:1;min-width:0"><div style="font-weight:800;font-size:15px">' + esc(u.first_name || '') + ' ' + esc(u.last_name || '') + '</div><div class="dep">' + esc(u.department || '—') + '</div>' + rcBadge + '</div>' +
+      '<div style="flex:1;min-width:0"><div style="font-weight:800;font-size:15px">' + esc(u.first_name || '') + ' ' + esc(u.last_name || '') + scoreBadge + '</div><div class="dep">' + esc(u.department || '—') + '</div>' + ((rc>0||bc>0) ? '<div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap"><span class="restrict-badge">⚠️ ' + rc + '</span><span class="violation-badge">🚫 ' + bc + '</span></div>' : '') + '</div>' +
       '<div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">' + status + '<button class="link" data-uedit="' + u.id + '" style="font-size:12px;padding:2px 6px">✏️ Düzenle</button></div>' +
     '</div></article>';
   }).join('');
@@ -3163,4 +3441,3 @@ if ('serviceWorker' in navigator) {
 </script>
 </body>
 </html>
-
