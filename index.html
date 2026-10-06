@@ -2995,7 +2995,7 @@ async function loadAdmin(){
   window._rep = {};
   if(adminView === 'dashboard') return loadAdminDashboard();
   const backBtn = '<button class="settings-back" data-admin-back>← Panele Dön</button>';
-  const titles = { reports:'🚩 Şikayetler', banned:'🚫 Yasaklılar & Skor', users:'👥 Kullanıcılar', ads:'📢 Reklamlar', requests:'📥 Talepler' };
+  const titles = { reports:'🚩 Şikayetler', banned:'🚫 Yasaklılar', users:'👥 Kullanıcılar', ads:'📢 Reklamlar', requests:'📥 Talepler' };
   $('#view').innerHTML = backBtn + '<h2 style="margin:0 0 14px;font-size:20px">' + (titles[adminView] || 'Admin') + '</h2><div id="adminView"><div class="empty">Yükleniyor...</div></div>';
   $('#view').querySelector('[data-admin-back]').onclick = () => { adminView = 'dashboard'; loadAdmin(); };
   const fns = { reports: loadAdminReports, banned: loadAdminBanned, users: loadAdminAllUsers, ads: loadAdminAds, requests: loadAdminRequests };
@@ -3027,7 +3027,7 @@ async function loadAdminDashboard(){
     '<h3 style="margin:18px 6px 10px;font-size:14px;color:var(--mute);font-weight:700">⚡ HIZLI AKSİYONLAR</h3>' +
     '<div class="admin-nav-grid">' +
       '<button class="admin-nav-card" data-go="reports"><span class="ico">🚩</span><span class="ttl">Şikayetler</span><span class="sub">' + (pending.count||0) + ' bekleyen</span></button>' +
-      '<button class="admin-nav-card" data-go="banned"><span class="ico">🚫</span><span class="ttl">Yasaklılar & Skor</span><span class="sub">Ban/kısıt geçmişi</span></button>' +
+      '<button class="admin-nav-card" data-go="banned"><span class="ico">🚫</span><span class="ttl">Yasaklılar</span><span class="sub">Ban ve kısıtlamalar</span></button>'
       '<button class="admin-nav-card" data-go="users"><span class="ico">👥</span><span class="ttl">Kullanıcılar</span><span class="sub">' + (totalUsers.count||0) + ' kayıtlı</span></button>' +
       '<button class="admin-nav-card" data-go="ads"><span class="ico">📢</span><span class="ttl">Reklamlar</span><span class="sub">Sponsor yönetimi</span></button>' +
       '<button class="admin-nav-card" data-go="requests"><span class="ico">📥</span><span class="ttl">Talepler</span><span class="sub">Reklam başvuruları</span></button>' +
@@ -3156,16 +3156,27 @@ async function loadAdminReports(){
       loadAdminReports();
       return;
     }
-    if(x === 'ban'){
-      if(!confirm('KALICI BAN? Hesabı ve tüm verileri silinir!')) return;
+        if(x === 'ban'){
+      if(!confirm('KALICI BAN? Kullanıcı bir daha kayıt olamaz.')) return;
       if(!confirm('Son onay: Emin misin?')) return;
       const btn = b; btn.disabled = true; btn.textContent = 'İşleniyor...';
       try {
+        // Önce ban_count'u arttır, banned_emails'e ekle ve history kaydet
+        try{
+          const { data: prof } = await sb.from('profiles').select('ban_count, email').eq('id', rep.uid).maybeSingle();
+          await sb.from('profiles').update({ ban_count: (prof?.ban_count || 0) + 1, is_banned: true }).eq('id', rep.uid);
+          await sb.from('moderation_history').insert({ user_id: rep.uid, action: 'ban', admin_id: me.id, reason: 'Şikayet üzerine ban' });
+          if(prof?.email){
+            try{ await sb.from('banned_emails').insert({ email: prof.email, reason: 'Şikayet üzerine', banned_at: new Date().toISOString(), status: 'active' }); }catch(_){}
+          }
+        }catch(_){}
+
+        // Edge function ile hesap silme/ban işlemini tetikle
         const { data: { session } } = await sb.auth.getSession();
         const res = await fetch(SB_URL + '/functions/v1/' + EDGE_FN, {
           method: 'POST',
           headers: { 'Authorization': 'Bearer ' + session.access_token, 'apikey': SB_KEY, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ targetUserId: rep.uid, ban: true, reason: 'Admin kararı ile kalıcı ban' })
+          body: JSON.stringify({ targetUserId: rep.uid, ban: true, reason: 'Şikayet üzerine kalıcı ban' })
         });
         const j = await res.json().catch(()=>({}));
         if(!res.ok) throw new Error(j.error || 'Ban başarısız');
@@ -3174,29 +3185,24 @@ async function loadAdminReports(){
         loadAdminReports();
       } catch(err){ btn.disabled = false; btn.textContent = '🚫 Banla'; toast('Hata: ' + err.message, 'err'); }
     }
-  };
-}
 
-/* YASAKLILAR — artık ban_count & restrict_count skorlarıyla */
+
+/* YASAKLILAR — ban/kısıt listesi */
 async function loadAdminBanned(){
   const box = $('#adminView');
+  
   let profiles = [];
   try {
-    // Banned veya restricted olan VEYA geçmişinde skoru olanları getir
-    const r = await sb.from('profiles').select('*').or('is_restricted.eq.true,restrict_count.gt.0,is_banned.eq.true,ban_count.gt.0').order('first_name');
-    profiles = r.data || [];
-    // Fallback: ban_count alanı yoksa tümünü çek
-    if(r.error){
-      const r2 = await sb.from('profiles').select('*').or('is_restricted.eq.true,restrict_count.gt.0,is_banned.eq.true').order('first_name');
-      profiles = r2.data || [];
+    const r = await sb.from('profiles').select('*').or('is_restricted.eq.true,restrict_count.gt.0,is_banned.eq.true,ban_count.gt.0').order('created_at', { ascending: false });
+    if(!r.error){ profiles = r.data || []; }
+    else {
+      const r2 = await sb.from('profiles').select('*').order('created_at', { ascending: false }).limit(1000);
+      profiles = (r2.data || []).filter(u => u.is_banned || u.is_restricted || (u.ban_count||0) > 0 || (u.restrict_count||0) > 0);
     }
-  } catch(e){
-    try{ const r3 = await sb.from('profiles').select('*').or('is_restricted.eq.true,is_banned.eq.true'); profiles = r3.data || []; }catch(_){}
-  }
+  } catch(e){}
+  
   let bannedEmails = [];
   try { const r = await sb.from('banned_emails').select('*').order('banned_at', { ascending: false }); bannedEmails = r.data || []; } catch(e){}
-  let moderationHistory = [];
-  try { const r = await sb.from('moderation_history').select('*').order('created_at', { ascending: false }).limit(200); moderationHistory = r.data || []; } catch(e){}
 
   const isEmailActive = b => !b.status || b.status === 'active';
 
@@ -3205,72 +3211,125 @@ async function loadAdminBanned(){
     const isRestricted = !!u.is_restricted;
     const rc = u.restrict_count || 0;
     const bc = u.ban_count || 0;
-    const score = (rc * 1) + (bc * 5);
-    let statusHtml;
-    if(isBanned) statusHtml = '<span class="tag" style="background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger)">🚫 BANLI</span>';
-    else if(isRestricted) statusHtml = '<span class="tag" style="background:color-mix(in srgb,#FF9900 14%,transparent);color:#ff9900">⚠️ KISITLI</span>';
-    else statusHtml = '<span class="tag" style="background:var(--bg);color:var(--mute)">📜 GEÇMİŞ</span>';
-
-    let btn = '';
-    if(isBanned) btn = '<button data-uid="' + u.id + '" data-act="unban" style="color:#2ecc71">✅ Banı Kaldır</button>';
-    else if(isRestricted) btn = '<button data-uid="' + u.id + '" data-act="unrestrict" style="color:#2ecc71">✅ Kısıtlamayı Kaldır</button><button data-uid="' + u.id + '" data-act="ban" style="color:var(--danger)">🚫 Banla</button>';
-    else btn = '<button data-uid="' + u.id + '" data-act="ban" style="color:var(--danger)">🚫 Banla</button>';
-
-    const userHistory = moderationHistory.filter(h => h.user_id === u.id).slice(0, 5);
-    const historyHtml = userHistory.length ? '<details style="margin-top:8px"><summary style="cursor:pointer;font-size:12px;color:var(--mute)">📜 Geçmiş (' + userHistory.length + ')</summary><div style="margin-top:6px;display:flex;flex-direction:column;gap:4px">' + userHistory.map(h => '<div style="font-size:11.5px;color:var(--mute);padding:4px 8px;background:var(--bg);border-radius:8px">' + (h.action === 'ban' ? '🚫 Ban' : h.action === 'restrict' ? '⚠️ Kısıt' : h.action === 'unban' ? '✅ Ban kaldırıldı' : '✅ Kısıt kaldırıldı') + ' · ' + (h.reason||'') + ' · ' + ago(h.created_at) + '</div>').join('') + '</div></details>' : '';
-
-    return '<article class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap"><div style="flex:1;min-width:0"><b style="font-size:15px">' + esc(u.first_name) + ' ' + esc(u.last_name) + '</b><div class="dep">' + esc(u.department||'') + '</div><div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap"><span class="restrict-badge">⚠️ ' + rc + ' kısıtlama</span><span class="violation-badge">🚫 ' + bc + ' ban</span><span class="tag" style="background:color-mix(in srgb,var(--ac) 14%,transparent);color:var(--ac);font-weight:800">🏆 Skor: ' + score + '</span></div></div>' + statusHtml + '</div>' + historyHtml + '<div class="acts">' + btn + '</div></article>';
+    
+    let statusHtml = '';
+    if(isBanned) statusHtml = '<span class="tag" style="background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger);font-weight:800">🚫 BANLI</span>';
+    else if(isRestricted) statusHtml = '<span class="tag" style="background:color-mix(in srgb,#FF9900 14%,transparent);color:#ff9900;font-weight:800">⚠️ KISITLI</span>';
+    else statusHtml = '<span class="tag" style="background:color-mix(in srgb,#2ECC71 14%,transparent);color:#2ECC71;font-weight:800">✅ TEMİZ</span>';
+    
+    let btns = '';
+    if(isBanned){
+      btns = '<button data-uid="' + u.id + '" data-act="unban" style="background:#2ECC71;color:#fff;border:0;padding:9px 16px;border-radius:999px;font-weight:700;font-size:13px;cursor:pointer">✅ Affet (Banı Kaldır)</button>';
+    } else if(isRestricted){
+      btns = '<button data-uid="' + u.id + '" data-act="unrestrict" style="background:#2ECC71;color:#fff;border:0;padding:9px 16px;border-radius:999px;font-weight:700;font-size:13px;cursor:pointer">✅ Affet (Kısıtlamayı Kaldır)</button>' +
+             '<button data-uid="' + u.id + '" data-act="ban" style="background:#D42F4B;color:#fff;border:0;padding:9px 16px;border-radius:999px;font-weight:700;font-size:13px;cursor:pointer">🚫 Banla</button>';
+    } else {
+      btns = '<button data-uid="' + u.id + '" data-act="restrict" style="background:#ff9900;color:#fff;border:0;padding:9px 16px;border-radius:999px;font-weight:700;font-size:13px;cursor:pointer">⚠️ Kısıtla</button>' +
+             '<button data-uid="' + u.id + '" data-act="ban" style="background:#D42F4B;color:#fff;border:0;padding:9px 16px;border-radius:999px;font-weight:700;font-size:13px;cursor:pointer">🚫 Banla</button>';
+    }
+    
+    return '<article class="card" data-uid="' + u.id + '">' +
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap">' +
+        '<div style="flex:1;min-width:0">' +
+          '<b style="font-size:16px;display:block">' + esc(u.first_name) + ' ' + esc(u.last_name) + '</b>' +
+          '<div class="dep" style="margin-top:2px">' + esc(u.department||'—') + '</div>' +
+          '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">' +
+            '<span style="background:color-mix(in srgb,#FF9900 14%,transparent);color:#ff9900;font-size:12px;font-weight:800;padding:5px 12px;border-radius:999px">⚠️ Kısıtlanma: ' + rc + '</span>' +
+            '<span style="background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger);font-size:12px;font-weight:800;padding:5px 12px;border-radius:999px">🚫 Banlanma: ' + bc + '</span>' +
+          '</div>' +
+        '</div>' +
+        statusHtml +
+      '</div>' +
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">' + btns + '</div>' +
+    '</article>';
   }).join('');
 
   const rowsEmails = (bannedEmails||[]).map(b => {
     const active = isEmailActive(b);
-    const statusHtml = active ? '<span class="tag" style="background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger)">🚫 BANLI</span>' : '<span class="tag" style="background:var(--bg);color:var(--mute)">✅ KALDIRILDI</span>';
-    const btn = active ? '<button data-email="' + esc(b.email) + '" data-act="unbanEmail" style="color:#2ecc71">✅ Banı Kaldır</button>' : '';
-    return '<article class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap"><div style="min-width:0;flex:1"><b style="font-size:13px;word-break:break-all">' + esc(b.email) + '</b><div class="dep">' + esc(new Date(b.banned_at).toLocaleString('tr-TR')) + ' · ' + esc(b.reason||'') + '</div></div>' + statusHtml + '</div>' + (btn ? '<div class="acts">' + btn + '</div>' : '') + '</article>';
+    const statusHtml = active ? '<span class="tag" style="background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger);font-weight:800">🚫 BANLI MAIL</span>' : '<span class="tag" style="background:var(--bg);color:var(--mute)">✅ KALDIRILDI</span>';
+    const btn = active ? '<button data-email="' + esc(b.email) + '" data-act="unbanEmail" style="background:#2ECC71;color:#fff;border:0;padding:8px 14px;border-radius:999px;font-weight:700;font-size:12.5px;cursor:pointer">✅ Mail Banını Kaldır</button>' : '';
+    return '<article class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap"><div style="min-width:0;flex:1"><b style="font-size:13px;word-break:break-all">' + esc(b.email) + '</b><div class="dep" style="margin-top:4px">' + esc(new Date(b.banned_at).toLocaleString('tr-TR')) + ' · ' + esc(b.reason||'') + '</div></div>' + statusHtml + '</div>' + (btn ? '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">' + btn + '</div>' : '') + '</article>';
   }).join('');
 
   const total = (profiles||[]).length + (bannedEmails||[]).length;
-  const scoreInfo = '<div class="card" style="background:linear-gradient(135deg,color-mix(in srgb,#FFB020 12%,var(--card)),var(--card));border:1px dashed #FFB020"><b style="font-size:13.5px">🏆 Skor Sistemi</b><div style="font-size:12.5px;color:var(--mute);margin-top:6px;line-height:1.6">1 kısıtlama = 1 puan · 1 ban = 5 puan<br>Toplam skor: <b style="color:var(--ac)">' + (profiles||[]).reduce((acc, u) => acc + (u.restrict_count||0) + (u.ban_count||0)*5, 0) + '</b></div></div>';
-
-  if(!total){ box.innerHTML = scoreInfo + '<div class="empty"><span class="em-ic">✅</span><div class="em-t">Temiz</div>Banlı veya kısıtlı kullanıcı yok.</div>'; return; }
-  box.innerHTML = scoreInfo + '<h3 style="margin:8px 6px;font-size:14px;color:var(--mute);font-weight:700">🚫 YASAKLILAR & SKOR (' + total + ')</h3>' + rowsProfiles + rowsEmails;
+  if(!total){ 
+    box.innerHTML = '<div class="empty"><span class="em-ic">✅</span><div class="em-t">Temiz</div>Henüz yasaklı veya kısıtlı kullanıcı yok.</div>'; 
+    return; 
+  }
+  
+  box.innerHTML = 
+    '<div class="card" style="background:linear-gradient(135deg,color-mix(in srgb,#FFB020 10%,var(--card)),var(--card));border:1px dashed #FFB020;margin-bottom:14px">' +
+      '<b style="font-size:14px">📋 Yasaklılar Listesi</b>' +
+      '<div style="font-size:12.5px;color:var(--mute);margin-top:6px;line-height:1.6">Affedilen kullanıcılar bile burada kalır — geçmiş silinmez.</div>' +
+    '</div>' +
+    '<h3 style="margin:8px 6px;font-size:14px;color:var(--mute);font-weight:700">🚫 YASAKLILAR (' + total + ')</h3>' + 
+    rowsProfiles + rowsEmails;
 
   box.onclick = async e => {
     const b = e.target.closest('button[data-act]'); if(!b) return;
     const act = b.dataset.act;
+    const uid = b.dataset.uid;
+    
     if(act === 'unrestrict'){
-      if(!confirm('Kısıtlama kaldırılsın mı?')) return;
-      await sb.from('profiles').update({ is_restricted: false }).eq('id', b.dataset.uid);
-      try{ await sb.from('moderation_history').insert({ user_id: b.dataset.uid, action: 'unrestrict', admin_id: me.id }); }catch(_){}
+      if(!confirm('Kısıtlama kaldırılsın mı? Kullanıcı tekrar içerik paylaşabilir.')) return;
+      b.disabled = true; b.textContent = 'İşleniyor...';
+      const { error } = await sb.from('profiles').update({ is_restricted: false }).eq('id', uid);
+      if(error){ toast('Hata: ' + error.message, 'err'); b.disabled = false; return; }
+      try{ await sb.from('moderation_history').insert({ user_id: uid, action: 'unrestrict', admin_id: me.id }); }catch(_){}
+      toast('Kısıtlama kaldırıldı. Geçmiş korundu.', 'ok');
       loadAdminBanned();
       return;
     }
+    
     if(act === 'unban'){
-      if(!confirm('Ban kaldırılsın mı?')) return;
-      await sb.from('profiles').update({ is_banned: false, is_restricted: false }).eq('id', b.dataset.uid);
-      try{ await sb.from('moderation_history').insert({ user_id: b.dataset.uid, action: 'unban', admin_id: me.id }); }catch(_){}
+      if(!confirm('Ban kaldırılsın mı? Kullanıcı tekrar giriş yapabilir.')) return;
+      b.disabled = true; b.textContent = 'İşleniyor...';
+      const { error } = await sb.from('profiles').update({ is_banned: false, is_restricted: false }).eq('id', uid);
+      if(error){ toast('Hata: ' + error.message, 'err'); b.disabled = false; return; }
+      try{ await sb.from('moderation_history').insert({ user_id: uid, action: 'unban', admin_id: me.id }); }catch(_){}
+      toast('Ban kaldırıldı. Geçmiş korundu.', 'ok');
       loadAdminBanned();
       return;
     }
+    
+    if(act === 'restrict'){
+      if(!confirm('Kullanıcı kısıtlansın mı? İçerik paylaşamaz ama giriş yapabilir.')) return;
+      b.disabled = true; b.textContent = 'İşleniyor...';
+      const { data: prof } = await sb.from('profiles').select('restrict_count').eq('id', uid).maybeSingle();
+      const newCount = (prof?.restrict_count || 0) + 1;
+      const { error } = await sb.from('profiles').update({ is_restricted: true, restrict_count: newCount }).eq('id', uid);
+      if(error){ toast('Hata: ' + error.message, 'err'); b.disabled = false; return; }
+      try{ await sb.from('moderation_history').insert({ user_id: uid, action: 'restrict', admin_id: me.id, reason: 'Admin kararı' }); }catch(_){}
+      toast('Kullanıcı kısıtlandı.', 'ok');
+      loadAdminBanned();
+      return;
+    }
+    
     if(act === 'unbanEmail'){
-      if(!confirm(b.dataset.email + ' ban kaldırılsın mı?')) return;
+      if(!confirm(b.dataset.email + ' mailinin banı kaldırılsın mı?')) return;
       try{ await sb.from('banned_emails').update({ status:'lifted', unbanned_at: new Date().toISOString() }).eq('email', b.dataset.email); }
       catch(_){ await sb.from('banned_emails').delete().eq('email', b.dataset.email); }
+      toast('Mail banı kaldırıldı.', 'ok');
       loadAdminBanned();
       return;
     }
+    
     if(act === 'ban'){
-      if(!confirm('KALICI BAN? Hesabı silinir ve bir daha kayıt olamaz!')) return;
+      if(!confirm('KALICI BAN? Kullanıcı bir daha kayıt olamaz.')) return;
       if(!confirm('Son onay: Emin misin?')) return;
       b.disabled = true; b.textContent = 'İşleniyor...';
-      const uid = b.dataset.uid;
       try{
-        // Skoru arttır ve moderation history kaydet (profil silinebilir, önce kaydet)
+        let userEmail = null;
         try{
-          const { data: prof } = await sb.from('profiles').select('ban_count').eq('id', uid).maybeSingle();
+          const { data: prof } = await sb.from('profiles').select('ban_count, email').eq('id', uid).maybeSingle();
+          userEmail = prof?.email;
           await sb.from('profiles').update({ ban_count: (prof?.ban_count || 0) + 1 }).eq('id', uid);
           await sb.from('moderation_history').insert({ user_id: uid, action: 'ban', admin_id: me.id, reason: 'Admin kararı' });
+          if(userEmail){
+            try{ await sb.from('banned_emails').insert({ email: userEmail, reason: 'Admin kararı', banned_at: new Date().toISOString(), status: 'active' }); }catch(_){}
+          }
         }catch(_){}
+        
         const { data: { session } } = await sb.auth.getSession();
         const res = await fetch(SB_URL + '/functions/v1/' + EDGE_FN, {
           method: 'POST',
@@ -3279,8 +3338,13 @@ async function loadAdminBanned(){
         });
         const j = await res.json().catch(()=>({}));
         if(!res.ok) throw new Error(j.error || 'Ban başarısız');
+        toast('Kullanıcı banlandı.', 'ok');
         loadAdminBanned();
-      } catch(err){ b.disabled = false; b.textContent = '🚫 Banla'; toast('Hata: ' + err.message, 'err'); }
+      } catch(err){ 
+        b.disabled = false; 
+        b.textContent = '🚫 Banla'; 
+        toast('Hata: ' + err.message, 'err'); 
+      }
     }
   };
 }
@@ -3308,12 +3372,10 @@ async function loadAdminAllUsers(){
     else if(u.is_restricted) status = '<span class="tag" style="background:color-mix(in srgb,#FF9900 14%,transparent);color:#ff9900">⚠️ KISITLI</span>';
     const rc = u.restrict_count || 0;
     const bc = u.ban_count || 0;
-    const score = rc + bc*5;
-    const scoreBadge = (rc > 0 || bc > 0) ? '<span class="tag" style="margin-left:6px;background:color-mix(in srgb,var(--ac) 14%,transparent);color:var(--ac);font-weight:800">🏆 ' + score + '</span>' : '';
+    const countBadge = (rc > 0 || bc > 0) ? '<span style="margin-left:6px;font-size:11px"><span style="background:color-mix(in srgb,#FF9900 14%,transparent);color:#ff9900;font-weight:800;padding:2px 7px;border-radius:999px">⚠️ ' + rc + '</span> <span style="background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger);font-weight:800;padding:2px 7px;border-radius:999px">🚫 ' + bc + '</span></span>' : '';
     return '<article class="card user-card" data-uid="' + u.id + '"><div class="user-card-row">' +
       '<div class="av" style="' + avatarStyle(u.id) + ';cursor:default">' + esc(initials(u.first_name, u.last_name).toUpperCase() || '?') + '</div>' +
-      '<div style="flex:1;min-width:0"><div style="font-weight:800;font-size:15px">' + esc(u.first_name || '') + ' ' + esc(u.last_name || '') + scoreBadge + '</div><div class="dep">' + esc(u.department || '—') + '</div>' + ((rc>0||bc>0) ? '<div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap"><span class="restrict-badge">⚠️ ' + rc + '</span><span class="violation-badge">🚫 ' + bc + '</span></div>' : '') + '</div>' +
-      '<div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">' + status + '<button class="link" data-uedit="' + u.id + '" style="font-size:12px;padding:2px 6px">✏️ Düzenle</button></div>' +
+      '<div style="flex:1;min-width:0"><div style="font-weight:800;font-size:15px">' + esc(u.first_name || '') + ' ' + esc(u.last_name || '') + countBadge + '</div><div class="dep">' + esc(u.department || '—') + '</div>' + ((rc>0||bc>0) ? '<div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap"><span class="restrict-badge">⚠️ ' + rc + '</span><span class="violation-badge">🚫 ' + bc + '</span></div>' : '') + '</div>' +      '<div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">' + status + '<button class="link" data-uedit="' + u.id + '" style="font-size:12px;padding:2px 6px">✏️ Düzenle</button></div>' +
     '</div></article>';
   }).join('');
 
