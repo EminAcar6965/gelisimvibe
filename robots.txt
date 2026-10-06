@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://gelisimvibe.com/sitemap.xml
+Sitemap: https://www.gelisimvibe.com.tr/sitemap.xml
