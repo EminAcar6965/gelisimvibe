@@ -1452,11 +1452,21 @@ window.addEventListener('load', async () => {
 
 async function boot(session){
   if(!session){ me = null; _bootedUserId = null; $('#app').classList.add('hide'); $('#auth').classList.remove('hide'); return; }
+  if(_bootedUserId === session.user.id && me) return;
+
   // PWA shortcut: ?tab=chat gibi parametreyle gelindiyse o sekmeye git
   const urlTab = new URLSearchParams(location.search).get('tab');
   if(urlTab && ['feed','chat','conf','library','ann','settings'].includes(urlTab)){
     try { sessionStorage.setItem('gv_tab', urlTab); } catch(_){}
     tab = urlTab;
+  }
+
+  let data = null, err = null;
+  for(let i = 0; i < 3; i++){
+    const r = await sb.from('profiles').select('*').eq('id', session.user.id).maybeSingle();
+    if(r.data){ data = r.data; break; }
+    err = r.error;
+    await new Promise(res => setTimeout(res, 400));
   }
   if(!data){
     say('Profil yüklenemedi. Lütfen sayfayı yenile.', 1);
