@@ -480,21 +480,68 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2a2010,#3a2d15)}
 @keyframes typing{0%,60%,100%{opacity:.35;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
 
 /* ============ AD CARDS (Sponsor + AdSense) ============ */
+/* ============ AD CARDS — GLOW EDITION ============ */
 .ad-card{
   position:relative;overflow:hidden;
-  background:linear-gradient(135deg,color-mix(in srgb,#FFB020 7%,var(--card)),var(--card) 55%);
-  border:1px solid color-mix(in srgb,#FFB020 32%,var(--line));
+  background:
+    radial-gradient(circle at 20% 0%,color-mix(in srgb,#FFB020 14%,transparent),transparent 55%),
+    radial-gradient(circle at 100% 100%,color-mix(in srgb,#FF6B9D 10%,transparent),transparent 50%),
+    linear-gradient(135deg,color-mix(in srgb,#FFB020 6%,var(--card)),var(--card) 60%);
+  border:1px solid color-mix(in srgb,#FFB020 40%,var(--line));
   border-radius:18px;padding:14px 15px;margin-bottom:10px;
-  box-shadow:var(--sh);
-  animation:up .3s cubic-bezier(.16,1,.3,1) both;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb,#FFB020 12%,transparent),
+    0 8px 28px color-mix(in srgb,#FFB020 22%,transparent),
+    0 2px 8px rgba(0,0,0,.04);
+  animation:up .3s cubic-bezier(.16,1,.3,1) both, adPulse 4s ease-in-out infinite;
+  isolation:isolate;
 }
+@keyframes adPulse{
+  0%,100%{
+    box-shadow:
+      0 0 0 1px color-mix(in srgb,#FFB020 12%,transparent),
+      0 8px 28px color-mix(in srgb,#FFB020 22%,transparent),
+      0 2px 8px rgba(0,0,0,.04);
+  }
+  50%{
+    box-shadow:
+      0 0 0 1px color-mix(in srgb,#FFB020 22%,transparent),
+      0 12px 36px color-mix(in srgb,#FFB020 38%,transparent),
+      0 2px 8px rgba(0,0,0,.05);
+  }
+}
+/* Kayan shine (parıltı) */
 .ad-card::before{
-  content:"";position:absolute;top:0;left:0;right:0;height:3px;
-  background:linear-gradient(90deg,#FFB020,#FF6B9D,#FFB020);
-  background-size:200% 100%;
-  animation:adShine 4s linear infinite;
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(115deg,
+    transparent 30%,
+    color-mix(in srgb,#fff 55%,transparent) 47%,
+    color-mix(in srgb,#FFE9A8 70%,transparent) 50%,
+    color-mix(in srgb,#fff 55%,transparent) 53%,
+    transparent 70%);
+  background-size:280% 280%;
+  animation:adSweep 3.8s cubic-bezier(.4,0,.6,1) infinite;
+  pointer-events:none;
+  z-index:0;
+  mix-blend-mode:overlay;
 }
-@keyframes adShine{0%{background-position:0% 0}100%{background-position:200% 0}}
+@keyframes adSweep{
+  0%{background-position:180% 0}
+  60%{background-position:-80% 0}
+  100%{background-position:-80% 0}
+}
+/* Üstteki çizgi */
+.ad-card::after{
+  content:"";position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,#FFB020,#FF6B9D,#B064E0,#FFB020);
+  background-size:300% 100%;
+  animation:adShine 5s linear infinite;
+  z-index:1;
+  border-radius:18px 18px 0 0;
+}
+@keyframes adShine{0%{background-position:0% 0}100%{background-position:300% 0}}
+/* Kart içeriği shine'ın üstünde kalsın */
+.ad-card > *{position:relative;z-index:2}
 .ad-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
 .ad-tag{
   display:inline-flex;align-items:center;gap:4px;
@@ -502,38 +549,95 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2a2010,#3a2d15)}
   font-size:10.5px;font-weight:800;letter-spacing:.7px;
   padding:4px 10px;border-radius:999px;
   text-shadow:0 1px 2px rgba(0,0,0,.2);
-  box-shadow:0 2px 6px rgba(255,176,32,.35);
+  box-shadow:0 2px 10px rgba(255,176,32,.55);
+  animation:tagPulse 2.5s ease-in-out infinite;
+}
+@keyframes tagPulse{
+  0%,100%{box-shadow:0 2px 10px rgba(255,176,32,.55);transform:scale(1)}
+  50%{box-shadow:0 4px 16px rgba(255,176,32,.85);transform:scale(1.02)}
 }
 .ad-title{font-size:16px;font-weight:800;line-height:1.3;margin:2px 0 4px;color:var(--ink)}
 .ad-body{font-size:13.5px;color:var(--mute);line-height:1.55;margin-bottom:10px}
 .ad-img{
-  width:100%;max-height:260px;object-fit:cover;border-radius:14px;
-  display:block;margin:10px 0 8px;background:var(--bg);
-  border:1px solid var(--line);
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  border-radius:14px;
+  display:block;
+  margin:10px 0 8px;
+  background:var(--bg);
+  border:1px solid color-mix(in srgb,#FFB020 25%,var(--line));
+  box-shadow:0 4px 16px color-mix(in srgb,#FFB020 18%,transparent);
 }
 .ad-cta{
   display:inline-flex;align-items:center;gap:6px;
   background:linear-gradient(135deg,#FFB020,#FF8A00);color:#fff;
   font-weight:800;font-size:13.5px;padding:9px 18px;border-radius:999px;
   text-decoration:none;margin-top:4px;
-  box-shadow:0 4px 14px rgba(255,176,32,.4);
+  box-shadow:0 4px 14px rgba(255,176,32,.5);
   transition:transform .15s ease,box-shadow .15s ease;
 }
-.ad-cta:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,176,32,.5)}
+.ad-cta:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(255,176,32,.7)}
 .ad-cta:active{transform:scale(.97)}
+
+/* AdSense — mavi ışıltı */
 .adsense-card{
   position:relative;overflow:hidden;
-  background:linear-gradient(180deg,color-mix(in srgb,var(--g) 4%,var(--card)),var(--card));
-  border:1px solid color-mix(in srgb,var(--g) 25%,var(--line));
-  border-radius:18px;padding:14px;margin-bottom:10px;box-shadow:var(--sh);
+  background:
+    radial-gradient(circle at 15% 0%,color-mix(in srgb,var(--g) 12%,transparent),transparent 55%),
+    linear-gradient(180deg,color-mix(in srgb,var(--g) 5%,var(--card)),var(--card));
+  border:1px solid color-mix(in srgb,var(--g) 35%,var(--line));
+  border-radius:18px;padding:14px;margin-bottom:10px;
+  box-shadow:0 8px 26px color-mix(in srgb,var(--g) 18%,transparent);
+  animation:adsensePulse 4s ease-in-out infinite;
+  isolation:isolate;
+}
+@keyframes adsensePulse{
+  0%,100%{box-shadow:0 8px 26px color-mix(in srgb,var(--g) 18%,transparent)}
+  50%{box-shadow:0 12px 34px color-mix(in srgb,var(--g) 32%,transparent)}
 }
 .adsense-card::before{
-  content:"";position:absolute;top:0;left:0;right:0;height:3px;
-  background:linear-gradient(90deg,#4285F4,#EA4335,#FBBC05,#34A853);
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(115deg,
+    transparent 30%,
+    color-mix(in srgb,#fff 40%,transparent) 47%,
+    color-mix(in srgb,#A8CBFF 60%,transparent) 50%,
+    color-mix(in srgb,#fff 40%,transparent) 53%,
+    transparent 70%);
+  background-size:280% 280%;
+  animation:adSweep 4.5s cubic-bezier(.4,0,.6,1) infinite;
+  pointer-events:none;
+  z-index:0;
+  mix-blend-mode:overlay;
 }
+.adsense-card::after{
+  content:"";position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,#4285F4,#EA4335,#FBBC05,#34A853,#4285F4);
+  background-size:300% 100%;
+  animation:adShine 5s linear infinite;
+  z-index:1;
+  border-radius:18px 18px 0 0;
+}
+.adsense-card > *{position:relative;z-index:2}
+
+/* Dark mode */
 body.night .ad-card{
-  background:linear-gradient(135deg,color-mix(in srgb,#FFB020 10%,var(--card)),var(--card) 60%);
-  border-color:color-mix(in srgb,#FFB020 38%,var(--line));
+  background:
+    radial-gradient(circle at 20% 0%,color-mix(in srgb,#FFB020 18%,transparent),transparent 55%),
+    radial-gradient(circle at 100% 100%,color-mix(in srgb,#FF6B9D 14%,transparent),transparent 50%),
+    linear-gradient(135deg,color-mix(in srgb,#FFB020 10%,var(--card)),var(--card) 60%);
+  border-color:color-mix(in srgb,#FFB020 45%,var(--line));
+  box-shadow:
+    0 0 0 1px color-mix(in srgb,#FFB020 20%,transparent),
+    0 8px 30px color-mix(in srgb,#FFB020 30%,transparent);
+}
+body.night .ad-card::before{mix-blend-mode:screen;opacity:.55}
+body.night .adsense-card::before{mix-blend-mode:screen;opacity:.45}
+body.night .ad-img{border-color:color-mix(in srgb,#FFB020 35%,var(--line))}
+
+/* Erişilebilirlik */
+@media (prefers-reduced-motion: reduce){
+  .ad-card,.ad-card::before,.ad-card::after,.ad-tag,.adsense-card,.adsense-card::before,.adsense-card::after{animation:none!important}
 }
 
 /* ============ ADVERTISE CTA ============ */
@@ -1072,18 +1176,36 @@ function openLegalDoc(kind){
 }
 
 /* ============== IMAGE UPLOAD ============== */
-function loadViaImg(file){
-  return new Promise((res,rej)=>{
-    const img = new Image();
-    const u = URL.createObjectURL(file);
-    img.onload = () => res({width: img.naturalWidth, height: img.naturalHeight, draw:(c,w,h)=>c.drawImage(img,0,0,w,h)});
-    img.onerror = () => { URL.revokeObjectURL(u); rej(new Error('Resim okunamadı')); };
-    img.src = u;
-  });
-}
-async function loadBitmapInfo(file){
-  if(window.createImageBitmap){ try{ const b = await createImageBitmap(file); return {width:b.width,height:b.height,draw:(c,w,h)=>c.drawImage(b,0,0,w,h)}; }catch(e){} }
-  return loadViaImg(file);
+async function uploadImg(file, bucket, onProgress, square){
+  bucket = bucket || 'images';
+  if(!file.type.startsWith('image/')) throw new Error('Sadece fotoğraf.');
+  if(file.size > 50e6) throw new Error('Fotoğraf max 50 MB.');
+  let blob = file, ext = (file.name.split('.').pop() || 'jpg').toLowerCase(), ct = file.type || 'image/jpeg';
+  try{
+    const info = await loadBitmapInfo(file);
+    const c = document.createElement('canvas');
+    const x = c.getContext('2d');
+    if(square){
+      const side = Math.min(info.width, info.height);
+      const size = Math.min(1200, side);
+      c.width = size; c.height = size;
+      const sx = (info.width - side) / 2;
+      const sy = (info.height - side) / 2;
+      x.fillStyle = '#fff'; x.fillRect(0, 0, size, size);
+      if(info.drawCrop) info.drawCrop(x, 0, 0, size, size, sx, sy, side, side);
+      else info.draw(x, size, size);
+    } else {
+      const k = Math.min(1, 1600 / Math.max(info.width, info.height));
+      c.width = Math.max(1, Math.round(info.width * k));
+      c.height = Math.max(1, Math.round(info.height * k));
+      x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height);
+      info.draw(x, c.width, c.height);
+    }
+    const j = await new Promise((r,jj)=>c.toBlob(b=>b?r(b):jj(new Error('Canvas')), 'image/jpeg', 0.85));
+    if(j){ blob = j; ext = 'jpg'; ct = 'image/jpeg'; }
+  }catch(e){}
+  const path = uid() + '.' + ext;
+  return xhrUpload(bucket, path, blob, ct, onProgress);
 }
 async function getToken(){
   const { data: { session } } = await sb.auth.getSession();
@@ -2191,7 +2313,7 @@ function openBookForm(){
     const btn = $('#bf .btn'); btn.disabled = true;
     let image_path = null;
     const f = $('#bimg').files[0];
-    if(f){ try{ image_path = await uploadImg(f, 'books'); }catch(err){ btn.disabled = false; return toast('Fotoğraf: ' + err.message, 'err'); } }
+    if(f){ try{ image_path = await uploadImg(f, 'ads', null, true); }catch(err){ btn.disabled = false; return toast('Görsel: ' + err.message, 'err'); } } 
     const priceVal = $('#bp').value.trim();
     const priceNum = priceVal === '' ? null : Number(priceVal);
     const { error } = await sb.from('books').insert({ user_id: me.id, title: $('#bt').value.trim(), author: $('#ba').value.trim() || null, description: $('#bd').value.trim() || null, price: (priceNum != null && priceNum > 0) ? priceNum : null, image_path });
@@ -3605,14 +3727,14 @@ async function loadAdminAds(){
   const { data: ads, error } = await sb.from('ads').select('*').order('created_at',{ascending:false}).limit(50);
   if(error){ box.innerHTML = '<div class="empty">' + esc(error.message) + '</div>'; return; }
   const adsenseInfo = '<div class="card" style="border-left:4px solid ' + (ADSENSE_ENABLED ? 'var(--g)' : 'var(--mute)') + '"><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="ad-tag" style="background:var(--g);color:#fff">🔷 GOOGLE ADSENSE</span></div><div style="font-size:13px;color:var(--mute);line-height:1.5">' + (ADSENSE_ENABLED ? '✅ Aktif — Her ' + ADSENSE_EVERY + ' postta bir reklam.' : '✅ Client ID bağlı. Reklam birimi oluşturup ADSENSE_SLOT güncelle.') + '</div></div>';
-  const form = '<form class="card composer" id="adf"><h3 style="margin:0 0 8px;font-size:15px;font-weight:800">📢 Yeni Sponsor Reklamı</h3><input id="adt" maxlength="100" placeholder="Reklam başlığı" required><textarea id="adb" maxlength="600" placeholder="Açıklama"></textarea><input id="adl" type="url" maxlength="500" placeholder="Link (https://...)"><div id="adimgpv" class="pv hide"></div><label style="display:flex;align-items:center;gap:8px;padding:10px;border:1px solid var(--line);border-radius:10px;color:var(--ac);font-weight:600;cursor:pointer">📷 Görsel<input type="file" id="adimg" accept="image/*" hidden></label><button class="btn">Yayınla</button></form>';
+  const form = '<form class="card composer" id="adf"><h3 style="margin:0 0 8px;font-size:15px;font-weight:800">📢 Yeni Sponsor Reklamı</h3><input id="adt" maxlength="100" placeholder="Reklam başlığı" required><textarea id="adb" maxlength="600" placeholder="Açıklama"></textarea><input id="adl" type="url" maxlength="500" placeholder="Link (https://...)"><div style="font-size:11.5px;color:var(--mute);background:color-mix(in srgb,#FFB020 12%,transparent);border:1px dashed color-mix(in srgb,#FFB020 40%,transparent);border-radius:8px;padding:8px 10px;margin:4px 0">📐 Görsel otomatik olarak <b>1:1 (kare)</b> kırpılır. Merkez odaklı bir görsel seç.</div><div id="adimgpv" class="pv hide"></div><label style="display:flex;align-items:center;gap:8px;padding:10px;border:1px solid var(--line);border-radius:10px;color:var(--ac);font-weight:600;cursor:pointer">📷 Görsel<input type="file" id="adimg" accept="image/*" hidden></label><button class="btn">Yayınla</button></form>';
   const list = (ads||[]).map(a => {
-    const img = a.image_path ? '<img src="' + adImgUrl(a.image_path) + '" style="width:100%;max-height:180px;object-fit:cover;border-radius:10px;margin-bottom:6px">' : '';
+    const img = a.image_path ? '<img src="' + adImgUrl(a.image_path) + '" style="width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:10px;margin-bottom:6px">' : '';
     const status = a.active ? '<span style="color:#2ecc71;font-weight:700">● Aktif</span>' : '<span style="color:var(--mute)">● Pasif</span>';
     return '<article class="card" data-adid="' + a.id + '" data-active="' + (a.active ? '1' : '0') + '" style="' + (a.active ? '' : 'opacity:.55') + '"><div style="display:flex;justify-content:space-between;align-items:center"><span class="ad-tag">📢 SPONSOR</span>' + status + '</div>' + img + '<div class="body" style="font-weight:800;font-size:15px;margin:6px 0 2px">' + esc(a.title) + '</div>' + (a.body ? '<div class="dep">' + esc(a.body) + '</div>' : '') + '<div class="acts"><button data-adact="toggle">' + (a.active ? 'Pasif yap' : 'Aktif yap') + '</button><button data-adact="del" style="color:var(--danger)">Sil</button></div></article>';
   }).join('') || '<div class="empty">Henüz sponsor reklamı yok.</div>';
   box.innerHTML = adsenseInfo + form + '<h3 style="margin:16px 6px 8px;font-size:14px;color:var(--mute);font-weight:700">SPONSOR REKLAMLARIN</h3>' + list;
-  $('#adimg').onchange = () => { const f = $('#adimg').files[0], pv = $('#adimgpv'); if(!f){ pv.classList.add('hide'); return; } pv.innerHTML = '<img src="' + URL.createObjectURL(f) + '" alt=""><button type="button" aria-label="Kaldır">×</button>'; pv.classList.remove('hide'); pv.querySelector('button').onclick = () => { $('#adimg').value = ''; pv.classList.add('hide'); }; };
+  $('#adimg').onchange = () => { const f = $('#adimg').files[0], pv = $('#adimgpv'); if(!f){ pv.classList.add('hide'); return; } pv.innerHTML = '<img src="' + URL.createObjectURL(f) + '" alt="" style="aspect-ratio:1/1;object-fit:cover;width:100%;max-height:none"><button type="button" aria-label="Kaldır">×</button>'; pv.classList.remove('hide'); pv.querySelector('button').onclick = () => { $('#adimg').value = ''; pv.classList.add('hide'); }; };
   $('#adf').onsubmit = async e => {
     e.preventDefault();
     const btn = $('#adf .btn'); btn.disabled = true;
