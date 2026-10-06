@@ -3156,12 +3156,11 @@ async function loadAdminReports(){
       loadAdminReports();
       return;
     }
-        if(x === 'ban'){
+            if(x === 'ban'){
       if(!confirm('KALICI BAN? Kullanıcı bir daha kayıt olamaz.')) return;
       if(!confirm('Son onay: Emin misin?')) return;
       const btn = b; btn.disabled = true; btn.textContent = 'İşleniyor...';
       try {
-        // Önce ban_count'u arttır, banned_emails'e ekle ve history kaydet
         try{
           const { data: prof } = await sb.from('profiles').select('ban_count, email').eq('id', rep.uid).maybeSingle();
           await sb.from('profiles').update({ ban_count: (prof?.ban_count || 0) + 1, is_banned: true }).eq('id', rep.uid);
@@ -3170,8 +3169,6 @@ async function loadAdminReports(){
             try{ await sb.from('banned_emails').insert({ email: prof.email, reason: 'Şikayet üzerine', banned_at: new Date().toISOString(), status: 'active' }); }catch(_){}
           }
         }catch(_){}
-
-        // Edge function ile hesap silme/ban işlemini tetikle
         const { data: { session } } = await sb.auth.getSession();
         const res = await fetch(SB_URL + '/functions/v1/' + EDGE_FN, {
           method: 'POST',
@@ -3185,7 +3182,6 @@ async function loadAdminReports(){
         loadAdminReports();
       } catch(err){ btn.disabled = false; btn.textContent = '🚫 Banla'; toast('Hata: ' + err.message, 'err'); }
     }
- }
 
 /* YASAKLILAR — ban/kısıt listesi */
 async function loadAdminBanned(){
