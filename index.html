@@ -124,38 +124,10 @@ body.night[data-sec="conf"]{
   --bg:#0A0510;--card:#150A20;--ink:#F0E5FF;--mute:#A890C0;--line:#2A1540;
   --ac:#C080FF;--acink:#1A0A2A;--ac2:#D8A0FF;--danger:#FF7B8E;
 }
-/* Confession sparkle overlay */
-body[data-sec="conf"] #view::before{
-  content:"";
-  position:fixed;inset:0;
-  background-image:
-    radial-gradient(1.5px 1.5px at 12% 18%, rgba(200,138,240,.85), transparent 60%),
-    radial-gradient(1px 1px at 78% 32%, rgba(176,100,224,.75), transparent 60%),
-    radial-gradient(2px 2px at 45% 62%, rgba(216,160,255,.7), transparent 60%),
-    radial-gradient(1px 1px at 88% 78%, rgba(200,138,240,.6), transparent 60%),
-    radial-gradient(1.5px 1.5px at 22% 88%, rgba(216,160,255,.65), transparent 60%),
-    radial-gradient(1px 1px at 62% 12%, rgba(176,100,224,.7), transparent 60%),
-    radial-gradient(1.2px 1.2px at 34% 42%, rgba(200,138,240,.5), transparent 60%),
-    radial-gradient(1px 1px at 92% 52%, rgba(216,160,255,.55), transparent 60%);
-  pointer-events:none;z-index:1;
-  animation:sparkleTwinkle 4.5s ease-in-out infinite alternate;
-}
-@keyframes sparkleTwinkle{
-  0%{opacity:.45;transform:scale(1)}
-  50%{opacity:.85;transform:scale(1.02)}
-  100%{opacity:.6;transform:scale(1)}
-}
-body[data-sec="conf"] #view{position:relative;z-index:2}
 body[data-sec="conf"] .card{
   background:linear-gradient(180deg,color-mix(in srgb,#B064E0 4%,var(--card)),var(--card));
   border:1px solid color-mix(in srgb,var(--ac) 18%,var(--line));
   position:relative;overflow:hidden;
-}
-body[data-sec="conf"] .card::after{
-  content:"✨";
-  position:absolute;top:8px;right:10px;
-  font-size:14px;opacity:.55;
-  animation:sparkleFloat 3s ease-in-out infinite;
 }
 @keyframes sparkleFloat{
   0%,100%{opacity:.35;transform:translateY(0) rotate(0deg)}
@@ -164,11 +136,6 @@ body[data-sec="conf"] .card::after{
 body[data-sec="conf"] .av.an{background:linear-gradient(135deg,#4A2060,#2A1040);border:1px solid color-mix(in srgb,var(--ac) 40%,transparent);color:var(--ac)}
 body[data-sec="conf"] .composer-new{background:linear-gradient(180deg,color-mix(in srgb,#B064E0 6%,var(--card)),var(--card));border:1px solid color-mix(in srgb,var(--ac) 25%,var(--line))}
 body[data-sec="conf"] .btn,body[data-sec="conf"] .composer-submit{background:linear-gradient(135deg,var(--ac),var(--ac2))}
-body[data-sec="conf"] .composer-anon-badge{
-  background:linear-gradient(135deg,#4A2060,#B064E0) !important;
-  box-shadow:0 0 14px rgba(176,100,224,.35);
-}
-
 body[data-sec="chat"]{--bg:#ECF5F0;--card:#fff;--ink:#0A1A12;--mute:#5E7D6E;--line:#D5E5DC;--ac:#0F6B4A;--acink:#fff;--ac2:#158A60;}
 body.night[data-sec="chat"]{--bg:#0A1D16;--card:#122B21;--ink:#E5F8EE;--mute:#88B5A2;--line:#1F4233;--ac:#2EE594;--acink:#0A1A12;--ac2:#52EDAB;}
 body[data-sec="settings"]{--bg:#F4F6F8;--card:#fff;--ink:#1A202C;--mute:#718096;--line:#E2E8F0;--ac:#4A5568;--acink:#fff;--ac2:#5F6B7E;}
@@ -1879,17 +1846,20 @@ async function report(target){
 
 /* ============== YORUMLAR (anonim numaralandırma) ============== */
 function assignAnonNumbers(rows){
-  // Her thread için ilk görünen user_id -> 1, 2, 3...
   const map = {};
   let next = 1;
   const out = rows.map(c => {
-    if(!c.user_id) return c;
+    // View'dan gelen anon_no varsa direkt kullan
+    if(c.anon_no !== undefined && c.anon_no !== null && c.anon_no !== '' && c.anon_no !== 'anon'){
+      return { ...c, _anonNo: c.anon_no };
+    }
+    // Fallback
+    if(!c.user_id) return { ...c, _anonNo: '?' };
     if(!map[c.user_id]) map[c.user_id] = next++;
     return { ...c, _anonNo: map[c.user_id] };
   });
   return out;
 }
-
 async function loadCommentsCommon(box, opts){
   const { table, fkColumn, id, anonTable, useRealConf, reporterKey } = opts;
   let rows = [];
@@ -1898,7 +1868,7 @@ async function loadCommentsCommon(box, opts){
     rows = (data||[]).map(c => ({ ...c, _real: c.profiles, _mine: c.user_id === me.id }));
   } else if(anonTable){
     const { data } = await sb.from(anonTable).select('*').eq(fkColumn, id).order('id');
-    rows = (data||[]).map(c => ({ ...c, _mine: c.is_mine }));
+    rows = (data||[]).map(c => ({ ...c, _mine: c.is_mine, _anonNo: c.anon_no }));
   } else {
     const { data } = await sb.from(table).select('id,content,user_id,created_at,profiles(first_name,last_name)').eq(fkColumn, id).order('id');
     rows = (data||[]).map(c => ({ ...c, _real: c.profiles, _mine: c.user_id === me.id }));
