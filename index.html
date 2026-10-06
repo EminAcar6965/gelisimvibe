@@ -2222,7 +2222,7 @@ async function loadSettings(sub){
   $('#view').innerHTML =
     '<div class="card" style="text-align:center">' +
       '<div class="avatar-big" style="' + avatarStyle(me.id) + '">' + esc(initials_) + '</div>' +
-      '<div style="font-weight:800;font-size:18px">' + esc(me.first_name) + ' ' + esc(me.last_name) + '</div>' +
+      '<div style="font-weight:800;font-size:15px">' + esc(u.first_name || '') + ' ' + esc(u.last_name || '') + (isAdminUser ? ' <span style="background:linear-gradient(135deg,#FFB020,#FF6B9D);color:#fff;font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:999px">👑 ADMIN</span>' : '') + countBadge + '</div>' +
       '<div class="dep">' + esc(me.department||'') + '</div>' +
       (me.is_admin ? '<span class="badge" style="margin-top:8px">👑 YÖNETİCİ</span>' : '') +
     '</div>' +
@@ -3360,11 +3360,11 @@ async function loadAdminAllUsers(){
     if(r2.error){ box.innerHTML = '<div class="empty">' + esc(r2.error.message) + '</div>'; return; }
     data = r2.data;
   }
-  const filtered = q ? (data||[]).filter(u => ((u.first_name||'') + ' ' + (u.last_name||'') + ' ' + (u.department||'')).toLowerCase().includes(q)) : (data||[]);
-
+  const filtered = (q ? (data||[]).filter(u => ((u.first_name||'') + ' ' + (u.last_name||'') + ' ' + (u.department||'')).toLowerCase().includes(q)) : (data||[])).sort((a,b) => (b.is_admin?1:0) - (a.is_admin?1:0));
   const headerHtml = '<h3 style="margin:8px 6px;font-size:14px;color:var(--mute);font-weight:700">👥 TÜM KULLANICILAR (' + (data||[]).length + ')</h3>';
   const searchHtml = '<div class="search-box"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="usearch" placeholder="İsim, soyisim veya bölüm ara..." value="' + esc(window._userSearch || '') + '"></div>';
   const listHtml = filtered.map(u => {
+  const isAdminUser = !!u.is_admin;
     let status = '';
     if(u.is_banned) status = '<span class="tag" style="background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger)">🚫 BANLI</span>';
     else if(u.is_restricted) status = '<span class="tag" style="background:color-mix(in srgb,#FF9900 14%,transparent);color:#ff9900">⚠️ KISITLI</span>';
@@ -3401,17 +3401,42 @@ async function loadAdminAllUsers(){
 }
 
 function openEditUserSheet(u){
+  const isAdminUser = !!u.is_admin;
+  const adminBtn = isAdminUser
+    ? '<button type="button" class="btn" id="ueAdminToggle" style="background:linear-gradient(135deg,#D42F4B,#FF5580);color:#fff;margin-top:6px">🚫 Admin Yetkisini Kaldır</button>'
+    : '<button type="button" class="btn" id="ueAdminToggle" style="background:linear-gradient(135deg,#FFB020,#FF6B9D);color:#fff;margin-top:6px">👑 Admin Yap</button>';
+
   const el = openSheet(
     '<h4>✏️ Kullanıcıyı Düzenle<button class="sheet-close" aria-label="Kapat">×</button></h4>' +
     '<form id="ueForm" style="display:flex;flex-direction:column;gap:10px">' +
       '<label style="font-size:13px;font-weight:600;color:var(--mute)">Ad</label><input id="ueFirst" maxlength="60" value="' + esc(u.first_name||'') + '" required>' +
       '<label style="font-size:13px;font-weight:600;color:var(--mute)">Soyad</label><input id="ueLast" maxlength="60" value="' + esc(u.last_name||'') + '" required>' +
       '<label style="font-size:13px;font-weight:600;color:var(--mute)">Bölüm</label><input id="ueDept" maxlength="120" value="' + esc(u.department||'') + '" required>' +
+      adminBtn +
       '<div style="display:flex;gap:8px;margin-top:8px">' +
       '<button type="button" class="btn sheet-btn cancel" data-x="cancel" style="flex:1;margin:0">Vazgeç</button>' +
       '<button type="submit" class="btn" style="flex:1">Kaydet</button></div></form>'
   );
   el.onclick = e => { if(e.target === el || e.target.classList.contains('sheet-close') || e.target.dataset.x === 'cancel') el.remove(); };
+  el.querySelector('#ueAdminToggle').onclick = async () => {
+    const isCurrentlyAdmin = !!u.is_admin;
+    const msg = isCurrentlyAdmin 
+      ? u.first_name + ' ' + u.last_name + ' kullanıcısının ADMIN yetkisi kaldırılsın mı?'
+      : u.first_name + ' ' + u.last_name + ' kullanıcısı ADMIN yapılsın mı?';
+    if(!confirm(msg)) return;
+    const btn = el.querySelector('#ueAdminToggle');
+    btn.disabled = true;
+    btn.textContent = 'İşleniyor...';
+    const { error } = await sb.from('profiles').update({ is_admin: !isCurrentlyAdmin }).eq('id', u.id);
+    if(error){ 
+      btn.disabled = false; 
+      btn.textContent = isCurrentlyAdmin ? '🚫 Admin Yetkisini Kaldır' : '👑 Admin Yap';
+      return toast('Hata: ' + error.message, 'err'); 
+    }
+    toast(isCurrentlyAdmin ? 'Admin yetkisi kaldırıldı.' : '👑 Admin yapıldı!', 'ok');
+    el.remove();
+    loadAdminAllUsers();
+  };
   $('#ueForm').onsubmit = async e => {
     e.preventDefault();
     const btn = e.target.querySelector('button[type="submit"]');
