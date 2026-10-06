@@ -3364,7 +3364,7 @@ async function loadAdminAllUsers(){
   const keepFocus = existingSearch && document.activeElement === existingSearch;
   const selStart = existingSearch ? existingSearch.selectionStart : 0;
   const q = (window._userSearch || '').toLowerCase().trim();
-  let { data, error } = await sb.from('profiles').select('id,first_name,last_name,department,is_banned,is_restricted,is_admin,restrict_count,ban_count,created_at')...
+    let { data, error } = await sb.from('profiles').select('id,first_name,last_name,department,is_banned,is_restricted,is_admin,restrict_count,ban_count,created_at').order('created_at', { ascending: false }).limit(1000);
    if(error){
     const r2 = await sb.from('profiles').select('id,first_name,last_name,department,is_banned,is_restricted,restrict_count,created_at').order('created_at', { ascending: false }).limit(1000);
     if(r2.error){ box.innerHTML = '<div class="empty">' + esc(r2.error.message) + '</div>'; return; }
