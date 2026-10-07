@@ -118,7 +118,6 @@ body[data-sec="ann"] .ann h3{font-size:19px;padding-bottom:8px;border-bottom:1px
 .ann-poll-box{background:color-mix(in srgb,var(--ac) 4%,var(--bg));border:1px dashed color-mix(in srgb,var(--ac) 40%,var(--line));border-radius:14px;padding:14px;margin-top:12px}
 .ann-poll-box h5{margin:0 0 10px;font-size:11.5px;font-weight:800;color:var(--ac);letter-spacing:1.2px;text-transform:uppercase}
 
-/* ============ CONFESSION - SPARKLE ============ */
 body[data-sec="conf"]{
   --bg:#140A1F;--card:#1E1230;--ink:#EDE4FF;--mute:#9B8AB8;--line:#33204A;
   --ac:#B064E0;--acink:#fff;--ac2:#C88AF0;--danger:#FF5580;
@@ -855,7 +854,7 @@ body,.card,.btn,.composer-new,.search-box,.settings-item,.conv,.cm-item,.seg,.sh
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ============================================================
-   GELİŞİM VIBE — v4.2 (dinamik reklam sıklığı)
+   GELİŞİM VIBE — v4.3 (bugfix)
    ============================================================ */
 const CONFIG = {
   SB_URL: 'https://ihkjmnogqhekvyroloeg.supabase.co',
@@ -879,10 +878,11 @@ const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid = () => (crypto?.randomUUID?.() || (Date.now().toString(36) + Math.random().toString(36).slice(2, 10)));
+// FIX #3.11: mailto/tel desteği
 const safeUrl = u => {
   if(!u) return '';
   const s = String(u).trim();
-  return /^https?:\/\//i.test(s) ? s : '';
+  return /^(https?:\/\/|mailto:|tel:)/i.test(s) ? s : '';
 };
 
 /* ============== REKLAM SIKLIĞI AYARLARI ============== */
@@ -955,7 +955,6 @@ let adminShowRealConf = localStorage.getItem('adminShowRealConf') === '1';
 let lastNotifCheck = 0;
 let feedUnsub = null;
 let _viewToken = 0;
-let _adSenseInit = false;
 let adsCache = null;
 let chatChannel = null, chatRefreshTimer = null, typingTimer = null;
 let adminView = 'dashboard';
@@ -970,6 +969,12 @@ const bookUrl  = p => p ? sb.storage.from('books').getPublicUrl(p).data.publicUr
 const pdfUrl   = p => p ? sb.storage.from('pdfs').getPublicUrl(p).data.publicUrl : '';
 const videoUrl = p => p ? sb.storage.from('videos').getPublicUrl(p).data.publicUrl : '';
 const adImgUrl = p => p ? sb.storage.from('ads').getPublicUrl(p).data.publicUrl : '';
+
+// FIX #2.6: storage dosya silme helper
+async function deleteStorageFile(bucket, path){
+  if(!path) return;
+  try{ await sb.storage.from(bucket).remove([path]); }catch(_){}
+}
 
 const haptic = (ms=8) => { try{ navigator.vibrate && navigator.vibrate(ms); }catch(_){} };
 
@@ -1319,6 +1324,7 @@ $('#toggle').onclick = () => {
   $('#nameNote').style.display = reg ? 'block' : 'none';
   $('#pw2').style.display = reg ? 'block' : 'none';
   $('#dp').style.display = reg ? 'block' : 'none';
+  $('#dp').required = reg; // FIX #3.13
   $('#kvkkBoxes').style.display = reg ? 'flex' : 'none';
   $('#regNote').style.display = reg ? 'block' : 'none';
   $('#authBtn').textContent = reg ? 'Kayıt ol' : 'Giriş yap';
@@ -1361,7 +1367,7 @@ $('#authForm').onsubmit = async e => {
   say('Bekle...');
   if(reg){
     try {
-      const { data: banned } = await sb.from('banned_emails').select('email,status').eq('email', email).maybeSingle();
+      const { data: banned } = await sb.from('banned_emails').select('email,status').eq('email', email).limit(1).maybeSingle();
       if(banned && (!banned.status || banned.status === 'active'))
         return say('🚫 Bu mail adresi kalıcı olarak banlanmış.', 1);
     } catch(_) {}
@@ -1376,15 +1382,32 @@ $('#authForm').onsubmit = async e => {
     if(!$('#kvkkAydinlatma').checked) return say('Aydınlatma metnini onaylaman gerekiyor.', 1);
     if(!$('#kvkkRiza').checked) return say('Açık rıza metnini onaylaman gerekiyor.', 1);
     if(!last_name && !confirm('Mail adresinden soyadı okuyamadım. "' + first_name + '" olarak kaydedilsin mi?')) return;
-    const { error } = await sb.auth.signUp({ email, password, options: { data: { first_name, last_name, department, kvkk_riza_at: new Date().toISOString() } } });
+    // FIX #1.1: signUp session dönerse OTP'yi atla
+    const { data: signUpData, error } = await sb.auth.signUp({
+      email, password,
+      options: { data: { first_name, last_name, department, kvkk_riza_at: new Date().toISOString() } }
+    });
     if(error) return say(error.message, 1);
+    if(signUpData?.session){
+      // Email onayı kapalı — otomatik giriş yapıldı, boot zaten tetiklendi
+      return;
+    }
     showOtpScreen(email, password);
   } else {
     const { error } = await sb.auth.signInWithPassword({ email, password });
-    if(error) return say(error.message.includes('not confirmed') ? 'Önce mailine gelen doğrulama kodunu gir.' : 'Mail veya şifre hatalı.', 1);
+    if(error){
+      // FIX #1.2: email onaylanmamışsa OTP ekranına yönlendir
+      const m = (error.message || '').toLowerCase();
+      if(m.includes('not confirmed') || m.includes('email not confirmed')){
+        showOtpScreen(email, password);
+        return;
+      }
+      return say('Mail veya şifre hatalı.', 1);
+    }
   }
 };
 
+// FIX #1.3, #1.4, #1.5: OTP ekranı yeniden yazıldı
 function showOtpScreen(email, password){
   const form = $('#authForm');
   form.onsubmit = null;
@@ -1395,30 +1418,50 @@ function showOtpScreen(email, password){
     </p>
     <input id="otpCode" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="10" placeholder="Doğrulama kodu" required autocomplete="one-time-code" style="text-align:center;font-size:24px;letter-spacing:6px;font-weight:800;padding:16px 12px">
     <button type="button" class="btn" id="otpBtn">Doğrula ve Giriş Yap</button>
+    <button type="button" class="link" id="otpResend" style="color:var(--mute)">Kodu tekrar gönder</button>
     <div id="msg"></div>
     <button type="button" class="link" id="otpBack" style="margin-top:4px">← Geri dön</button>
   `;
   setTimeout(() => { const el = $('#otpCode'); if(el) el.focus(); }, 150);
   $('#otpBack').onclick = () => location.reload();
+
+  let verifying = false;
   const doVerify = async () => {
+    if(verifying) return;
     const token = ($('#otpCode').value || '').trim();
     if(token.length < 4) return say('Kod en az 4 haneli olmalı.', 1);
+    verifying = true;
+    const btn = $('#otpBtn');
+    if(btn){ btn.disabled = true; btn.textContent = 'Doğrulanıyor...'; }
     say('Doğrulanıyor...');
     let { error } = await sb.auth.verifyOtp({ email, token, type: 'signup' });
     if(error){
       const r2 = await sb.auth.verifyOtp({ email, token, type: 'email' });
-      if(r2.error){ console.error('[OTP]', error, r2.error); return say('Kod hatalı veya süresi dolmuş.', 1); }
+      if(r2.error){
+        verifying = false;
+        if(btn){ btn.disabled = false; btn.textContent = 'Doğrula ve Giriş Yap'; }
+        return say('Kod hatalı veya süresi dolmuş.', 1);
+      }
     }
+    // FIX #1.3: verifyOtp zaten session açar, signInWithPassword'a gerek yok
     say('✅ Doğrulandı! Giriş yapılıyor...');
-    const { error: signErr } = await sb.auth.signInWithPassword({ email, password });
-    if(signErr) return say(signErr.message, 1);
   };
+
   $('#otpBtn').onclick = doVerify;
+  $('#otpResend').onclick = async () => {
+    try{
+      const { error } = await sb.auth.resend({ type: 'signup', email });
+      if(error) return toast('Gönderilemedi: ' + error.message, 'err');
+      toast('Kod tekrar gönderildi. 📬', 'ok');
+    }catch(e){ toast('Hata: ' + (e.message || 'bilinmeyen'), 'err'); }
+  };
+
   const otpEl = $('#otpCode');
   otpEl.onkeydown = e => { if(e.key === 'Enter'){ e.preventDefault(); doVerify(); } };
   otpEl.oninput = e => {
     e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
-    if(e.target.value.length === 6) doVerify();
+    // FIX #1.5: 6 veya 8 hanede otomatik doğrula (çift tetikleme verifying ile engellenir)
+    if(e.target.value.length === 6 || e.target.value.length === 8) doVerify();
   };
 }
 
@@ -1487,6 +1530,9 @@ async function boot(session){
     $('#auth').classList.remove('hide');
     return;
   }
+  // Aynı kullanıcı için tekrar boot etme
+  if(_bootedUserId === session.user.id && me) return;
+
   const urlTab = new URLSearchParams(location.search).get('tab');
   if(urlTab && ['feed','chat','conf','library','ann','settings'].includes(urlTab)){
     try { sessionStorage.setItem('gv_tab', urlTab); } catch(_){}
@@ -1653,7 +1699,7 @@ function renderAdCard(ad){
   const url = safeUrl(ad.link_url);
   const img = ad.image_path ? '<img class="ad-img" loading="lazy" decoding="async" src="' + adImgUrl(ad.image_path) + '" alt="">' : '';
   const cta = url ? '<a class="ad-cta" href="' + esc(url) + '" target="_blank" rel="noopener">Daha fazla →</a>' : '';
-  return '<article class="ad-card"><div class="ad-head"><span class="ad-tag">📢 SPONSOR</span><span style="color:var(--mute);font-size:10.5px">Sponsorlu içerik</span></div><div class="ad-title">' + esc(ad.title) + '</div>' + (ad.body ? '<div class="ad-body">' + esc(ad.body) + '</div>' : '') + img + cta + '</article>';
+  return '<article class="ad-card" data-adid="' + (ad.id||'') + '"><div class="ad-head"><span class="ad-tag">📢 SPONSOR</span><span style="color:var(--mute);font-size:10.5px">Sponsorlu içerik</span></div><div class="ad-title">' + esc(ad.title) + '</div>' + (ad.body ? '<div class="ad-body">' + esc(ad.body) + '</div>' : '') + img + cta + '</article>';
 }
 function renderAdSenseCard(){
   if(!ADSENSE_ENABLED) return '';
@@ -1758,7 +1804,11 @@ async function loadList(t, append=false){
     ? (useRealConf ? 'id,content,created_at,user_id,image_path,profiles(first_name,last_name,department)' : '*')
     : 'id,content,created_at,user_id,image_path,video_path,profiles(first_name,last_name,department)';
 
-  if(!append){ feedPage = 0; feedItems = []; feedExhausted = false; }
+  // FIX #2.5: Yeni yüklemede eski observer'ı temizle
+  if(!append){
+    if(feedUnsub){ try{ feedUnsub(); }catch(_){} feedUnsub = null; }
+    feedPage = 0; feedItems = []; feedExhausted = false;
+  }
 
   const pageSize = 20;
   const from = feedPage * pageSize, to = from + pageSize - 1;
@@ -1767,6 +1817,9 @@ async function loadList(t, append=false){
   const newItems = mainRes.data || [], error = mainRes.error;
   if(error) { $('#view').innerHTML = '<div class="empty">Yüklenemedi: ' + esc(error.message) + '</div>'; return; }
   if(newItems.length < pageSize) feedExhausted = true;
+
+  // FIX #2.4: feedPage'i sadece başarı sonrası arttır
+  if(append) feedPage++;
 
   if(append){
     feedItems = feedItems.concat(newItems);
@@ -1782,9 +1835,10 @@ async function loadList(t, append=false){
     likes = data || [];
   }
 
+  // FIX #2.2: append modunda reklam yükleme
   let ads = [];
-  if(!conf){
-    if(append && adsCache) ads = adsCache;
+  if(!conf && !append){
+    if(adsCache){ ads = adsCache; }
     else {
       const { data } = await sb.from('ads').select('*').eq('active', true).order('created_at',{ascending:false}).limit(10);
       ads = data || [];
@@ -1943,6 +1997,8 @@ async function loadList(t, append=false){
     let ai = 0;
     asc.forEach((p, i) => {
       ascOut.push({ type:'post', data:p });
+      // FIX #2.2: append modunda reklam ekleme
+      if(append) return;
       const idx = i + 1;
       if(idx % adSettings.sponsor_every === 0 && ads.length){ ascOut.push({ type:'ad', data: ads[ai % ads.length] }); ai++; }
       else if(ADSENSE_ENABLED && idx % adSettings.adsense_every === 0){ ascOut.push({ type:'adsense' }); }
@@ -1952,15 +2008,19 @@ async function loadList(t, append=false){
       if(x.type === 'ad') return renderAdCard(x.data);
       if(x.type === 'adsense') return renderAdSenseCard();
       return postHtml(x.data);
-    }).join('') + renderAdvertiseCTA();
-    if(!_adSenseInit){ _adSenseInit = true; setTimeout(initAdSense, 250); }
+    }).join('');
+    if(!append) html += renderAdvertiseCTA();
+    // FIX #2.3: AdSense her yüklemede init
+    if(ADSENSE_ENABLED && hasAdConsent()) setTimeout(initAdSense, 250);
   }
 
   if(append){
     const existing = new Set([...listEl.querySelectorAll('article.card[data-id]')].map(x => x.dataset.id));
     const wrapper = document.createElement('div');
     wrapper.innerHTML = html;
+    // FIX #2.2: reklam/CTA kartlarını append'te filtrele
     const newNodes = [...wrapper.children].filter(n => {
+      if(n.classList && (n.classList.contains('ad-card') || n.classList.contains('adsense-card') || n.classList.contains('advertise-cta'))) return false;
       if(n.tagName !== 'ARTICLE' || !n.dataset.id) return true;
       return !existing.has(n.dataset.id);
     });
@@ -1996,13 +2056,16 @@ async function loadList(t, append=false){
   if(!conf && !feedExhausted){
     const endEl = document.getElementById('feedEnd');
     if(endEl){
+      // FIX #2.4: try/finally ile feedLoading kilidi
       const io = new IntersectionObserver((entries) => {
         entries.forEach(async en => {
           if(en.isIntersecting && !feedLoading && !feedExhausted){
             feedLoading = true;
-            feedPage++;
-            await loadList(t, true);
-            feedLoading = false;
+            try{
+              await loadList(t, true);
+            } finally {
+              feedLoading = false;
+            }
           }
         });
       }, { rootMargin: '400px' });
@@ -2019,9 +2082,10 @@ async function loadHashtag(){
   $('#view').innerHTML = '<div class="skel-card"><div class="skel-line w60"></div><div class="skel-line w80"></div></div><div class="skeleton"></div>';
 
   const q = '#' + escapeLike(tag);
+  // FIX #2.8: confessions_public kullan (RLS uyumu)
   const results = await Promise.all([
     sb.from('posts').select('id,content,created_at,user_id,image_path,video_path,profiles(first_name,last_name,department)').ilike('content','%' + q + '%').order('created_at',{ascending:false}).limit(50),
-    sb.from('confessions').select('id,content,created_at,user_id,image_path,profiles(first_name,last_name,department)').ilike('content','%' + q + '%').order('created_at',{ascending:false}).limit(50),
+    sb.from('confessions_public').select('*').ilike('content','%' + q + '%').order('created_at',{ascending:false}).limit(50),
     sb.from('announcements').select('id,title,content,created_at').ilike('content','%' + q + '%').order('created_at',{ascending:false}).limit(20)
   ]);
 
@@ -2102,6 +2166,14 @@ async function act(a, id, card, conf, col, t){
   }
   if(a === 'del'){
     if(!confirm('Silinsin mi?')) return;
+    // FIX #2.6: storage dosyalarını da sil
+    try{
+      const { data: row } = await sb.from(conf ? 'confessions' : 'posts').select('image_path,video_path').eq('id', id).maybeSingle();
+      if(row){
+        if(row.image_path) await deleteStorageFile('images', row.image_path);
+        if(row.video_path) await deleteStorageFile('videos', row.video_path);
+      }
+    }catch(_){}
     try{
       if(conf){ await sb.from('likes').delete().eq('confession_id', id); await sb.from('confession_comments').delete().eq('confession_id', id); }
       else { await sb.from('likes').delete().eq('post_id', id); await sb.from('comments').delete().eq('post_id', id); }
@@ -2207,14 +2279,34 @@ async function loadCommentsCommon(box, opts){
     const content = ta.value.trim(); if(!content) return;
     const { error } = await sb.from(table).insert({ user_id: me.id, [fkColumn]: id, content });
     if(error) return toast(error.message, 'err');
-    loadCommentsCommon(box, opts);
+    // FIX #2.10: yorum sayısını kart üstünde güncelle
+    await loadCommentsCommon(box, opts);
+    const card = box.closest('.card');
+    if(card){
+      const btn = card.querySelector('button[data-a="cm"]');
+      if(btn){
+        const count = box.querySelectorAll('.cm-item').length;
+        btn.textContent = '💬 Yorumlar · ' + fmtNum(count);
+      }
+    }
   };
   box.onclick = async e => {
     const u = e.target.closest('[data-uid]');
     if(u && u.dataset.uid !== me.id){ openUserMenu(u.dataset.uid, u.dataset.name); return; }
     const b = e.target.closest('button'); if(!b) return;
     if(b.dataset.r) report({ [reporterKey]: +b.dataset.r });
-    if(b.dataset.d && confirm('Silinsin mi?')){ await sb.from(table).delete().eq('id', +b.dataset.d); loadCommentsCommon(box, opts); }
+    if(b.dataset.d && confirm('Silinsin mi?')){
+      await sb.from(table).delete().eq('id', +b.dataset.d);
+      await loadCommentsCommon(box, opts);
+      const card = box.closest('.card');
+      if(card){
+        const cbtn = card.querySelector('button[data-a="cm"]');
+        if(cbtn){
+          const count = box.querySelectorAll('.cm-item').length;
+          cbtn.textContent = '💬 Yorumlar · ' + fmtNum(count);
+        }
+      }
+    }
   };
 }
 
@@ -2234,7 +2326,8 @@ async function loadComments(box, id, conf){
 function openUserMenu(userId, userName){
   if(!userId || userId === me.id) return;
   const ini = (userName || '?').split(' ').map(x => x[0]).slice(0,2).join('').toUpperCase();
-  let adminBtn = me.is_admin ? '<button class="sheet-btn danger" data-x="ban">🚫 Kullanıcıyı Engelle</button>' : '';
+  // FIX #3.5: "Engelle" yerine "Banla"
+  let adminBtn = me.is_admin ? '<button class="sheet-btn danger" data-x="ban">🚫 Kullanıcıyı Banla</button>' : '';
   const el = openSheet(
     '<h4><span style="display:flex;align-items:center;gap:10px"><span class="av" style="' + avatarStyle(userId) + '">' + esc(ini) + '</span> ' + esc(userName) + '</span><button class="sheet-close" aria-label="Kapat">×</button></h4>' +
     '<button class="sheet-btn" data-x="msg">💬 Mesaj gönder</button>' +
@@ -2252,16 +2345,20 @@ function openUserMenu(userId, userName){
       if(!confirm(userName + ' kalıcı olarak banlansın mı?')) return;
       if(!confirm('Son onay: Emin misin?')) return;
       try{
+        // FIX #2.7: email ve ban_count ayrı çek
         let userEmail = null;
         try{
-          const { data: prof } = await sb.from('profiles').select('ban_count, email').eq('id', userId).maybeSingle();
-          userEmail = prof?.email;
-          await sb.from('profiles').update({ ban_count: (prof?.ban_count || 0) + 1, is_banned: true }).eq('id', userId);
-          await sb.from('moderation_history').insert({ user_id: userId, action: 'ban', admin_id: me.id, reason: 'Admin kararı' });
-          if(userEmail){
-            try{ await sb.from('banned_emails').insert({ email: userEmail, reason: 'Admin kararı', banned_at: new Date().toISOString(), status: 'active' }); }catch(_){}
-          }
+          const { data: p } = await sb.from('profiles').select('email').eq('id', userId).maybeSingle();
+          userEmail = p?.email || null;
         }catch(_){}
+        try{
+          const { data: prof } = await sb.from('profiles').select('ban_count').eq('id', userId).maybeSingle();
+          await sb.from('profiles').update({ ban_count: (prof?.ban_count || 0) + 1, is_banned: true }).eq('id', userId);
+        }catch(_){}
+        try{ await sb.from('moderation_history').insert({ user_id: userId, action: 'ban', admin_id: me.id, reason: 'Admin kararı' }); }catch(_){}
+        if(userEmail){
+          try{ await sb.from('banned_emails').insert({ email: userEmail, reason: 'Admin kararı', banned_at: new Date().toISOString(), status: 'active' }); }catch(_){}
+        }
         toast('Kullanıcı banlandı.', 'ok');
       }catch(err){ toast('Hata: ' + err.message, 'err'); }
     }
@@ -2312,7 +2409,12 @@ async function loadBooks(){
   $('#libView').onclick = async e => {
     const u = e.target.closest('.bseller'); if(u){ openUserMenu(u.dataset.uid, u.dataset.name); return; }
     const d = e.target.closest('button[data-bdel]');
-    if(d && confirm('Kitap silinsin mi?')){ await sb.from('books').delete().eq('id', +d.dataset.bdel); loadBooks(); }
+    if(d && confirm('Kitap silinsin mi?')){
+      const { data: bk } = await sb.from('books').select('image_path').eq('id', +d.dataset.bdel).maybeSingle();
+      if(bk?.image_path) await deleteStorageFile('books', bk.image_path);
+      await sb.from('books').delete().eq('id', +d.dataset.bdel);
+      loadBooks();
+    }
   };
   window._booksData = items;
   function refreshBooksList(){
@@ -2355,7 +2457,8 @@ function openBookForm(){
     const btn = $('#bf .btn'); btn.disabled = true;
     let image_path = null;
     const f = $('#bimg').files[0];
-    if(f){ try{ image_path = await uploadImg(f, 'ads', null, true); }catch(err){ btn.disabled = false; return toast('Görsel: ' + err.message, 'err'); } }
+    // FIX #2.1: books bucket'ına yükle (ads değil)
+    if(f){ try{ image_path = await uploadImg(f, 'books', null, true); }catch(err){ btn.disabled = false; return toast('Görsel: ' + err.message, 'err'); } }
     const priceVal = $('#bp').value.trim();
     const priceNum = priceVal === '' ? null : Number(priceVal);
     const { error } = await sb.from('books').insert({ user_id: me.id, title: $('#bt').value.trim(), author: $('#ba').value.trim() || null, description: $('#bd').value.trim() || null, price: (priceNum != null && priceNum > 0) ? priceNum : null, image_path });
@@ -2403,7 +2506,12 @@ async function loadPdfs(){
     const u = e.target.closest('[data-uid]');
     if(u && u.dataset.uid !== me.id){ openUserMenu(u.dataset.uid, u.dataset.name); return; }
     const d = e.target.closest('button[data-pdel]');
-    if(d && confirm('PDF silinsin mi?')){ await sb.from('pdfs').delete().eq('id', +d.dataset.pdel); loadPdfs(); }
+    if(d && confirm('PDF silinsin mi?')){
+      const { data: pf } = await sb.from('pdfs').select('file_path').eq('id', +d.dataset.pdel).maybeSingle();
+      if(pf?.file_path) await deleteStorageFile('pdfs', pf.file_path);
+      await sb.from('pdfs').delete().eq('id', +d.dataset.pdel);
+      loadPdfs();
+    }
   };
 }
 function openPdfForm(){
@@ -2553,7 +2661,7 @@ async function loadSettings(sub){
       '<div class="settings-item danger" data-open="delete"><div class="ico">🗑️</div><div class="txt"><b>Hesabımı Sil</b><small>Anında ve kalıcı olarak silinir</small></div><span class="arrow">›</span></div>' +
       '<div class="settings-item danger" data-open="logout"><div class="ico">🚪</div><div class="txt"><b>Çıkış Yap</b><small>Hesabından güvenli çıkış</small></div><span class="arrow">›</span></div>' +
     '</div>' +
-    '<div style="text-align:center;margin-top:22px;color:var(--mute);font-size:11px">Gelişim Vibe · v4.2<br>Designed &amp; Developed by <b style="color:var(--ac)">Emin Acar</b></div>';
+    '<div style="text-align:center;margin-top:22px;color:var(--mute);font-size:11px">Gelişim Vibe · v4.3<br>Designed &amp; Developed by <b style="color:var(--ac)">Emin Acar</b></div>';
   $('#view').onclick = async e => {
     const item = e.target.closest('[data-open]'); if(!item) return;
     const x = item.dataset.open;
@@ -2694,10 +2802,12 @@ async function loadInfo(){
 async function loadChat(){
   removeFab(); clearChatTimer(); clearChatChannel();
   if(chatWith) return loadChatView();
+  // FIX #2.9: son mesajları al (descending), sonra çevir
   const { data: msgs, error } = await sb.from('messages').select('id,sender_id,receiver_id,content,image_path,read_at,created_at').or('sender_id.eq.' + me.id + ',receiver_id.eq.' + me.id).order('created_at',{ascending:false}).limit(500);
   if(error) return $('#view').innerHTML = '<div class="empty">' + esc(error.message) + '</div>';
   const partners = new Map();
-  for(const m of msgs || []){
+  const sorted = (msgs || []); // descending
+  for(const m of sorted){
     const other = m.sender_id === me.id ? m.receiver_id : m.sender_id;
     if(!partners.has(other)) partners.set(other, { last: m, unread: 0 });
     if(m.receiver_id === me.id && !m.read_at) partners.get(other).unread++;
@@ -2791,8 +2901,10 @@ async function loadChatView(){
   const other = chatWith;
   chatReplyTo = null;
   chatImgFile = null;
-  const { data: msgs, error } = await sb.from('messages').select('*').or('and(sender_id.eq.' + me.id + ',receiver_id.eq.' + other + '),and(sender_id.eq.' + other + ',receiver_id.eq.' + me.id + ')').order('created_at').limit(500);
+  // FIX #2.9: son 500 mesajı al
+  const { data: rawMsgs, error } = await sb.from('messages').select('*').or('and(sender_id.eq.' + me.id + ',receiver_id.eq.' + other + '),and(sender_id.eq.' + other + ',receiver_id.eq.' + me.id + ')').order('created_at',{ascending:false}).limit(500);
   if(error) return $('#view').innerHTML = '<div class="empty">' + esc(error.message) + '</div>';
+  const msgs = (rawMsgs || []).slice().reverse();
   await sb.from('messages').update({ read_at: new Date().toISOString() }).eq('receiver_id', me.id).eq('sender_id', other).is('read_at', null);
   const ini = (chatUser || '?').split(' ').map(x => x[0]).slice(0,2).join('').toUpperCase();
 
@@ -2817,8 +2929,9 @@ async function loadChatView(){
 
   let lastMsgCount = (msgs||[]).length;
   const refreshMessages = async (wasNear) => {
-    const { data } = await sb.from('messages').select('*').or('and(sender_id.eq.' + me.id + ',receiver_id.eq.' + other + '),and(sender_id.eq.' + other + ',receiver_id.eq.' + me.id + ')').order('created_at').limit(500);
-    if(!data) return;
+    const { data: raw } = await sb.from('messages').select('*').or('and(sender_id.eq.' + me.id + ',receiver_id.eq.' + other + '),and(sender_id.eq.' + other + ',receiver_id.eq.' + me.id + ')').order('created_at',{ascending:false}).limit(500);
+    if(!raw) return;
+    const data = raw.slice().reverse();
     if(data.length !== lastMsgCount){
       lastMsgCount = data.length;
       body.innerHTML = renderMessages(data);
@@ -3476,14 +3589,19 @@ async function loadAdminReports(){
       if(!confirm('Son onay: Emin misin?')) return;
       const btn = b; btn.disabled = true; btn.textContent = 'İşleniyor...';
       try {
+        let userEmail = null;
         try{
-          const { data: prof } = await sb.from('profiles').select('ban_count, email').eq('id', rep.uid).maybeSingle();
-          await sb.from('profiles').update({ ban_count: (prof?.ban_count || 0) + 1, is_banned: true }).eq('id', rep.uid);
-          await sb.from('moderation_history').insert({ user_id: rep.uid, action: 'ban', admin_id: me.id, reason: 'Şikayet üzerine ban' });
-          if(prof?.email){
-            try{ await sb.from('banned_emails').insert({ email: prof.email, reason: 'Şikayet üzerine', banned_at: new Date().toISOString(), status: 'active' }); }catch(_){}
-          }
+          const { data: p } = await sb.from('profiles').select('email').eq('id', rep.uid).maybeSingle();
+          userEmail = p?.email || null;
         }catch(_){}
+        try{
+          const { data: prof } = await sb.from('profiles').select('ban_count').eq('id', rep.uid).maybeSingle();
+          await sb.from('profiles').update({ ban_count: (prof?.ban_count || 0) + 1, is_banned: true }).eq('id', rep.uid);
+        }catch(_){}
+        try{ await sb.from('moderation_history').insert({ user_id: rep.uid, action: 'ban', admin_id: me.id, reason: 'Şikayet üzerine ban' }); }catch(_){}
+        if(userEmail){
+          try{ await sb.from('banned_emails').insert({ email: userEmail, reason: 'Şikayet üzerine', banned_at: new Date().toISOString(), status: 'active' }); }catch(_){}
+        }
         const { data: { session } } = await sb.auth.getSession();
         const res = await fetch(SB_URL + '/functions/v1/' + EDGE_FN, {
           method: 'POST',
@@ -3633,14 +3751,17 @@ async function loadAdminBanned(){
       try{
         let userEmail = null;
         try{
-          const { data: prof } = await sb.from('profiles').select('ban_count, email').eq('id', uid).maybeSingle();
-          userEmail = prof?.email;
-          await sb.from('profiles').update({ ban_count: (prof?.ban_count || 0) + 1 }).eq('id', uid);
-          await sb.from('moderation_history').insert({ user_id: uid, action: 'ban', admin_id: me.id, reason: 'Admin kararı' });
-          if(userEmail){
-            try{ await sb.from('banned_emails').insert({ email: userEmail, reason: 'Admin kararı', banned_at: new Date().toISOString(), status: 'active' }); }catch(_){}
-          }
+          const { data: p } = await sb.from('profiles').select('email').eq('id', uid).maybeSingle();
+          userEmail = p?.email || null;
         }catch(_){}
+        try{
+          const { data: prof } = await sb.from('profiles').select('ban_count').eq('id', uid).maybeSingle();
+          await sb.from('profiles').update({ ban_count: (prof?.ban_count || 0) + 1 }).eq('id', uid);
+        }catch(_){}
+        try{ await sb.from('moderation_history').insert({ user_id: uid, action: 'ban', admin_id: me.id, reason: 'Admin kararı' }); }catch(_){}
+        if(userEmail){
+          try{ await sb.from('banned_emails').insert({ email: userEmail, reason: 'Admin kararı', banned_at: new Date().toISOString(), status: 'active' }); }catch(_){}
+        }
 
         const { data: { session } } = await sb.auth.getSession();
         const res = await fetch(SB_URL + '/functions/v1/' + EDGE_FN, {
@@ -3768,7 +3889,6 @@ function openEditUserSheet(u){
 async function loadAdminAds(){
   const box = $('#adminView');
 
-  // ---------- YENİ: Reklam Sıklığı Ayar Formu ----------
   const freqSettings =
     '<form class="card composer" id="adsetf" style="border-left:4px solid var(--ad)">' +
       '<h3 style="margin:0 0 10px;font-size:15px;font-weight:800">⚙️ Reklam Sıklığı</h3>' +
@@ -3787,11 +3907,10 @@ async function loadAdminAds(){
         '<button type="button" class="btn" id="adsetReset" style="flex:0 0 auto;background:var(--bg);color:var(--ink)">↺ Sıfırla</button>' +
       '</div>' +
     '</form>';
-  // ------------------------------------------------------
 
   const { data: ads, error } = await sb.from('ads').select('*').order('created_at',{ascending:false}).limit(50);
   if(error){ box.innerHTML = freqSettings + '<div class="empty">' + esc(error.message) + '</div>'; return; }
-  const adsenseInfo = '<div class="card" style="border-left:4px solid ' + (ADSENSE_ENABLED ? 'var(--g)' : 'var(--mute)') + '"><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="ad-tag" style="background:var(--g);color:#fff">🔷 GOOGLE ADSENSE</span></div><div style="font-size:13px;color:var(--mute);line-height:1.5">' + (ADSENSE_ENABLED ? '✅ Aktif — Her ' + adSettings.adsense_every + ' postta bir reklam.' : '✅ Client ID bağlı. Reklam birimi oluşturup ADSENSE_SLOT güncelle.') + '</div></div>';
+  const adsenseInfo = '<div class="card" style="border-left:4px solid ' + (ADSENSE_ENABLED ? 'var(--g)' : 'var(--mute)') + '"><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="ad-tag" style="background:var(--g);color:#fff">🔷 GOOGLE ADSENSE</span></div><div style="font-size:13px;color:var(--mute);line-height:1.5">' + (ADSENSE_ENABLED ? '✅ Aktif — Her ' + adSettings.adsense_every + ' postta bir reklam.' : '⚠️ ADSENSE_SLOT placeholder (0000...) olduğu için devre dışı. Client ID bağlı ama slot oluşturulmamış.') + '</div></div>';
   const form = '<form class="card composer" id="adf"><h3 style="margin:0 0 8px;font-size:15px;font-weight:800">📢 Yeni Sponsor Reklamı</h3><input id="adt" maxlength="100" placeholder="Reklam başlığı" required><textarea id="adb" maxlength="600" placeholder="Açıklama"></textarea><input id="adl" type="url" maxlength="500" placeholder="Link (https://...)"><div style="font-size:11.5px;color:var(--mute);background:color-mix(in srgb,#FFB020 12%,transparent);border:1px dashed color-mix(in srgb,#FFB020 40%,transparent);border-radius:8px;padding:8px 10px;margin:4px 0">📐 Görsel otomatik olarak <b>1:1 (kare)</b> kırpılır. Merkez odaklı bir görsel seç.</div><div id="adimgpv" class="pv hide"></div><label style="display:flex;align-items:center;gap:8px;padding:10px;border:1px solid var(--line);border-radius:10px;color:var(--ac);font-weight:600;cursor:pointer">📷 Görsel<input type="file" id="adimg" accept="image/*" hidden></label><button class="btn">Yayınla</button></form>';
   const list = (ads||[]).map(a => {
     const img = a.image_path ? '<img src="' + adImgUrl(a.image_path) + '" style="width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:10px;margin-bottom:6px">' : '';
@@ -3813,7 +3932,6 @@ async function loadAdminAds(){
     loadAdminAds();
   };
 
-  // ---------- YENİ: Reklam sıklığı form handler ----------
   const setForm = $('#adsetf');
   if(setForm){
     setForm.onsubmit = async e => {
@@ -3839,7 +3957,6 @@ async function loadAdminAds(){
       toast('Varsayılan değerler yüklendi. Kaydet butonuna bas.', 'info');
     };
   }
-  // --------------------------------------------------------
 
   box.onclick = async e => {
     const b = e.target.closest('button[data-adact]'); if(!b) return;
@@ -3888,4 +4005,4 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 </body>
-</html>
+  </html>
