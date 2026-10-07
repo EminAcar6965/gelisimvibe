@@ -1021,6 +1021,9 @@ let lastNotifCheck = 0;
 let feedUnsub = null;
 let _viewToken = 0;
 let adsCache = null;
+let adsCacheTs = 0;
+const ADS_CACHE_TTL = 5 * 60 * 1000;
+let adsChannel = null;
 let chatChannel = null, chatRefreshTimer = null, typingTimer = null;
 let adminView = 'dashboard';
 let _bootedUserId = null;
@@ -1660,6 +1663,10 @@ async function boot(session){
   show(tab);
   checkNotifications();
   subscribeAnnouncements();
+  show(tab);
+  checkNotifications();
+  subscribeAnnouncements();
+  subscribeAdsChannel();
 }
 sb.auth.getSession().then(({ data }) => boot(data.session));
 sb.auth.onAuthStateChange((ev, s) => {
@@ -1735,6 +1742,24 @@ async function show(t, opts){
 }
 
 /* ============== DUYURU REALTIME ============== */
+/* ============== REKLAM REALTIME ============== */
+function subscribeAdsChannel(){
+  if(adsChannel){ try{ adsChannel.unsubscribe(); }catch(_){} adsChannel = null; }
+  try{
+    adsChannel = sb.channel('gv-ads-' + Date.now())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'ads' }, async payload => {
+        adsCache = null;
+        adsCacheTs = 0;
+        if(tab === 'feed' && me){
+          const scrollY = window.scrollY || document.documentElement.scrollTop;
+          await show('feed');
+          window.scrollTo({ top: scrollY, behavior: 'auto' });
+        }
+      })
+      .subscribe();
+  }catch(e){ console.warn('[ads-realtime]', e); }
+}
+
 function subscribeAnnouncements(){
   try{
     if(annChannel){ try{ annChannel.unsubscribe(); }catch(_){} annChannel = null; }
@@ -2061,11 +2086,13 @@ async function loadList(t, append=false){
 
   let ads = [];
   if(!conf && !append){
-    if(adsCache){ ads = adsCache; }
-    else {
+    if(adsCache && (Date.now() - adsCacheTs) < ADS_CACHE_TTL){
+      ads = adsCache;
+    } else {
       const { data } = await sb.from('ads').select('*').eq('active', true).order('created_at',{ascending:false}).limit(10);
       ads = data || [];
       adsCache = ads;
+      adsCacheTs = Date.now();
     }
   }
 
