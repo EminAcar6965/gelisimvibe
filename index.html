@@ -228,7 +228,7 @@ body.night .cm-name .anon{color:#E15A78}
 .composer-new{background:var(--card);border-radius:20px;padding:16px 16px 12px;margin-bottom:12px;border:1px solid var(--line);box-shadow:var(--sh);position:relative;overflow:hidden}
 .composer-new::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--ac)}
 .composer-head{display:flex;gap:12px;align-items:flex-start;margin-top:4px}
-.composer-head .cav{width:42px;height:42px;border-radius:50%;flex:none;background:var(--ac);color:var(--acink);display:grid;place-items:center;font-weight:800;font-size:15px}
+.composer-head .cav{width:42px;height:42px;border-radius:50%;flex:none;background:var(--ac);color:var(--acink);display:grid;place-items:center;font-weight:800;font-size:15px;background-size:cover;background-position:center}
 .composer-head textarea{flex:1;border:0;background:transparent;padding:10px 0;min-height:64px;resize:none;font-size:15.5px;line-height:1.5;font-family:inherit;overflow:hidden}
 .composer-head textarea::placeholder{color:var(--mute)}
 .composer-head textarea:focus{outline:0;box-shadow:none;border:0}
@@ -310,7 +310,7 @@ body.night .nav-tabs button[data-t="admin"]{--nc:#00FF88}
 
 .tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:999px;background:var(--bg);color:var(--mute)}
 .hd{display:flex;align-items:center;gap:10px}
-.av{width:40px;height:40px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:800;font-size:15px;color:#fff;background:var(--ac);cursor:pointer;text-shadow:0 1px 2px rgba(0,0,0,.25)}
+.av{width:40px;height:40px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:800;font-size:15px;color:#fff;background:var(--ac);cursor:pointer;text-shadow:0 1px 2px rgba(0,0,0,.25);background-size:cover;background-position:center;overflow:hidden}
 .av.an{background:#8B1A3D;color:#fff;cursor:default;text-shadow:none}
 body.night .av.an{background:#B0284F}
 .av.an svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:2}
@@ -338,7 +338,7 @@ body.night .bcard .bimg{background:linear-gradient(135deg,#2a2010,#3a2d15)}
 .bcard .ba{color:var(--mute);font-size:12px;margin-top:2px}
 .bcard .bp{margin-top:6px;color:var(--ac);font-weight:800;font-size:14px}
 .bcard .bseller{margin-top:8px;font-size:11.5px;color:var(--mute);display:flex;align-items:center;gap:6px;cursor:pointer}
-.bcard .bseller .dot{width:22px;height:22px;border-radius:50%;background:var(--ac);color:var(--acink);display:grid;place-items:center;font-size:10px;font-weight:800}
+.bcard .bseller .dot{width:22px;height:22px;border-radius:50%;background:var(--ac);color:var(--acink);display:grid;place-items:center;font-size:10px;font-weight:800;background-size:cover;background-position:center}
 .pcard{background:var(--card);border-radius:16px;padding:14px;margin-bottom:10px;border:1px solid var(--line);box-shadow:var(--sh);display:flex;gap:12px;align-items:flex-start}
 .pcard .pico{width:46px;height:56px;border-radius:10px;background:var(--ac);color:var(--acink);display:grid;place-items:center;flex:none}
 .pcard .pico svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2}
@@ -678,7 +678,7 @@ body.night .ad-img{border-color:color-mix(in srgb,#FFB020 35%,var(--line))}
 .settings-item .arrow{color:var(--mute);font-size:18px;flex:none}
 .settings-item.danger .ico{background:color-mix(in srgb,#D42F4B 14%,transparent)}
 .settings-item.danger .txt b{color:var(--danger)}
-.avatar-big{width:70px;height:70px;border-radius:50%;background:var(--ac);color:var(--acink);display:grid;place-items:center;font-weight:800;font-size:26px;margin:0 auto 12px}
+.avatar-big{width:70px;height:70px;border-radius:50%;background:var(--ac);color:var(--acink);display:grid;place-items:center;font-weight:800;font-size:26px;margin:0 auto 12px;background-size:cover;background-position:center;overflow:hidden}
 .settings-back{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-weight:700;font-size:13.5px;color:var(--ac);margin-bottom:12px;box-shadow:var(--sh)}
 .settings-back:active{transform:scale(.97)}
 
@@ -726,6 +726,13 @@ body,.card,.btn,.composer-new,.search-box,.settings-item,.conv,.cm-item,.seg,.sh
 .dev-btn.wa{background:linear-gradient(135deg,#25D366,#128C7E);box-shadow:0 4px 14px rgba(37,211,102,.35)}
 .dev-btn.wa:hover{box-shadow:0 6px 20px rgba(37,211,102,.5)}
 .dev-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* Avatar upload circle */
+.avatar-uploader{width:130px;height:130px;border-radius:50%;margin:0 auto 18px;position:relative;background-size:cover;background-position:center;background-color:var(--bg);border:3px dashed color-mix(in srgb,var(--ac) 40%,var(--line));display:grid;place-items:center;overflow:hidden;cursor:pointer;transition:border-color .2s ease}
+.avatar-uploader:hover{border-color:var(--ac)}
+.avatar-uploader .ini{font-weight:800;font-size:44px;color:#fff}
+.avatar-uploader .overlay{position:absolute;inset:0;background:rgba(0,0,0,.45);display:grid;place-items:center;color:#fff;font-size:13px;font-weight:800;opacity:0;transition:opacity .2s ease}
+.avatar-uploader:hover .overlay{opacity:1}
 </style>
 <script type="application/ld+json">
 {
@@ -803,7 +810,7 @@ body,.card,.btn,.composer-new,.search-box,.settings-item,.conv,.cm-item,.seg,.sh
     </div>
   </form>
   <p class="note" id="regNote" style="display:none">Kayıt olduktan sonra mailine doğrulama kodu gelir.</p>
-  <p class="note">Bu uygulama bir öğrenci tarafından öğrenciler için geliştirilmiştir, resmi bir üniversite uygulaması değildir.</p>
+  <p class="note">Bu uygulama bir İGÜ öğrencisi tarafından öğrenciler için geliştirilmiştir, resmi bir üniversite uygulaması değildir.</p>
   <p class="auth-footer">Designed &amp; Developed by <b>Emin Acar</b></p>
   <a href="https://www.instagram.com/igugelisimvibe/" target="_blank" rel="noopener" class="auth-instagram" aria-label="Instagram">
     <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
@@ -813,7 +820,7 @@ body,.card,.btn,.composer-new,.search-box,.settings-item,.conv,.cm-item,.seg,.sh
   <div class="seo-content" style="max-width:680px;margin:32px auto 0;padding:20px;text-align:left;color:var(--mute);font-size:13.5px;line-height:1.75">
     <h2 style="font-size:17px;font-weight:800;color:var(--ink);margin:0 0 10px">Gelişim Vibe Nedir?</h2>
     <p style="margin:0 0 14px">
-      <strong style="color:var(--ink)">Gelişim Vibe</strong>, İstanbul Gelişim Üniversitesi (İGÜ) öğrencileri tarafından
+      <strong style="color:var(--ink)">Gelişim Vibe</strong>, İstanbul Gelişim Üniversitesi (İGÜ) <strong style="color:var(--ink)">öğrencisi</strong> tarafından
       <strong style="color:var(--ink)">öğrenciler için</strong> geliştirilmiş bir sosyal topluluk uygulamasıdır.
       Okul mailinle (<em>isim.soyisim@ogr.gelisim.edu.tr</em>) giriş yaparak kampüsteki diğer öğrencilerle
       paylaşımda bulunabilir, anonim itiraf gönderebilir, 2. el kitap satabilir veya takas edebilir,
@@ -883,7 +890,7 @@ body,.card,.btn,.composer-new,.search-box,.settings-item,.conv,.cm-item,.seg,.sh
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ============================================================
-   GELİŞİM VIBE — v4.5 (bugfix + IG/WA geliştirici bölümü)
+   GELİŞİM VIBE — v4.6 (profil fotoğrafı + ayarlar revizyonu)
    ============================================================ */
 const CONFIG = {
   SB_URL: 'https://ihkjmnogqhekvyroloeg.supabase.co',
@@ -1017,6 +1024,7 @@ const bookUrl  = p => p ? sb.storage.from('books').getPublicUrl(p).data.publicUr
 const pdfUrl   = p => p ? sb.storage.from('pdfs').getPublicUrl(p).data.publicUrl : '';
 const videoUrl = p => p ? sb.storage.from('videos').getPublicUrl(p).data.publicUrl : '';
 const adImgUrl = p => p ? sb.storage.from('ads').getPublicUrl(p).data.publicUrl : '';
+const avatarUrl = p => p ? sb.storage.from('images').getPublicUrl(p).data.publicUrl : '';
 
 async function deleteStorageFile(bucket, path){
   if(!path) return;
@@ -1099,6 +1107,16 @@ function avatarStyle(id){
   return `background:hsl(${h} 62% 38%);color:#fff`;
 }
 const avHtml = (id, f, l, cls='') => `<span class="av ${cls}" style="${avatarStyle(id)}">${esc(initials(f,l).toUpperCase()||'?')}</span>`;
+
+/* renderAvatar: avatar_path varsa resmi gösterir */
+function renderAvatar(id, f, l, avatarPath, cls){
+  const ini = esc(initials(f,l).toUpperCase()||'?');
+  const c = cls ? ' ' + cls : '';
+  if(avatarPath){
+    return '<span class="av' + c + '" style="background-image:url(' + esc(avatarUrl(avatarPath)) + ');color:transparent;text-shadow:none">' + ini + '</span>';
+  }
+  return '<span class="av' + c + '" style="' + avatarStyle(id) + '">' + ini + '</span>';
+}
 
 /* ============== SHEET ============== */
 function openSheet(html, opts){
@@ -1368,6 +1386,9 @@ async function uploadPdf(file, onProgress){
   }
   const path = uid() + '.pdf';
   return xhrUpload('pdfs', path, file, 'application/pdf', onProgress);
+}
+async function uploadAvatar(file, onProgress){
+  return uploadImg(file, 'images', onProgress, true);
 }
 async function uploadChatImg(file, onProgress){
   if(!file.type.startsWith('image/')) throw new Error('Sadece fotoğraf.');
@@ -1864,8 +1885,8 @@ async function loadList(t, append=false){
   const useRealConf = conf && me.is_admin && adminShowRealConf;
   const table = conf ? (useRealConf ? 'confessions' : 'confessions_public') : 'posts';
   const selectCols = conf
-    ? (useRealConf ? 'id,content,created_at,user_id,image_path,profiles(first_name,last_name,department)' : '*')
-    : 'id,content,created_at,user_id,image_path,video_path,profiles(first_name,last_name,department)';
+    ? (useRealConf ? 'id,content,created_at,user_id,image_path,profiles(first_name,last_name,department,avatar_path)' : '*')
+    : 'id,content,created_at,user_id,image_path,video_path,profiles(first_name,last_name,department,avatar_path)';
 
   if(!append){
     if(feedUnsub){ try{ feedUnsub(); }catch(_){} feedUnsub = null; }
@@ -1911,9 +1932,12 @@ async function loadList(t, append=false){
     ? '<div class="admin-toggle"><div><b>🔒 Admin modu</b> ' + (adminShowRealConf ? '· Gerçek isimler' : '· Anonim görünüm') + '</div><button id="toggleReal">' + (adminShowRealConf ? 'Anonime çevir' : 'Gerçek isimleri gör') + '</button></div>'
     : '';
 
-  const composerAvatar = conf
-    ? '<div class="cav" style="background:linear-gradient(135deg,#4A2060,#2A1040);color:#B064E0">👻</div>'
-    : '<div class="cav" style="' + avatarStyle(me.id) + '">' + esc(initials(me.first_name, me.last_name).toUpperCase() || '?') + '</div>';
+  const composerAvatarInner = me.avatar_path
+    ? '<div class="cav" style="background-image:url(' + esc(avatarUrl(me.avatar_path)) + ')"></div>'
+    : conf
+      ? '<div class="cav" style="background:linear-gradient(135deg,#4A2060,#2A1040);color:#B064E0">👻</div>'
+      : '<div class="cav" style="' + avatarStyle(me.id) + '">' + esc(initials(me.first_name, me.last_name).toUpperCase() || '?') + '</div>';
+  const composerAvatar = composerAvatarInner;
 
   const composer =
     '<form class="composer-new" id="cf">' +
@@ -2028,13 +2052,13 @@ async function loadList(t, append=false){
     let head;
     if(conf){
       if(useRealConf && i.profiles){
-        head = '<span class="av" data-uid="' + i.user_id + '" data-name="' + esc(i.profiles.first_name + ' ' + i.profiles.last_name) + '" style="' + avatarStyle(i.user_id) + '">' + esc(initials(i.profiles.first_name, i.profiles.last_name).toUpperCase()) + '</span><div><span class="who" data-uid="' + i.user_id + '" data-name="' + esc(i.profiles.first_name + ' ' + i.profiles.last_name) + '">' + esc(i.profiles.first_name) + ' ' + esc(i.profiles.last_name) + '</span><div class="dep" style="color:#ff5a3c">🔒 gerçek kimlik · ' + esc(i.profiles.department || '') + ' · ' + ago(i.created_at) + '</div></div>';
+        head = renderAvatar(i.user_id, i.profiles.first_name, i.profiles.last_name, i.profiles.avatar_path) + '<div><span class="who" data-uid="' + i.user_id + '" data-name="' + esc(i.profiles.first_name + ' ' + i.profiles.last_name) + '">' + esc(i.profiles.first_name) + ' ' + esc(i.profiles.last_name) + '</span><div class="dep" style="color:#ff5a3c">🔒 gerçek kimlik · ' + esc(i.profiles.department || '') + ' · ' + ago(i.created_at) + '</div></div>';
       } else {
         head = '<span class="av an" title="Anonim">' + GHOST + '</span><div><span class="who" style="cursor:default">Anonim</span><div class="dep">' + ago(i.created_at) + '</div></div>';
       }
     } else {
       const p = i.profiles || { first_name:'?', last_name:'', department:'' };
-      head = '<span class="av" data-uid="' + i.user_id + '" data-name="' + esc((p.first_name||'') + ' ' + (p.last_name||'')) + '" style="' + avatarStyle(i.user_id) + '">' + esc(initials(p.first_name, p.last_name).toUpperCase()) + '</span><div><span class="who" data-uid="' + i.user_id + '" data-name="' + esc((p.first_name||'') + ' ' + (p.last_name||'')) + '">' + esc(p.first_name) + ' ' + esc(p.last_name) + '</span><div class="dep">' + esc(p.department||'') + ' · ' + ago(i.created_at) + '</div></div>';
+      head = renderAvatar(i.user_id, p.first_name, p.last_name, p.avatar_path) + '<div><span class="who" data-uid="' + i.user_id + '" data-name="' + esc((p.first_name||'') + ' ' + (p.last_name||'')) + '">' + esc(p.first_name) + ' ' + esc(p.last_name) + '</span><div class="dep">' + esc(p.department||'') + ' · ' + ago(i.created_at) + '</div></div>';
     }
     const media = (i.image_path ? '<a href="' + imgUrl(i.image_path) + '" target="_blank" rel="noopener"><img class="pimg" loading="lazy" decoding="async" src="' + imgUrl(i.image_path) + '" alt=""></a>' : '') + (i.video_path ? '<video class="pvid" controls playsinline preload="metadata" src="' + videoUrl(i.video_path) + '"></video>' : '');
     return '<article class="card" data-id="' + i.id + '"><div class="hd">' + head + '</div>' +
@@ -2139,7 +2163,7 @@ async function loadHashtag(){
 
   const q = '#' + escapeLike(tag);
   const results = await Promise.all([
-    sb.from('posts').select('id,content,created_at,user_id,image_path,video_path,profiles(first_name,last_name,department)').ilike('content','%' + q + '%').order('created_at',{ascending:false}).limit(50),
+    sb.from('posts').select('id,content,created_at,user_id,image_path,video_path,profiles(first_name,last_name,department,avatar_path)').ilike('content','%' + q + '%').order('created_at',{ascending:false}).limit(50),
     sb.from('confessions_public').select('*').ilike('content','%' + q + '%').order('created_at',{ascending:false}).limit(50),
     sb.from('announcements').select('id,title,content,created_at').ilike('content','%' + q + '%').order('created_at',{ascending:false}).limit(20)
   ]);
@@ -2162,7 +2186,7 @@ async function loadHashtag(){
   const postCard = p => {
     const ls = likesMap['p' + p.id] || [];
     const prof = p.profiles || {first_name:'?',last_name:'',department:''};
-    return '<article class="card" data-id="' + p.id + '"><div class="hd">' + avHtml(p.user_id, prof.first_name, prof.last_name) + '<div><span class="who">' + esc(prof.first_name) + ' ' + esc(prof.last_name) + '</span><div class="dep">' + esc(prof.department||'') + ' · ' + ago(p.created_at) + '</div></div></div>' +
+    return '<article class="card" data-id="' + p.id + '"><div class="hd">' + renderAvatar(p.user_id, prof.first_name, prof.last_name, prof.avatar_path) + '<div><span class="who">' + esc(prof.first_name) + ' ' + esc(prof.last_name) + '</span><div class="dep">' + esc(prof.department||'') + ' · ' + ago(p.created_at) + '</div></div></div>' +
       (p.content ? '<div class="body">' + linkify(p.content) + '</div>' : '') +
       (p.image_path ? '<img class="pimg" loading="lazy" decoding="async" src="' + imgUrl(p.image_path) + '" alt="">' : '') +
       (p.video_path ? '<video class="pvid" controls playsinline preload="metadata" src="' + videoUrl(p.video_path) + '"></video>' : '') +
@@ -2302,13 +2326,13 @@ async function loadCommentsCommon(box, opts){
   const { table, fkColumn, id, anonTable, useRealConf, reporterKey } = opts;
   let rows = [];
   if(useRealConf){
-    const { data } = await sb.from(table).select('id,content,user_id,created_at,profiles(first_name,last_name)').eq(fkColumn, id).order('id');
+    const { data } = await sb.from(table).select('id,content,user_id,created_at,profiles(first_name,last_name,avatar_path)').eq(fkColumn, id).order('id');
     rows = (data||[]).map(c => ({ ...c, _real: c.profiles, _mine: c.user_id === me.id }));
   } else if(anonTable){
     const { data } = await sb.from(anonTable).select('*').eq(fkColumn, id).order('id');
     rows = (data||[]).map(c => ({ ...c, _mine: c.is_mine, _anonNo: c.anon_no }));
   } else {
-    const { data } = await sb.from(table).select('id,content,user_id,created_at,profiles(first_name,last_name)').eq(fkColumn, id).order('id');
+    const { data } = await sb.from(table).select('id,content,user_id,created_at,profiles(first_name,last_name,avatar_path)').eq(fkColumn, id).order('id');
     rows = (data||[]).map(c => ({ ...c, _real: c.profiles, _mine: c.user_id === me.id }));
   }
   const isConf = !!anonTable;
@@ -2433,13 +2457,13 @@ async function loadLibrary(){
 async function loadBooks(){
   removeFab();
   let items, error;
-  ({data: items, error} = await sb.from('books').select('id,user_id,title,author,description,price,image_path,created_at,profiles(first_name,last_name,department)').order('created_at',{ascending:false}).limit(80));
+  ({data: items, error} = await sb.from('books').select('id,user_id,title,author,description,price,image_path,created_at,profiles(first_name,last_name,department,avatar_path)').order('created_at',{ascending:false}).limit(80));
   if(error){
     const r2 = await sb.from('books').select('id,user_id,title,author,description,price,image_path,created_at').order('created_at',{ascending:false}).limit(80);
     if(r2.error) return $('#libView').innerHTML = '<div class="empty">Yüklenemedi: ' + esc(r2.error.message) + '</div>';
     items = r2.data || [];
     const ids = [...new Set(items.map(b => b.user_id))];
-    if(ids.length){ const {data:ps} = await sb.from('profiles').select('id,first_name,last_name,department').in('id', ids); const map = {}; (ps||[]).forEach(p => map[p.id] = p); items.forEach(b => b.profiles = map[b.user_id] || {first_name:'?',last_name:'',department:''}); }
+    if(ids.length){ const {data:ps} = await sb.from('profiles').select('id,first_name,last_name,department,avatar_path').in('id', ids); const map = {}; (ps||[]).forEach(p => map[p.id] = p); items.forEach(b => b.profiles = map[b.user_id] || {first_name:'?',last_name:'',department:''}); }
   }
   const q = bookSearch.toLowerCase().trim();
   const filtered = q ? items.filter(b => (b.title||'').toLowerCase().includes(q) || (b.author||'').toLowerCase().includes(q) || (b.description||'').toLowerCase().includes(q)) : items;
@@ -2450,7 +2474,10 @@ async function loadBooks(){
     const price = (b.price != null && b.price !== '' && priceNum > 0) ? priceNum + ' ₺' : 'Takas / Ücretsiz';
     const canDel = b.user_id === me.id || me.is_admin;
     const prof = b.profiles || {first_name:'?',last_name:'',department:''};
-    return '<article class="bcard" data-id="' + b.id + '">' + img + '<div class="info"><div class="bt">' + esc(b.title) + '</div>' + (b.author ? '<div class="ba">' + esc(b.author) + '</div>' : '') + (b.description ? '<div class="ba" style="margin-top:4px;line-height:1.4">' + esc(b.description) + '</div>' : '') + '<div class="bp">' + price + '</div><div class="bseller" data-uid="' + b.user_id + '" data-name="' + esc(prof.first_name + ' ' + prof.last_name) + '"><span class="dot" style="' + avatarStyle(b.user_id) + '">' + esc(initials(prof.first_name, prof.last_name).toUpperCase()) + '</span><span>' + esc(prof.first_name) + ' ' + esc(prof.last_name) + '</span></div>' + (canDel ? '<div style="margin-top:8px"><button class="link" data-bdel="' + b.id + '" style="padding:0;font-size:12px;color:var(--danger)">Sil</button></div>' : '') + '</div></article>';
+    const sellerAvatar = prof.avatar_path
+      ? '<span class="dot" style="background-image:url(' + esc(avatarUrl(prof.avatar_path)) + ');background-size:cover;background-position:center;color:transparent">' + esc(initials(prof.first_name, prof.last_name).toUpperCase()) + '</span>'
+      : '<span class="dot" style="' + avatarStyle(b.user_id) + '">' + esc(initials(prof.first_name, prof.last_name).toUpperCase()) + '</span>';
+    return '<article class="bcard" data-id="' + b.id + '">' + img + '<div class="info"><div class="bt">' + esc(b.title) + '</div>' + (b.author ? '<div class="ba">' + esc(b.author) + '</div>' : '') + (b.description ? '<div class="ba" style="margin-top:4px;line-height:1.4">' + esc(b.description) + '</div>' : '') + '<div class="bp">' + price + '</div><div class="bseller" data-uid="' + b.user_id + '" data-name="' + esc(prof.first_name + ' ' + prof.last_name) + '">' + sellerAvatar + '<span>' + esc(prof.first_name) + ' ' + esc(prof.last_name) + '</span></div>' + (canDel ? '<div style="margin-top:8px"><button class="link" data-bdel="' + b.id + '" style="padding:0;font-size:12px;color:var(--danger)">Sil</button></div>' : '') + '</div></article>';
   }).join('');
   $('#libView').innerHTML = search + (list ? '<div class="bgrid">' + list + '</div>' : (q ? '<div class="empty"><span class="em-ic">🔍</span><div class="em-t">Sonuç bulunamadı</div></div>' : '<div class="empty"><span class="em-ic">📚</span><div class="em-t">Henüz kitap yok</div>Sağ alttaki + butonuna bas.</div>'));
   const sb_ = document.getElementById('bsearch');
@@ -2478,7 +2505,10 @@ async function loadBooks(){
       const price = (b.price != null && b.price !== '' && priceNum > 0) ? priceNum + ' ₺' : 'Takas / Ücretsiz';
       const canDel = b.user_id === me.id || me.is_admin;
       const prof = b.profiles || {first_name:'?',last_name:'',department:''};
-      return '<article class="bcard" data-id="' + b.id + '">' + img + '<div class="info"><div class="bt">' + esc(b.title) + '</div>' + (b.author ? '<div class="ba">' + esc(b.author) + '</div>' : '') + (b.description ? '<div class="ba" style="margin-top:4px;line-height:1.4">' + esc(b.description) + '</div>' : '') + '<div class="bp">' + price + '</div><div class="bseller" data-uid="' + b.user_id + '" data-name="' + esc(prof.first_name + ' ' + prof.last_name) + '"><span class="dot" style="' + avatarStyle(b.user_id) + '">' + esc(initials(prof.first_name, prof.last_name).toUpperCase()) + '</span><span>' + esc(prof.first_name) + ' ' + esc(prof.last_name) + '</span></div>' + (canDel ? '<div style="margin-top:8px"><button class="link" data-bdel="' + b.id + '" style="padding:0;font-size:12px;color:var(--danger)">Sil</button></div>' : '') + '</div></article>';
+      const sellerAvatar = prof.avatar_path
+        ? '<span class="dot" style="background-image:url(' + esc(avatarUrl(prof.avatar_path)) + ');background-size:cover;background-position:center;color:transparent">' + esc(initials(prof.first_name, prof.last_name).toUpperCase()) + '</span>'
+        : '<span class="dot" style="' + avatarStyle(b.user_id) + '">' + esc(initials(prof.first_name, prof.last_name).toUpperCase()) + '</span>';
+      return '<article class="bcard" data-id="' + b.id + '">' + img + '<div class="info"><div class="bt">' + esc(b.title) + '</div>' + (b.author ? '<div class="ba">' + esc(b.author) + '</div>' : '') + (b.description ? '<div class="ba" style="margin-top:4px;line-height:1.4">' + esc(b.description) + '</div>' : '') + '<div class="bp">' + price + '</div><div class="bseller" data-uid="' + b.user_id + '" data-name="' + esc(prof.first_name + ' ' + prof.last_name) + '">' + sellerAvatar + '<span>' + esc(prof.first_name) + ' ' + esc(prof.last_name) + '</span></div>' + (canDel ? '<div style="margin-top:8px"><button class="link" data-bdel="' + b.id + '" style="padding:0;font-size:12px;color:var(--danger)">Sil</button></div>' : '') + '</div></article>';
     }).join('');
     const grid = document.querySelector('#libView .bgrid');
     const emptyEl = document.querySelector('#libView .empty');
@@ -2520,13 +2550,13 @@ function openBookForm(){
 async function loadPdfs(){
   removeFab();
   let items, error;
-  ({data: items, error} = await sb.from('pdfs').select('id,user_id,title,category,description,file_path,created_at,profiles(first_name,last_name,department)').order('created_at',{ascending:false}).limit(80));
+  ({data: items, error} = await sb.from('pdfs').select('id,user_id,title,category,description,file_path,created_at,profiles(first_name,last_name,department,avatar_path)').order('created_at',{ascending:false}).limit(80));
   if(error){
     const r2 = await sb.from('pdfs').select('id,user_id,title,category,description,file_path,created_at').order('created_at',{ascending:false}).limit(80);
     if(r2.error) return $('#libView').innerHTML = '<div class="empty">Yüklenemedi</div>';
     items = r2.data || [];
     const ids = [...new Set(items.map(p => p.user_id))];
-    if(ids.length){ const {data:ps} = await sb.from('profiles').select('id,first_name,last_name,department').in('id', ids); const map = {}; (ps||[]).forEach(p => map[p.id] = p); items.forEach(p => p.profiles = map[p.user_id] || {first_name:'?',last_name:'',department:''}); }
+    if(ids.length){ const {data:ps} = await sb.from('profiles').select('id,first_name,last_name,department,avatar_path').in('id', ids); const map = {}; (ps||[]).forEach(p => map[p.id] = p); items.forEach(p => p.profiles = map[p.user_id] || {first_name:'?',last_name:'',department:''}); }
   }
   const q = pdfSearch.toLowerCase().trim();
   const filtered = q ? items.filter(p => (p.title||'').toLowerCase().includes(q) || (p.description||'').toLowerCase().includes(q) || (p.category||'').toLowerCase().includes(q)) : items;
@@ -2689,6 +2719,7 @@ async function loadSettings(sub){
   if(sub === 'password') return loadPasswordChange();
   if(sub === 'notif') return loadNotificationSettings();
   if(sub === 'developer') return loadDeveloper();
+  if(sub === 'avatar') return loadAvatarChange();
   const initials_ = initials(me.first_name, me.last_name).toUpperCase();
   const notifPerm = ('Notification' in window) ? Notification.permission : 'desteklenmiyor';
   const notifUser = notifEnabled();
@@ -2698,9 +2729,16 @@ async function loadSettings(sub){
   else if(notifPerm === 'denied') notifLabel = '🚫 Reddedildi';
   else notifLabel = 'İzin verilmedi';
 
+  const avatarBigContent = me.avatar_path
+    ? ''
+    : esc(initials_);
+  const avatarBigStyle = me.avatar_path
+    ? 'background-image:url(' + esc(avatarUrl(me.avatar_path)) + ');background-size:cover;background-position:center;color:transparent'
+    : avatarStyle(me.id);
+
   $('#view').innerHTML =
     '<div class="card" style="text-align:center">' +
-      '<div class="avatar-big" style="' + avatarStyle(me.id) + '">' + esc(initials_) + '</div>' +
+      '<div class="avatar-big" style="' + avatarBigStyle + '">' + avatarBigContent + '</div>' +
       '<div style="font-weight:800;font-size:18px">' + esc(me.first_name) + ' ' + esc(me.last_name) + '</div>' +
       '<div class="dep">' + esc(me.department||'') + '</div>' +
       (me.is_admin ? '<span class="badge" style="margin-top:8px">👑 YÖNETİCİ</span>' : '') +
@@ -2708,14 +2746,15 @@ async function loadSettings(sub){
     '<div class="settings-list">' +
       '<div class="settings-item" data-open="password"><div class="ico">🔑</div><div class="txt"><b>Şifre Değiştir</b><small>Hesabının şifresini güncelle</small></div><span class="arrow">›</span></div>' +
       '<div class="settings-item" data-open="notif"><div class="ico">🔔</div><div class="txt"><b>Bildirimler</b><small>' + notifLabel + '</small></div><span class="arrow">›</span></div>' +
-      '<div class="settings-item" data-open="info"><div class="ico">ℹ️</div><div class="txt"><b>Bilgi</b><small>Hakkımızda, Gizlilik, İletişim</small></div><span class="arrow">›</span></div>' +
-      '<div class="settings-item" data-open="developer"><div class="ico">👨‍💻</div><div class="txt"><b>Yapımcı Hakkında</b><small>Emin Acar · Kurucu & Geliştirici</small></div><span class="arrow">›</span></div>' +
-      '<div class="settings-item" data-open="feedback"><div class="ico">💡</div><div class="txt"><b>Öneri & Şikayet</b><small>Uygulamayı geliştirmemize yardımcı ol</small></div><span class="arrow">›</span></div>' +
+      '<div class="settings-item" data-open="avatar"><div class="ico">📷</div><div class="txt"><b>Profil Fotoğrafını Değiştir</b><small>Hesabının profil resmini güncelle</small></div><span class="arrow">›</span></div>' +
       '<div class="settings-item" data-open="advertise"><div class="ico">📢</div><div class="txt"><b>Reklam Ver</b><small>WhatsApp ile iletişime geç</small></div><span class="arrow">›</span></div>' +
-      '<div class="settings-item danger" data-open="delete"><div class="ico">🗑️</div><div class="txt"><b>Hesabımı Sil</b><small>Anında ve kalıcı olarak silinir</small></div><span class="arrow">›</span></div>' +
+      '<div class="settings-item" data-open="feedback"><div class="ico">💡</div><div class="txt"><b>Öneri & Şikayet</b><small>Uygulamayı geliştirmemize yardımcı ol</small></div><span class="arrow">›</span></div>' +
+      '<div class="settings-item" data-open="info"><div class="ico">ℹ️</div><div class="txt"><b>Gelişim Vibe Hakkında</b><small>Hakkımızda, İletişim, Gizlilik</small></div><span class="arrow">›</span></div>' +
+      '<div class="settings-item" data-open="developer"><div class="ico">👨‍💻</div><div class="txt"><b>Yapımcı Hakkında</b><small>Emin Acar · Kurucu & Geliştirici</small></div><span class="arrow">›</span></div>' +
       '<div class="settings-item danger" data-open="logout"><div class="ico">🚪</div><div class="txt"><b>Çıkış Yap</b><small>Hesabından güvenli çıkış</small></div><span class="arrow">›</span></div>' +
+      '<div class="settings-item danger" data-open="delete"><div class="ico">🗑️</div><div class="txt"><b>Hesabımı Sil</b><small>Anında ve kalıcı olarak silinir</small></div><span class="arrow">›</span></div>' +
     '</div>' +
-    '<div style="text-align:center;margin-top:22px;color:var(--mute);font-size:11px">Gelişim Vibe · v4.5<br>Designed &amp; Developed by <b style="color:var(--ac)">Emin Acar</b></div>';
+    '<div style="text-align:center;margin-top:22px;color:var(--mute);font-size:11px">Gelişim Vibe · v4.6<br>Designed &amp; Developed by <b style="color:var(--ac)">Emin Acar</b></div>';
   $('#view').onclick = async e => {
     const item = e.target.closest('[data-open]'); if(!item) return;
     const x = item.dataset.open;
@@ -2725,8 +2764,85 @@ async function loadSettings(sub){
     if(x === 'info') loadSettings('info');
     if(x === 'password') loadSettings('password');
     if(x === 'developer') loadSettings('developer');
+    if(x === 'avatar') loadSettings('avatar');
     if(x === 'feedback') show('feedback');
     if(x === 'advertise') openAdvertiseSheet();
+  };
+}
+
+/* ============== AVATAR CHANGE ============== */
+async function loadAvatarChange(){
+  removeFab();
+  const hasAvatar = !!me.avatar_path;
+  const avatarBg = hasAvatar
+    ? 'background-image:url(' + esc(avatarUrl(me.avatar_path)) + ')'
+    : avatarStyle(me.id);
+  const inner = hasAvatar ? '' : '<span class="ini">' + esc(initials(me.first_name, me.last_name).toUpperCase()) + '</span>';
+
+  $('#view').innerHTML = settingsHeader('📷 Profil Fotoğrafını Değiştir') +
+    '<div class="card" style="text-align:center">' +
+      '<div class="avatar-uploader" id="avatarUploader" style="' + avatarBg + '">' +
+        inner +
+        '<div class="overlay">📷 Değiştir</div>' +
+      '</div>' +
+      '<input type="file" id="avInput" accept="image/*" hidden>' +
+      '<button class="btn" id="avPick" style="width:100%">📷 Yeni Fotoğraf Seç</button>' +
+      (hasAvatar ? '<button class="btn" id="avRemove" style="width:100%;margin-top:8px;background:var(--bg);color:var(--danger);border:1px solid var(--line)">🗑️ Fotoğrafı Kaldır</button>' : '') +
+      '<div class="prog-wrap hide" id="avProg" style="margin-top:12px"><div class="prog-bar"><div class="prog-fill" id="avFill"></div></div><div class="prog-text" id="avText">Yükleniyor... %0</div></div>' +
+      '<p style="font-size:12px;color:var(--mute);margin-top:14px;line-height:1.55">Seçtiğin fotoğraf otomatik olarak kare kırpılır, optimize edilir ve tüm uygulamada profil resmin olarak görünür.</p>' +
+      '<div style="background:color-mix(in srgb,var(--ac) 8%,transparent);border-left:3px solid var(--ac);border-radius:10px;padding:12px;margin-top:14px;text-align:left">' +
+        '<div style="font-size:12.5px;color:var(--ink);font-weight:700;margin-bottom:4px">💡 Öneriler</div>' +
+        '<ul style="margin:0;padding-left:18px;font-size:12px;color:var(--mute);line-height:1.6">' +
+          '<li>Yüzünün net göründüğü bir fotoğraf seç</li>' +
+          '<li>Kare format tercih et</li>' +
+          '<li>Uygunsuz içerikler kaldırılır</li>' +
+        '</ul>' +
+      '</div>' +
+    '</div>';
+
+  const setP = p => {
+    $('#avProg').classList.remove('hide');
+    $('#avFill').style.width = Math.round(p*100) + '%';
+    $('#avText').textContent = 'Yükleniyor... %' + Math.round(p*100);
+  };
+
+  const doUpload = async (file) => {
+    if(!file) return;
+    if(!file.type.startsWith('image/')) return toast('Sadece fotoğraf seçebilirsin.', 'err');
+    const btn = $('#avPick'); btn.disabled = true; btn.textContent = 'Yükleniyor...';
+    try{
+      const oldPath = me.avatar_path;
+      setP(0);
+      const path = await uploadAvatar(file, p => setP(p));
+      const { error } = await sb.from('profiles').update({ avatar_path: path }).eq('id', me.id);
+      if(error) throw new Error(error.message);
+      if(oldPath) await deleteStorageFile('images', oldPath);
+      me.avatar_path = path;
+      toast('✅ Profil fotoğrafın güncellendi.', 'ok');
+      loadAvatarChange();
+    }catch(err){
+      btn.disabled = false;
+      btn.textContent = '📷 Yeni Fotoğraf Seç';
+      $('#avProg').classList.add('hide');
+      toast('Hata: ' + err.message, 'err');
+    }
+  };
+
+  $('#avPick').onclick = () => $('#avInput').click();
+  $('#avatarUploader').onclick = () => $('#avInput').click();
+  $('#avInput').onchange = () => doUpload($('#avInput').files[0]);
+
+  const rm = $('#avRemove');
+  if(rm) rm.onclick = async () => {
+    if(!confirm('Profil fotoğrafın kaldırılsın mı?')) return;
+    try{
+      const oldPath = me.avatar_path;
+      await sb.from('profiles').update({ avatar_path: null }).eq('id', me.id);
+      if(oldPath) await deleteStorageFile('images', oldPath);
+      me.avatar_path = null;
+      toast('Fotoğraf kaldırıldı.', 'ok');
+      loadAvatarChange();
+    }catch(err){ toast('Hata: ' + err.message, 'err'); }
   };
 }
 
@@ -2836,7 +2952,6 @@ function deleteAccount(){
       const json = await res.json().catch(() => ({}));
       if(!res.ok) throw new Error(json.error || 'Silme başarısız');
 
-      // Başarılı — modal'ı kapat, localStorage temizle, bildir
       Object.keys(localStorage).forEach(k => {
         if(k.startsWith('seen_') || k === 'theme' || k === 'cookie_consent' || k.startsWith('gv_') || k === 'adminShowRealConf') {
           localStorage.removeItem(k);
@@ -2846,10 +2961,8 @@ function deleteAccount(){
       el.remove();
       toast('✅ Hesabın silindi. Hoşça kal!', 'ok');
 
-      // signOut başarısız olabilir (kullanıcı zaten silindi) — hata yutma
       try { await sb.auth.signOut(); } catch(_){}
 
-      // 1 saniye sonra sayfayı yenile → login ekranı gelsin
       setTimeout(() => { window.location.reload(); }, 1000);
     } catch(err){
       btn.disabled = false; btn.textContent = 'Hesabımı Sil';
@@ -2883,12 +2996,145 @@ async function loadPasswordChange(){
     }catch(err){ btn.disabled = false; btn.textContent = 'Değiştir'; toast('Hata: ' + err.message, 'err'); }
   };
 }
+
+/* ============== INFO (Gelişim Vibe Hakkında) ============== */
 async function loadInfo(){
   removeFab();
-  $('#view').innerHTML = settingsHeader('ℹ️ Bilgi') + '<div class="seg"><button data-it="about" class="on">ℹ️ Hakkımızda</button><button data-it="privacy">🔒 Gizlilik</button><button data-it="contact">📬 İletişim</button></div><div id="infoView"></div>';
-  const about = '<article class="card"><h2 style="margin:0 0 10px;font-size:20px">ℹ️ Hakkımızda</h2><p style="line-height:1.7;color:var(--mute);font-size:14.5px"><b style="color:var(--ink)">Gelişim Vibe</b>, İstanbul Gelişim Üniversitesi öğrencileri tarafından <b>öğrenciler için</b> geliştirilmiş bir topluluk uygulamasıdır.</p><div style="background:var(--bg);border-radius:12px;padding:14px;margin-top:14px"><div style="font-weight:800;margin-bottom:6px">📌 Neler Yapabilirsin?</div><ul style="margin:0;padding-left:20px;line-height:1.8;color:var(--mute);font-size:14px"><li>Akışta paylaşım yap (#etiket kullan)</li><li>Anonim itiraf gönder</li><li>2. el kitap sat / takas yap</li><li>Ders notlarını PDF olarak paylaş</li><li>Mesajlaş, emoji reaksiyon ver</li></ul></div><div style="background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 10%,transparent),transparent);border-radius:12px;padding:14px;margin-top:14px;border:1px dashed var(--ac)"><div style="font-weight:800;margin-bottom:6px">📜 Yasal Uyarı</div><p style="margin:0;color:var(--mute);font-size:13px;line-height:1.6">Bu uygulama <b>resmi bir üniversite uygulaması değildir</b>.</p></div><a href="' + COMMUNITY_IG + '" target="_blank" rel="noopener" class="dev-btn ig" style="margin-top:14px"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>@igugelisimvibe</a></article>';
-  const privacy = '<article class="card"><h2 style="margin:0 0 10px;font-size:20px">🔒 Gizlilik Politikası</h2><div style="line-height:1.75;font-size:14.5px"><h3 style="font-size:15px;margin:16px 0 6px">1. Veri Sorumlusu</h3><p style="margin:0;color:var(--mute)">Gelişim Vibe · WhatsApp üzerinden iletişime geçebilirsiniz.</p><h3 style="font-size:15px;margin:16px 0 6px">2. Çerezler</h3><p style="margin:0;color:var(--mute)">Google AdSense kişiselleştirilmiş reklam için çerez kullanır; onay sonrası yüklenir.</p><h3 style="font-size:15px;margin:16px 0 6px">3. KVKK m.11 Haklarınız</h3><p style="margin:0;color:var(--mute)">Başvuru WhatsApp üzerinden yapılabilir.</p></div></article>';
-  const contact = '<article class="card"><h2 style="margin:0 0 10px;font-size:20px">📬 İletişim</h2><p style="color:var(--mute);font-size:13.5px;margin:0 0 16px">Bizimle WhatsApp üzerinden iletişime geçebilirsin.</p><div style="display:flex;flex-direction:column;gap:10px"><a href="https://wa.me/' + CONTACT_WA + '" target="_blank" rel="noopener" class="dev-btn wa" style="margin:0"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>WhatsApp ile İletişime Geç</a></div></article>';
+  $('#view').innerHTML = settingsHeader('ℹ️ Gelişim Vibe Hakkında') +
+    '<div class="seg">' +
+      '<button data-it="about" class="on">ℹ️ Hakkında</button>' +
+      '<button data-it="contact">📬 İletişim</button>' +
+      '<button data-it="privacy">🔒 Gizlilik</button>' +
+    '</div>' +
+    '<div id="infoView"></div>';
+
+  const about = '<article class="card">' +
+    '<h2 style="margin:0 0 12px;font-size:20px">Gelişim Vibe Nedir?</h2>' +
+    '<p style="line-height:1.75;color:var(--mute);font-size:14.5px;margin:0 0 14px"><b style="color:var(--ink)">Gelişim Vibe</b>, İstanbul Gelişim Üniversitesi (İGÜ) <b>öğrencisi</b> tarafından <b>öğrenciler için</b> geliştirilmiş bir sosyal topluluk uygulamasıdır. Okul mailinle giriş yaparak kampüsteki diğer öğrencilerle paylaşımda bulunabilir, anonim itiraf gönderebilir, 2. el kitap satabilir veya takas edebilir, ders notlarını PDF olarak paylaşabilirsin.</p>' +
+    '<h3 style="font-size:16px;margin:20px 0 10px">Neler Yapabilirsin?</h3>' +
+    '<ul style="margin:0;padding-left:22px;line-height:1.9;color:var(--mute);font-size:14px">' +
+      '<li><b style="color:var(--ink)">📝 Akış</b> — kampüsle ilgili düşüncelerini paylaş, #etiket kullan</li>' +
+      '<li><b style="color:var(--ink)">👻 Anonim İtiraf</b> — kimliğini gizleyerek itirafta bulun</li>' +
+      '<li><b style="color:var(--ink)">📚 2. El Kitap</b> — kitap sat veya takas et</li>' +
+      '<li><b style="color:var(--ink)">📄 PDF Paylaşımı</b> — ders notu ve kaynakları yükle</li>' +
+      '<li><b style="color:var(--ink)">💬 Mesajlaşma</b> — arkadaşlarınla özel sohbet et</li>' +
+      '<li><b style="color:var(--ink)">📢 Duyurular</b> — resmi duyuruları ve anketleri takip et</li>' +
+    '</ul>' +
+    '<h3 style="font-size:16px;margin:20px 0 10px">Sıkça Sorulan Sorular</h3>' +
+    '<details style="margin-bottom:10px;padding:10px 14px;background:var(--bg);border:1px solid var(--line);border-radius:10px">' +
+      '<summary style="cursor:pointer;font-weight:700;color:var(--ink)">Gelişim Vibe ücretsiz mi?</summary>' +
+      '<p style="margin:8px 0 0;color:var(--mute);font-size:13.5px">Evet, tamamen ücretsizdir. Hiçbir ücret veya abonelik yoktur.</p>' +
+    '</details>' +
+    '<details style="margin-bottom:10px;padding:10px 14px;background:var(--bg);border:1px solid var(--line);border-radius:10px">' +
+      '<summary style="cursor:pointer;font-weight:700;color:var(--ink)">Kimler kayıt olabilir?</summary>' +
+      '<p style="margin:8px 0 0;color:var(--mute);font-size:13.5px">Sadece <em>@ogr.gelisim.edu.tr</em> uzantılı okul maili olan İstanbul Gelişim Üniversitesi öğrencileri kayıt olabilir.</p>' +
+    '</details>' +
+    '<details style="margin-bottom:10px;padding:10px 14px;background:var(--bg);border:1px solid var(--line);border-radius:10px">' +
+      '<summary style="cursor:pointer;font-weight:700;color:var(--ink)">İtiraflar gerçekten anonim mi?</summary>' +
+      '<p style="margin:8px 0 0;color:var(--mute);font-size:13.5px">Evet. İtiraflar kimliğin gizlenerek paylaşılır. Yöneticiler dahil hiç kimse kimin gönderdiğini göremez.</p>' +
+    '</details>' +
+    '<details style="margin-bottom:10px;padding:10px 14px;background:var(--bg);border:1px solid var(--line);border-radius:10px">' +
+      '<summary style="cursor:pointer;font-weight:700;color:var(--ink)">Resmi bir üniversite uygulaması mı?</summary>' +
+      '<p style="margin:8px 0 0;color:var(--mute);font-size:13.5px">Hayır. Gelişim Vibe bağımsız bir öğrenci projesidir ve resmi bir üniversite uygulaması değildir.</p>' +
+    '</details>' +
+    '<div style="background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 10%,transparent),transparent);border-radius:12px;padding:14px;margin-top:16px;border:1px dashed var(--ac)">' +
+      '<div style="font-weight:800;margin-bottom:6px;font-size:13px">📜 Yasal Uyarı</div>' +
+      '<p style="margin:0;color:var(--mute);font-size:12.5px;line-height:1.6">Bu uygulama <b style="color:var(--ink)">resmi bir üniversite uygulaması değildir</b>. Bağımsız bir öğrenci projesi olarak yürütülmektedir.</p>' +
+    '</div>' +
+    '<a href="' + COMMUNITY_IG + '" target="_blank" rel="noopener" class="dev-btn ig" style="margin-top:16px">' +
+      '<svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>' +
+      '@igugelisimvibe' +
+    '</a>' +
+  '</article>';
+
+  const privacy = '<article class="card">' +
+    '<h2 style="margin:0 0 14px;font-size:20px">🔒 Gizlilik Politikası ve KVKK Aydınlatma</h2>' +
+    '<div style="line-height:1.8;font-size:14px;color:var(--mute);text-align:justify">' +
+      '<p style="margin:0 0 14px">Bu Gizlilik Politikası ve KVKK Aydınlatma Metni, 6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") m.10 uyarınca, Gelişim Vibe uygulamasını kullanan öğrencileri bilgilendirmek amacıyla hazırlanmıştır.</p>' +
+
+      '<h3 style="font-size:15.5px;margin:20px 0 8px;color:var(--ink)">1. Veri Sorumlusu</h3>' +
+      '<p style="margin:0 0 14px">Gelişim Vibe, İstanbul Gelişim Üniversitesi öğrencileri için bağımsız bir öğrenci projesi olarak geliştirilmiştir. Veri sorumlusu sıfatıyla iletişim için WhatsApp: <b style="color:var(--ink)">' + CONTACT_WA + '</b> numarası kullanılabilir. Uygulama, resmi bir üniversite uygulaması değildir.</p>' +
+
+      '<h3 style="font-size:15.5px;margin:20px 0 8px;color:var(--ink)">2. İşlenen Kişisel Veriler</h3>' +
+      '<p style="margin:0 0 10px">Uygulamayı kullanırken aşağıdaki veriler işlenebilir:</p>' +
+      '<ul style="margin:0 0 14px;padding-left:22px">' +
+        '<li><b style="color:var(--ink)">Kimlik Verileri:</b> Ad, soyad</li>' +
+        '<li><b style="color:var(--ink)">İletişim Verileri:</b> Okul e-posta adresi</li>' +
+        '<li><b style="color:var(--ink)">Eğitim Verileri:</b> Bölüm bilgisi</li>' +
+        '<li><b style="color:var(--ink)">İçerik Verileri:</b> Paylaşımlar, itiraflar, yorumlar, mesajlar, yüklediğin medya (fotoğraf, video, PDF, profil fotoğrafı)</li>' +
+        '<li><b style="color:var(--ink)">Teknik Veriler:</b> IP adresi, cihaz bilgisi, çerez verileri</li>' +
+        '<li><b style="color:var(--ink)">İşlem Güvenliği Verileri:</b> Şikayet kayıtları, moderasyon geçmişi</li>' +
+      '</ul>' +
+
+      '<h3 style="font-size:15.5px;margin:20px 0 8px;color:var(--ink)">3. Kişisel Verilerin İşlenme Amaçları</h3>' +
+      '<ul style="margin:0 0 14px;padding-left:22px">' +
+        '<li>Üyelik kaydı ve doğrulama işlemleri</li>' +
+        '<li>Sosyal topluluk hizmetlerinin sunulması (paylaşım, mesajlaşma, itiraf, kitap takası)</li>' +
+        '<li>Topluluk güvenliği ve içerik moderasyonu</li>' +
+        '<li>Yasal yükümlülüklerin yerine getirilmesi</li>' +
+        '<li>Hizmet kalitesinin iyileştirilmesi ve hata tespiti</li>' +
+        '<li>Kullanıcı onayı ile kişiselleştirilmiş reklam gösterimi</li>' +
+      '</ul>' +
+
+      '<h3 style="font-size:15.5px;margin:20px 0 8px;color:var(--ink)">4. Kişisel Verilerin Aktarımı</h3>' +
+      '<p style="margin:0 0 10px">Kişisel verileriniz aşağıdaki hizmet sağlayıcıları aracılığıyla işlenmektedir:</p>' +
+      '<ul style="margin:0 0 14px;padding-left:22px">' +
+        '<li><b style="color:var(--ink)">Supabase Inc. (ABD/AB):</b> Veritabanı ve kimlik doğrulama hizmetleri</li>' +
+        '<li><b style="color:var(--ink)">Google LLC (ABD):</b> Google AdSense reklam hizmeti (yalnızca çerez onayı verildiğinde)</li>' +
+        '<li><b style="color:var(--ink)">Cloudflare Inc. (ABD):</b> CDN ve güvenlik hizmetleri</li>' +
+      '</ul>' +
+      '<p style="margin:0 0 14px">Yurt dışına aktarım, KVKK m.9 kapsamında <b style="color:var(--ink)">açık rızanıza</b> dayanılarak ve Standart Sözleşme Hükümleri (SCC) ile güvence altına alınarak yapılmaktadır.</p>' +
+
+      '<h3 style="font-size:15.5px;margin:20px 0 8px;color:var(--ink)">5. Çerezler ve Reklam</h3>' +
+      '<p style="margin:0 0 10px">Uygulamamızda üç tür çerez kullanılır:</p>' +
+      '<ul style="margin:0 0 14px;padding-left:22px">' +
+        '<li><b style="color:var(--ink)">Zorunlu Çerezler:</b> Oturum yönetimi için gereklidir</li>' +
+        '<li><b style="color:var(--ink)">Tercih Çerezleri:</b> Tema, dil gibi kişisel tercihlerinizi saklar</li>' +
+        '<li><b style="color:var(--ink)">Reklam Çerezleri (Google AdSense):</b> Yalnızca onay verdiğinizde yüklenir. Google\'ın reklam politikalarına <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener" style="color:var(--ac)">buradan</a> ulaşabilirsiniz.</li>' +
+      '</ul>' +
+
+      '<h3 style="font-size:15.5px;margin:20px 0 8px;color:var(--ink)">6. Veri Saklama Süresi</h3>' +
+      '<p style="margin:0 0 14px">Verileriniz, hesabınızı silene kadar veya işleme amacının gerektirdiği süre boyunca saklanır. Hesabınızı sildiğinizde tüm kişisel verileriniz <b style="color:var(--ink)">anında ve kalıcı olarak</b> silinir. Yasal zorunluluk gerektiren kayıtlar (moderasyon geçmişi gibi) ise yalnızca yönetici tarafından görülebilir şekilde anonim tutulabilir.</p>' +
+
+      '<h3 style="font-size:15.5px;margin:20px 0 8px;color:var(--ink)">7. Veri Güvenliği</h3>' +
+      '<p style="margin:0 0 14px">Verileriniz SSL/TLS şifrelemesi ile korunur. Supabase üzerinde Row Level Security (RLS) politikaları ile erişim kontrolü sağlanır. Şifreler hashlenerek saklanır ve hiçbir zaman düz metin olarak tutulmaz. Yöneticiler dahil hiç kimse itirafların gerçek sahiplerini göremez.</p>' +
+
+      '<h3 style="font-size:15.5px;margin:20px 0 8px;color:var(--ink)">8. Haklarınız (KVKK m.11)</h3>' +
+      '<p style="margin:0 0 10px">KVKK m.11 uyarınca aşağıdaki haklara sahipsiniz:</p>' +
+      '<ul style="margin:0 0 14px;padding-left:22px">' +
+        '<li>Kişisel verilerinizin işlenip işlenmediğini öğrenme</li>' +
+        '<li>İşlenmişse buna ilişkin bilgi talep etme</li>' +
+        '<li>İşlenme amacını ve amacına uygun kullanılıp kullanılmadığını öğrenme</li>' +
+        '<li>Yurt içinde / yurt dışında aktarıldığı üçüncü kişileri bilme</li>' +
+        '<li>Eksik veya yanlış işlenmişse düzeltilmesini isteme</li>' +
+        '<li>KVKK m.7 çerçevesinde silinmesini veya yok edilmesini isteme</li>' +
+        '<li>Düzeltme / silme işlemlerinin aktarıldığı üçüncü kişilere bildirilmesini isteme</li>' +
+        '<li>Otomatik sistemlerle analiz edilmesi sonucu aleyhinize çıkan sonuçlara itiraz etme</li>' +
+        '<li>Kanuna aykırı işleme sebebiyle zarara uğramanız hâlinde zararın giderilmesini talep etme</li>' +
+      '</ul>' +
+      '<p style="margin:0 0 14px">Haklarınızı kullanmak için WhatsApp üzerinden bizimle iletişime geçebilirsiniz.</p>' +
+
+      '<h3 style="font-size:15.5px;margin:20px 0 8px;color:var(--ink)">9. Yaş Sınırı</h3>' +
+      '<p style="margin:0 0 14px">Uygulama, 18 yaş ve üzeri üniversite öğrencilerine yöneliktir. 18 yaşından küçük kullanıcıların ebeveyn onayı ile kullanması önerilir.</p>' +
+
+      '<div style="background:color-mix(in srgb,var(--ac) 8%,transparent);border-left:3px solid var(--ac);border-radius:10px;padding:14px;margin-top:20px">' +
+        '<p style="margin:0;color:var(--ink);font-size:13.5px;line-height:1.6"><b>Önemli Not:</b> Gelişim Vibe, İstanbul Gelişim Üniversitesi\'nin <b>resmî bir uygulaması değildir</b>. Bağımsız bir öğrenci projesi olarak yürütülmektedir. Üniversitenin kurumsal veri işleme faaliyetlerinden ayrı değerlendirilmelidir.</p>' +
+      '</div>' +
+    '</div>' +
+  '</article>';
+
+  const contact = '<article class="card">' +
+    '<h2 style="margin:0 0 10px;font-size:20px">📬 İletişim</h2>' +
+    '<p style="color:var(--mute);font-size:13.5px;margin:0 0 16px;line-height:1.6">Bizimle WhatsApp üzerinden iletişime geçebilirsin. Soruların, önerilerin ve şikayetlerin için buradayız.</p>' +
+    '<div style="display:flex;flex-direction:column;gap:10px">' +
+      '<a href="https://wa.me/' + CONTACT_WA + '" target="_blank" rel="noopener" class="dev-btn wa" style="margin:0"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>WhatsApp ile İletişime Geç</a>' +
+      '<a href="' + COMMUNITY_IG + '" target="_blank" rel="noopener" class="dev-btn ig" style="margin:0"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>Instagram · @igugelisimvibe</a>' +
+    '</div>' +
+    '<div style="margin-top:18px;padding:14px;background:var(--bg);border-radius:12px;font-size:12.5px;color:var(--mute);line-height:1.6">' +
+      '<b style="color:var(--ink)">📢 Reklam ve iş birliği:</b> Reklam vermek istiyorsan <b style="color:var(--ink)">' + CONTACT_EMAIL + '</b> adresine ya da WhatsApp üzerinden bize ulaşabilirsin.' +
+    '</div>' +
+  '</article>';
+
   const setView = v => {
     $('#view').querySelectorAll('.seg button').forEach(x => x.classList.toggle('on', x.dataset.it === v));
     $('#infoView').innerHTML = v === 'about' ? about : v === 'privacy' ? privacy : contact;
@@ -2917,13 +3163,13 @@ async function loadChat(){
   }
   const ids = [...partners.keys()];
   let profs = {};
-  if(ids.length){ const {data:ps} = await sb.from('profiles').select('id,first_name,last_name,department').in('id', ids); (ps||[]).forEach(p => profs[p.id] = p); }
+  if(ids.length){ const {data:ps} = await sb.from('profiles').select('id,first_name,last_name,department,avatar_path').in('id', ids); (ps||[]).forEach(p => profs[p.id] = p); }
   const rows = ids.map(id => {
     const p = profs[id] || {first_name:'?',last_name:'',department:''};
     const info = partners.get(id);
     const last = info.last;
     const txt = (last.sender_id === me.id ? 'Sen: ' : '') + (last.image_path ? '📷 Fotoğraf' : last.content);
-    return '<div class="conv" data-uid="' + id + '" data-name="' + esc(p.first_name + ' ' + p.last_name) + '"><span class="av" style="' + avatarStyle(id) + '">' + esc(initials(p.first_name, p.last_name).toUpperCase() || '?') + '</span><div class="cmid"><div class="cn">' + esc(p.first_name) + ' ' + esc(p.last_name) + '</div><div class="cl">' + esc(txt).slice(0,60) + '</div></div>' + (info.unread ? '<span class="cb">' + info.unread + '</span>' : '') + '</div>';
+    return '<div class="conv" data-uid="' + id + '" data-name="' + esc(p.first_name + ' ' + p.last_name) + '">' + renderAvatar(id, p.first_name, p.last_name, p.avatar_path) + '<div class="cmid"><div class="cn">' + esc(p.first_name) + ' ' + esc(p.last_name) + '</div><div class="cl">' + esc(txt).slice(0,60) + '</div></div>' + (info.unread ? '<span class="cb">' + info.unread + '</span>' : '') + '</div>';
   }).join('');
   $('#view').innerHTML = (rows || '<div class="empty"><span class="em-ic">💬</span><div class="em-t">Henüz mesajın yok</div>Bir kullanıcının profiline dokunup mesaj gönderebilirsin.</div>') + (rows ? '<div class="empty" style="padding:12px;font-size:12px">💡 Bir sohbete uzun basarak silebilirsin</div>' : '');
 
@@ -3009,9 +3255,13 @@ async function loadChatView(){
   const msgs = (rawMsgs || []).slice().reverse();
   await sb.from('messages').update({ read_at: new Date().toISOString() }).eq('receiver_id', me.id).eq('sender_id', other).is('read_at', null);
   const ini = (chatUser || '?').split(' ').map(x => x[0]).slice(0,2).join('').toUpperCase();
+  const { data: otherProfile } = await sb.from('profiles').select('avatar_path,first_name,last_name').eq('id', other).maybeSingle();
+  const otherAvatarHtml = otherProfile && otherProfile.avatar_path
+    ? '<span class="av" style="background-image:url(' + esc(avatarUrl(otherProfile.avatar_path)) + ');color:transparent">' + esc(ini) + '</span>'
+    : '<span class="av" style="' + avatarStyle(other) + '">' + esc(ini) + '</span>';
 
   $('#view').innerHTML = '<div class="chat-wrap">' +
-    '<div class="chat-head"><button class="back" id="chatBack">←</button><span class="av" style="' + avatarStyle(other) + '">' + esc(ini) + '</span><div style="flex:1;min-width:0"><div style="font-weight:700">' + esc(chatUser||'Kullanıcı') + '</div><div class="dep" id="chatStatus">çevrimiçi olabilir</div></div></div>' +
+    '<div class="chat-head"><button class="back" id="chatBack">←</button>' + otherAvatarHtml + '<div style="flex:1;min-width:0"><div style="font-weight:700">' + esc(chatUser||'Kullanıcı') + '</div><div class="dep" id="chatStatus">çevrimiçi olabilir</div></div></div>' +
     '<div class="chat-body" id="chatBody">' + (renderMessages(msgs||[]) || '<div class="empty" style="padding:20px">Sohbeti başlat 👋</div>') + '</div>' +
     '<div id="replyPreview"></div>' +
     '<div id="chatEmojiBar" class="hide"></div>' +
@@ -3499,7 +3749,7 @@ function renderAnnForm(){
 }
 
 async function loadAnnComments(box, annId){
-  const { data } = await sb.from('announcement_comments').select('id,content,user_id,created_at,profiles(first_name,last_name)').eq('announcement_id', annId).order('id');
+  const { data } = await sb.from('announcement_comments').select('id,content,user_id,created_at,profiles(first_name,last_name,avatar_path)').eq('announcement_id', annId).order('id');
   const itemsHtml = (data||[]).map(c => {
     const mine = c.user_id === me.id;
     const name = '<span class="cm-name who" data-uid="' + c.user_id + '" data-name="' + esc((c.profiles?.first_name||'') + ' ' + (c.profiles?.last_name||'')) + '">' + esc(c.profiles?.first_name||'') + ' ' + esc(c.profiles?.last_name||'') + '</span>';
@@ -3952,9 +4202,9 @@ async function loadAdminAllUsers(){
   const keepFocus = existingSearch && document.activeElement === existingSearch;
   const selStart = existingSearch ? existingSearch.selectionStart : 0;
   const q = (window._userSearch || '').toLowerCase().trim();
-  let { data, error } = await sb.from('profiles').select('id,first_name,last_name,department,is_banned,is_restricted,is_admin,restrict_count,ban_count,created_at').order('created_at', { ascending: false }).limit(1000);
+  let { data, error } = await sb.from('profiles').select('id,first_name,last_name,department,avatar_path,is_banned,is_restricted,is_admin,restrict_count,ban_count,created_at').order('created_at', { ascending: false }).limit(1000);
   if(error){
-    const r2 = await sb.from('profiles').select('id,first_name,last_name,department,is_banned,is_restricted,restrict_count,created_at').order('created_at', { ascending: false }).limit(1000);
+    const r2 = await sb.from('profiles').select('id,first_name,last_name,department,avatar_path,is_banned,is_restricted,restrict_count,created_at').order('created_at', { ascending: false }).limit(1000);
     if(r2.error){ box.innerHTML = '<div class="empty">' + esc(r2.error.message) + '</div>'; return; }
     data = r2.data;
   }
@@ -3969,8 +4219,11 @@ async function loadAdminAllUsers(){
     const rc = u.restrict_count || 0;
     const bc = u.ban_count || 0;
     const countBadge = (rc > 0 || bc > 0) ? '<span style="margin-left:6px;font-size:11px"><span style="background:color-mix(in srgb,#FF9900 14%,transparent);color:#ff9900;font-weight:800;padding:2px 7px;border-radius:999px">⚠️ ' + rc + '</span> <span style="background:color-mix(in srgb,#D42F4B 14%,transparent);color:var(--danger);font-weight:800;padding:2px 7px;border-radius:999px">🚫 ' + bc + '</span></span>' : '';
+    const avInner = u.avatar_path
+      ? '<div class="av" style="background-image:url(' + esc(avatarUrl(u.avatar_path)) + ');color:transparent">' + esc(initials(u.first_name, u.last_name).toUpperCase() || '?') + '</div>'
+      : '<div class="av" style="' + avatarStyle(u.id) + '">' + esc(initials(u.first_name, u.last_name).toUpperCase() || '?') + '</div>';
     return '<article class="card user-card" data-uid="' + u.id + '"><div class="user-card-row">' +
-      '<div class="av" style="' + avatarStyle(u.id) + ';cursor:default">' + esc(initials(u.first_name, u.last_name).toUpperCase() || '?') + '</div>' +
+      avInner +
       '<div style="flex:1;min-width:0"><div style="font-weight:800;font-size:15px">' + esc(u.first_name || '') + ' ' + esc(u.last_name || '') + (isAdminUser ? ' <span style="background:linear-gradient(135deg,#FFB020,#FF6B9D);color:#fff;font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:999px">👑 ADMIN</span>' : '') + countBadge + '</div><div class="dep">' + esc(u.department || '—') + '</div>' + ((rc>0||bc>0) ? '<div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap"><span class="restrict-badge">⚠️ ' + rc + '</span><span class="violation-badge">🚫 ' + bc + '</span></div>' : '') + '</div>' +
       '<div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">' + status + '<button class="link" data-uedit="' + u.id + '" style="font-size:12px;padding:2px 6px">✏️ Düzenle</button></div>' +
     '</div></article>';
@@ -4005,8 +4258,22 @@ function openEditUserSheet(u){
     ? '<button type="button" class="btn" id="ueAdminToggle" style="background:linear-gradient(135deg,#D42F4B,#FF5580);color:#fff;margin-top:6px">🚫 Admin Yetkisini Kaldır</button>'
     : '<button type="button" class="btn" id="ueAdminToggle" style="background:linear-gradient(135deg,#FFB020,#FF6B9D);color:#fff;margin-top:6px">👑 Admin Yap</button>';
 
+  const hasAvatar = !!u.avatar_path;
+  const avatarBg = hasAvatar
+    ? 'background-image:url(' + esc(avatarUrl(u.avatar_path)) + ')'
+    : avatarStyle(u.id);
+  const avatarInner = hasAvatar ? '' : esc(initials(u.first_name, u.last_name).toUpperCase() || '?');
+  const avatarRemoveBtn = hasAvatar ? '<button type="button" class="btn sm" id="ueAvatarRemove" style="background:var(--bg);color:var(--danger);margin-top:6px;border:1px solid var(--line);width:100%">🗑️ Fotoğrafı Kaldır</button>' : '';
+
   const el = openSheet(
     '<h4>✏️ Kullanıcıyı Düzenle<button class="sheet-close" aria-label="Kapat">×</button></h4>' +
+    '<div style="text-align:center;margin-bottom:16px">' +
+      '<div id="ueAvatarPreview" style="width:100px;height:100px;border-radius:50%;margin:0 auto 10px;' + avatarBg + ';background-size:cover;background-position:center;display:grid;place-items:center;color:#fff;font-weight:800;font-size:34px;overflow:hidden">' + avatarInner + '</div>' +
+      '<input type="file" id="ueAvatar" accept="image/*" hidden>' +
+      '<button type="button" class="btn sm" id="ueAvatarBtn" style="background:var(--bg);color:var(--ac);width:100%">📷 Fotoğrafı Değiştir</button>' +
+      avatarRemoveBtn +
+      '<div class="prog-wrap hide" id="ueAvatarProg" style="margin-top:8px"><div class="prog-bar"><div class="prog-fill" id="ueAvatarFill"></div></div><div class="prog-text" id="ueAvatarText">Yükleniyor... %0</div></div>' +
+    '</div>' +
     '<form id="ueForm" style="display:flex;flex-direction:column;gap:10px">' +
       '<label style="font-size:13px;font-weight:600;color:var(--mute)">Ad</label><input id="ueFirst" maxlength="60" value="' + esc(u.first_name||'') + '" required>' +
       '<label style="font-size:13px;font-weight:600;color:var(--mute)">Soyad</label><input id="ueLast" maxlength="60" value="' + esc(u.last_name||'') + '" required>' +
@@ -4017,6 +4284,49 @@ function openEditUserSheet(u){
       '<button type="submit" class="btn" style="flex:1">Kaydet</button></div></form>'
   );
   el.onclick = e => { if(e.target === el || e.target.classList.contains('sheet-close') || e.target.dataset.x === 'cancel') el.remove(); };
+
+  /* --- Admin avatar upload --- */
+  const setAvP = p => {
+    el.querySelector('#ueAvatarProg').classList.remove('hide');
+    el.querySelector('#ueAvatarFill').style.width = Math.round(p*100) + '%';
+    el.querySelector('#ueAvatarText').textContent = 'Yükleniyor... %' + Math.round(p*100);
+  };
+  const avInput = el.querySelector('#ueAvatar');
+  const avBtn = el.querySelector('#ueAvatarBtn');
+  avBtn.onclick = () => avInput.click();
+  avInput.onchange = async () => {
+    const f = avInput.files[0]; if(!f) return;
+    if(!f.type.startsWith('image/')) return toast('Sadece fotoğraf.', 'err');
+    avBtn.disabled = true; avBtn.textContent = 'Yükleniyor...';
+    try{
+      const oldPath = u.avatar_path;
+      setAvP(0);
+      const path = await uploadAvatar(f, p => setAvP(p));
+      const { error } = await sb.from('profiles').update({ avatar_path: path }).eq('id', u.id);
+      if(error) throw new Error(error.message);
+      if(oldPath) await deleteStorageFile('images', oldPath);
+      toast('✅ Fotoğraf güncellendi.', 'ok');
+      el.remove();
+      loadAdminAllUsers();
+    }catch(err){
+      avBtn.disabled = false; avBtn.textContent = '📷 Fotoğrafı Değiştir';
+      el.querySelector('#ueAvatarProg').classList.add('hide');
+      toast('Hata: ' + err.message, 'err');
+    }
+  };
+  const avRm = el.querySelector('#ueAvatarRemove');
+  if(avRm) avRm.onclick = async () => {
+    if(!confirm('Bu kullanıcının profil fotoğrafı kaldırılsın mı?')) return;
+    try{
+      const oldPath = u.avatar_path;
+      await sb.from('profiles').update({ avatar_path: null }).eq('id', u.id);
+      if(oldPath) await deleteStorageFile('images', oldPath);
+      toast('Fotoğraf kaldırıldı.', 'ok');
+      el.remove();
+      loadAdminAllUsers();
+    }catch(err){ toast('Hata: ' + err.message, 'err'); }
+  };
+
   el.querySelector('#ueAdminToggle').onclick = async () => {
     const isCurrentlyAdmin = !!u.is_admin;
     const msg = isCurrentlyAdmin
