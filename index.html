@@ -2827,6 +2827,7 @@ function deleteAccount(){
     btn.disabled = true; btn.textContent = 'Siliniyor...';
     try {
       const { data: { session } } = await sb.auth.getSession();
+      if(!session) throw new Error('Oturum bulunamadı.');
       const res = await fetch(SB_URL + '/functions/v1/' + EDGE_FN, {
         method: 'POST',
         headers: { 'Authorization': 'Bearer ' + session.access_token, 'apikey': SB_KEY, 'Content-Type': 'application/json' },
@@ -2834,9 +2835,22 @@ function deleteAccount(){
       });
       const json = await res.json().catch(() => ({}));
       if(!res.ok) throw new Error(json.error || 'Silme başarısız');
-      Object.keys(localStorage).forEach(k => { if(k.startsWith('seen_') || k === 'theme' || k === 'cookie_consent') localStorage.removeItem(k); });
-      toast('Hesabın silindi.', 'ok');
-      await sb.auth.signOut();
+
+      // Başarılı — modal'ı kapat, localStorage temizle, bildir
+      Object.keys(localStorage).forEach(k => {
+        if(k.startsWith('seen_') || k === 'theme' || k === 'cookie_consent' || k.startsWith('gv_') || k === 'adminShowRealConf') {
+          localStorage.removeItem(k);
+        }
+      });
+      try{ sessionStorage.clear(); }catch(_){}
+      el.remove();
+      toast('✅ Hesabın silindi. Hoşça kal!', 'ok');
+
+      // signOut başarısız olabilir (kullanıcı zaten silindi) — hata yutma
+      try { await sb.auth.signOut(); } catch(_){}
+
+      // 1 saniye sonra sayfayı yenile → login ekranı gelsin
+      setTimeout(() => { window.location.reload(); }, 1000);
     } catch(err){
       btn.disabled = false; btn.textContent = 'Hesabımı Sil';
       toast('Hata: ' + err.message, 'err');
