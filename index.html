@@ -181,6 +181,17 @@ input:focus,textarea:focus,select:focus{outline:0;border-color:var(--ac);box-sha
 #msg.err{color:var(--danger)}
 .auth-footer{margin-top:6px;font-size:11px;color:var(--mute);text-align:center;letter-spacing:.3px}
 .auth-footer b{color:var(--ac)}
+.auth-instagram{
+  display:inline-flex;align-items:center;gap:8px;margin-top:12px;
+  padding:10px 22px;
+  background:linear-gradient(135deg,#833AB4,#FD1D1D,#FCB045);
+  color:#fff;text-decoration:none;border-radius:999px;
+  font-weight:700;font-size:14px;
+  box-shadow:0 4px 14px rgba(253,29,29,.35);
+  transition:transform .15s ease,box-shadow .15s ease;
+}
+.auth-instagram:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(253,29,29,.5)}
+.auth-instagram svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
 
 header{position:sticky;top:0;z-index:15;background:var(--bg);display:flex;justify-content:space-between;align-items:center;padding:8px 14px;max-width:640px;margin:0 auto;gap:10px}
 .brand{display:flex;align-items:center;gap:9px;min-width:0}
@@ -780,6 +791,10 @@ body,.card,.btn,.composer-new,.search-box,.settings-item,.conv,.cm-item,.seg,.sh
   <p class="note" id="regNote" style="display:none">Kayıt olduktan sonra mailine doğrulama kodu gelir.</p>
   <p class="note">Bu uygulama bir öğrenci tarafından öğrenciler için geliştirilmiştir, resmi bir üniversite uygulaması değildir.</p>
   <p class="auth-footer">Designed &amp; Developed by <b>Emin Acar</b></p>
+  <a href="https://instagram.com/gelisimvibe" target="_blank" rel="noopener" class="auth-instagram" aria-label="Instagram">
+    <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+    @gelisimvibe
+  </a>
 
   <div class="seo-content" style="max-width:680px;margin:32px auto 0;padding:20px;text-align:left;color:var(--mute);font-size:13.5px;line-height:1.75">
     <h2 style="font-size:17px;font-weight:800;color:var(--ink);margin:0 0 10px">Gelişim Vibe Nedir?</h2>
@@ -854,7 +869,7 @@ body,.card,.btn,.composer-new,.search-box,.settings-item,.conv,.cm-item,.seg,.sh
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ============================================================
-   GELİŞİM VIBE — v4.3 (bugfix)
+   GELİŞİM VIBE — v4.4 (bugfix + features)
    ============================================================ */
 const CONFIG = {
   SB_URL: 'https://ihkjmnogqhekvyroloeg.supabase.co',
@@ -878,7 +893,6 @@ const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid = () => (crypto?.randomUUID?.() || (Date.now().toString(36) + Math.random().toString(36).slice(2, 10)));
-// FIX #3.11: mailto/tel desteği
 const safeUrl = u => {
   if(!u) return '';
   const s = String(u).trim();
@@ -944,7 +958,13 @@ const ago = d => {
 const fullDate = d => new Date(d).toLocaleString('tr-TR', { day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
 
 const initials = (f,l) => ((f||'')[0]||'') + ((l||'')[0]||'');
-const capFirst = s => { s = String(s||'').trim(); if(!s) return ''; return s.charAt(0).toLocaleUpperCase('tr-TR') + s.slice(1).toLocaleLowerCase('tr-TR'); };
+// FIX #5: Türkçe isim düzeltmesi — her kelimenin ilk harfi büyük
+const capFirst = s => {
+  s = String(s||'').trim(); if(!s) return '';
+  return s.split(/\s+/).map(w =>
+    w.charAt(0).toLocaleUpperCase('tr-TR') + w.slice(1).toLocaleLowerCase('tr-TR')
+  ).join(' ');
+};
 const fmtNum = n => { n = Number(n)||0; if(n<1000) return String(n); if(n<1e6) return (n/1000).toFixed(n<10000?1:0).replace('.0','') + 'B'; return (n/1e6).toFixed(1).replace('.0','') + 'M'; };
 const escapeLike = s => String(s||'').replace(/[\\%_]/g, '\\$&');
 
@@ -970,7 +990,6 @@ const pdfUrl   = p => p ? sb.storage.from('pdfs').getPublicUrl(p).data.publicUrl
 const videoUrl = p => p ? sb.storage.from('videos').getPublicUrl(p).data.publicUrl : '';
 const adImgUrl = p => p ? sb.storage.from('ads').getPublicUrl(p).data.publicUrl : '';
 
-// FIX #2.6: storage dosya silme helper
 async function deleteStorageFile(bucket, path){
   if(!path) return;
   try{ await sb.storage.from(bucket).remove([path]); }catch(_){}
@@ -1324,7 +1343,7 @@ $('#toggle').onclick = () => {
   $('#nameNote').style.display = reg ? 'block' : 'none';
   $('#pw2').style.display = reg ? 'block' : 'none';
   $('#dp').style.display = reg ? 'block' : 'none';
-  $('#dp').required = reg; // FIX #3.13
+  $('#dp').required = reg;
   $('#kvkkBoxes').style.display = reg ? 'flex' : 'none';
   $('#regNote').style.display = reg ? 'block' : 'none';
   $('#authBtn').textContent = reg ? 'Kayıt ol' : 'Giriş yap';
@@ -1382,21 +1401,18 @@ $('#authForm').onsubmit = async e => {
     if(!$('#kvkkAydinlatma').checked) return say('Aydınlatma metnini onaylaman gerekiyor.', 1);
     if(!$('#kvkkRiza').checked) return say('Açık rıza metnini onaylaman gerekiyor.', 1);
     if(!last_name && !confirm('Mail adresinden soyadı okuyamadım. "' + first_name + '" olarak kaydedilsin mi?')) return;
-    // FIX #1.1: signUp session dönerse OTP'yi atla
     const { data: signUpData, error } = await sb.auth.signUp({
       email, password,
       options: { data: { first_name, last_name, department, kvkk_riza_at: new Date().toISOString() } }
     });
     if(error) return say(error.message, 1);
     if(signUpData?.session){
-      // Email onayı kapalı — otomatik giriş yapıldı, boot zaten tetiklendi
       return;
     }
     showOtpScreen(email, password);
   } else {
     const { error } = await sb.auth.signInWithPassword({ email, password });
     if(error){
-      // FIX #1.2: email onaylanmamışsa OTP ekranına yönlendir
       const m = (error.message || '').toLowerCase();
       if(m.includes('not confirmed') || m.includes('email not confirmed')){
         showOtpScreen(email, password);
@@ -1407,7 +1423,6 @@ $('#authForm').onsubmit = async e => {
   }
 };
 
-// FIX #1.3, #1.4, #1.5: OTP ekranı yeniden yazıldı
 function showOtpScreen(email, password){
   const form = $('#authForm');
   form.onsubmit = null;
@@ -1443,7 +1458,6 @@ function showOtpScreen(email, password){
         return say('Kod hatalı veya süresi dolmuş.', 1);
       }
     }
-    // FIX #1.3: verifyOtp zaten session açar, signInWithPassword'a gerek yok
     say('✅ Doğrulandı! Giriş yapılıyor...');
   };
 
@@ -1460,7 +1474,6 @@ function showOtpScreen(email, password){
   otpEl.onkeydown = e => { if(e.key === 'Enter'){ e.preventDefault(); doVerify(); } };
   otpEl.oninput = e => {
     e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
-    // FIX #1.5: 6 veya 8 hanede otomatik doğrula (çift tetikleme verifying ile engellenir)
     if(e.target.value.length === 6 || e.target.value.length === 8) doVerify();
   };
 }
@@ -1530,7 +1543,6 @@ async function boot(session){
     $('#auth').classList.remove('hide');
     return;
   }
-  // Aynı kullanıcı için tekrar boot etme
   if(_bootedUserId === session.user.id && me) return;
 
   const urlTab = new URLSearchParams(location.search).get('tab');
@@ -1706,10 +1718,13 @@ function renderAdSenseCard(){
   if(!hasAdConsent()) return '';
   return '<article class="ad-card adsense-card"><div class="ad-head"><span class="ad-tag" style="background:var(--g);color:#fff">🔷 GOOGLE</span><span style="color:var(--mute);font-size:10.5px">Sponsorlu içerik</span></div><div style="min-height:100px;margin-top:6px;overflow:hidden"><ins class="adsbygoogle" style="display:block" data-ad-client="' + ADSENSE_CLIENT + '" data-ad-slot="' + ADSENSE_SLOT + '" data-ad-format="auto" data-full-width-responsive="true"></ins></div></article>';
 }
+// FIX #8: initAdSense çift tetikleme koruması
+let _adsenseInitTimer = null;
 function initAdSense(){
   if(!ADSENSE_ENABLED || !hasAdConsent()) return;
   if(!document.getElementById('adsense-script')) loadAdSenseScript();
-  setTimeout(() => {
+  clearTimeout(_adsenseInitTimer);
+  _adsenseInitTimer = setTimeout(() => {
     document.querySelectorAll('.adsbygoogle').forEach(el => {
       if(!el.dataset.adsbygoogleStatus){
         try{ (window.adsbygoogle = window.adsbygoogle || []).push({}); el.dataset.adsbygoogleStatus = 'done'; }catch(e){}
@@ -1804,13 +1819,13 @@ async function loadList(t, append=false){
     ? (useRealConf ? 'id,content,created_at,user_id,image_path,profiles(first_name,last_name,department)' : '*')
     : 'id,content,created_at,user_id,image_path,video_path,profiles(first_name,last_name,department)';
 
-  // FIX #2.5: Yeni yüklemede eski observer'ı temizle
   if(!append){
     if(feedUnsub){ try{ feedUnsub(); }catch(_){} feedUnsub = null; }
     feedPage = 0; feedItems = []; feedExhausted = false;
   }
 
   const pageSize = 20;
+  // FIX #4: feedPage sorgudan ÖNCE kullanılır, arttırma başarı sonrası
   const from = feedPage * pageSize, to = from + pageSize - 1;
 
   const mainRes = await sb.from(table).select(selectCols).order('created_at',{ascending:false}).range(from, to);
@@ -1818,7 +1833,7 @@ async function loadList(t, append=false){
   if(error) { $('#view').innerHTML = '<div class="empty">Yüklenemedi: ' + esc(error.message) + '</div>'; return; }
   if(newItems.length < pageSize) feedExhausted = true;
 
-  // FIX #2.4: feedPage'i sadece başarı sonrası arttır
+  // FIX: sayfa numarasını burada arttır
   if(append) feedPage++;
 
   if(append){
@@ -1835,7 +1850,6 @@ async function loadList(t, append=false){
     likes = data || [];
   }
 
-  // FIX #2.2: append modunda reklam yükleme
   let ads = [];
   if(!conf && !append){
     if(adsCache){ ads = adsCache; }
@@ -1997,7 +2011,6 @@ async function loadList(t, append=false){
     let ai = 0;
     asc.forEach((p, i) => {
       ascOut.push({ type:'post', data:p });
-      // FIX #2.2: append modunda reklam ekleme
       if(append) return;
       const idx = i + 1;
       if(idx % adSettings.sponsor_every === 0 && ads.length){ ascOut.push({ type:'ad', data: ads[ai % ads.length] }); ai++; }
@@ -2010,7 +2023,6 @@ async function loadList(t, append=false){
       return postHtml(x.data);
     }).join('');
     if(!append) html += renderAdvertiseCTA();
-    // FIX #2.3: AdSense her yüklemede init
     if(ADSENSE_ENABLED && hasAdConsent()) setTimeout(initAdSense, 250);
   }
 
@@ -2018,7 +2030,6 @@ async function loadList(t, append=false){
     const existing = new Set([...listEl.querySelectorAll('article.card[data-id]')].map(x => x.dataset.id));
     const wrapper = document.createElement('div');
     wrapper.innerHTML = html;
-    // FIX #2.2: reklam/CTA kartlarını append'te filtrele
     const newNodes = [...wrapper.children].filter(n => {
       if(n.classList && (n.classList.contains('ad-card') || n.classList.contains('adsense-card') || n.classList.contains('advertise-cta'))) return false;
       if(n.tagName !== 'ARTICLE' || !n.dataset.id) return true;
@@ -2053,10 +2064,11 @@ async function loadList(t, append=false){
     };
   }
 
+  // FIX #5: Observer sızıntısı — eskisini temizle
   if(!conf && !feedExhausted){
     const endEl = document.getElementById('feedEnd');
     if(endEl){
-      // FIX #2.4: try/finally ile feedLoading kilidi
+      if(feedUnsub){ try{ feedUnsub(); }catch(_){} feedUnsub = null; }
       const io = new IntersectionObserver((entries) => {
         entries.forEach(async en => {
           if(en.isIntersecting && !feedLoading && !feedExhausted){
@@ -2082,7 +2094,6 @@ async function loadHashtag(){
   $('#view').innerHTML = '<div class="skel-card"><div class="skel-line w60"></div><div class="skel-line w80"></div></div><div class="skeleton"></div>';
 
   const q = '#' + escapeLike(tag);
-  // FIX #2.8: confessions_public kullan (RLS uyumu)
   const results = await Promise.all([
     sb.from('posts').select('id,content,created_at,user_id,image_path,video_path,profiles(first_name,last_name,department)').ilike('content','%' + q + '%').order('created_at',{ascending:false}).limit(50),
     sb.from('confessions_public').select('*').ilike('content','%' + q + '%').order('created_at',{ascending:false}).limit(50),
@@ -2166,7 +2177,6 @@ async function act(a, id, card, conf, col, t){
   }
   if(a === 'del'){
     if(!confirm('Silinsin mi?')) return;
-    // FIX #2.6: storage dosyalarını da sil
     try{
       const { data: row } = await sb.from(conf ? 'confessions' : 'posts').select('image_path,video_path').eq('id', id).maybeSingle();
       if(row){
@@ -2279,7 +2289,6 @@ async function loadCommentsCommon(box, opts){
     const content = ta.value.trim(); if(!content) return;
     const { error } = await sb.from(table).insert({ user_id: me.id, [fkColumn]: id, content });
     if(error) return toast(error.message, 'err');
-    // FIX #2.10: yorum sayısını kart üstünde güncelle
     await loadCommentsCommon(box, opts);
     const card = box.closest('.card');
     if(card){
@@ -2326,7 +2335,6 @@ async function loadComments(box, id, conf){
 function openUserMenu(userId, userName){
   if(!userId || userId === me.id) return;
   const ini = (userName || '?').split(' ').map(x => x[0]).slice(0,2).join('').toUpperCase();
-  // FIX #3.5: "Engelle" yerine "Banla"
   let adminBtn = me.is_admin ? '<button class="sheet-btn danger" data-x="ban">🚫 Kullanıcıyı Banla</button>' : '';
   const el = openSheet(
     '<h4><span style="display:flex;align-items:center;gap:10px"><span class="av" style="' + avatarStyle(userId) + '">' + esc(ini) + '</span> ' + esc(userName) + '</span><button class="sheet-close" aria-label="Kapat">×</button></h4>' +
@@ -2345,7 +2353,6 @@ function openUserMenu(userId, userName){
       if(!confirm(userName + ' kalıcı olarak banlansın mı?')) return;
       if(!confirm('Son onay: Emin misin?')) return;
       try{
-        // FIX #2.7: email ve ban_count ayrı çek
         let userEmail = null;
         try{
           const { data: p } = await sb.from('profiles').select('email').eq('id', userId).maybeSingle();
@@ -2357,7 +2364,8 @@ function openUserMenu(userId, userName){
         }catch(_){}
         try{ await sb.from('moderation_history').insert({ user_id: userId, action: 'ban', admin_id: me.id, reason: 'Admin kararı' }); }catch(_){}
         if(userEmail){
-          try{ await sb.from('banned_emails').insert({ email: userEmail, reason: 'Admin kararı', banned_at: new Date().toISOString(), status: 'active' }); }catch(_){}
+          const { error: beErr } = await sb.from('banned_emails').insert({ email: userEmail, reason: 'Admin kararı', banned_at: new Date().toISOString(), status: 'active' });
+          if(beErr) console.warn('[ban] banned_emails insert başarısız:', beErr.message);
         }
         toast('Kullanıcı banlandı.', 'ok');
       }catch(err){ toast('Hata: ' + err.message, 'err'); }
@@ -2383,7 +2391,7 @@ async function loadBooks(){
   let items, error;
   ({data: items, error} = await sb.from('books').select('id,user_id,title,author,description,price,image_path,created_at,profiles(first_name,last_name,department)').order('created_at',{ascending:false}).limit(80));
   if(error){
-    const r2 = await sb.from('books').select('*').order('created_at',{ascending:false}).limit(80);
+    const r2 = await sb.from('books').select('id,user_id,title,author,description,price,image_path,created_at').order('created_at',{ascending:false}).limit(80);
     if(r2.error) return $('#libView').innerHTML = '<div class="empty">Yüklenemedi: ' + esc(r2.error.message) + '</div>';
     items = r2.data || [];
     const ids = [...new Set(items.map(b => b.user_id))];
@@ -2457,7 +2465,6 @@ function openBookForm(){
     const btn = $('#bf .btn'); btn.disabled = true;
     let image_path = null;
     const f = $('#bimg').files[0];
-    // FIX #2.1: books bucket'ına yükle (ads değil)
     if(f){ try{ image_path = await uploadImg(f, 'books', null, true); }catch(err){ btn.disabled = false; return toast('Görsel: ' + err.message, 'err'); } }
     const priceVal = $('#bp').value.trim();
     const priceNum = priceVal === '' ? null : Number(priceVal);
@@ -2471,7 +2478,7 @@ async function loadPdfs(){
   let items, error;
   ({data: items, error} = await sb.from('pdfs').select('id,user_id,title,category,description,file_path,created_at,profiles(first_name,last_name,department)').order('created_at',{ascending:false}).limit(80));
   if(error){
-    const r2 = await sb.from('pdfs').select('*').order('created_at',{ascending:false}).limit(80);
+    const r2 = await sb.from('pdfs').select('id,user_id,title,category,description,file_path,created_at').order('created_at',{ascending:false}).limit(80);
     if(r2.error) return $('#libView').innerHTML = '<div class="empty">Yüklenemedi</div>';
     items = r2.data || [];
     const ids = [...new Set(items.map(p => p.user_id))];
@@ -2661,7 +2668,7 @@ async function loadSettings(sub){
       '<div class="settings-item danger" data-open="delete"><div class="ico">🗑️</div><div class="txt"><b>Hesabımı Sil</b><small>Anında ve kalıcı olarak silinir</small></div><span class="arrow">›</span></div>' +
       '<div class="settings-item danger" data-open="logout"><div class="ico">🚪</div><div class="txt"><b>Çıkış Yap</b><small>Hesabından güvenli çıkış</small></div><span class="arrow">›</span></div>' +
     '</div>' +
-    '<div style="text-align:center;margin-top:22px;color:var(--mute);font-size:11px">Gelişim Vibe · v4.3<br>Designed &amp; Developed by <b style="color:var(--ac)">Emin Acar</b></div>';
+    '<div style="text-align:center;margin-top:22px;color:var(--mute);font-size:11px">Gelişim Vibe · v4.4<br>Designed &amp; Developed by <b style="color:var(--ac)">Emin Acar</b></div>';
   $('#view').onclick = async e => {
     const item = e.target.closest('[data-open]'); if(!item) return;
     const x = item.dataset.open;
@@ -2802,11 +2809,10 @@ async function loadInfo(){
 async function loadChat(){
   removeFab(); clearChatTimer(); clearChatChannel();
   if(chatWith) return loadChatView();
-  // FIX #2.9: son mesajları al (descending), sonra çevir
   const { data: msgs, error } = await sb.from('messages').select('id,sender_id,receiver_id,content,image_path,read_at,created_at').or('sender_id.eq.' + me.id + ',receiver_id.eq.' + me.id).order('created_at',{ascending:false}).limit(500);
   if(error) return $('#view').innerHTML = '<div class="empty">' + esc(error.message) + '</div>';
   const partners = new Map();
-  const sorted = (msgs || []); // descending
+  const sorted = (msgs || []);
   for(const m of sorted){
     const other = m.sender_id === me.id ? m.receiver_id : m.sender_id;
     if(!partners.has(other)) partners.set(other, { last: m, unread: 0 });
@@ -2901,7 +2907,6 @@ async function loadChatView(){
   const other = chatWith;
   chatReplyTo = null;
   chatImgFile = null;
-  // FIX #2.9: son 500 mesajı al
   const { data: rawMsgs, error } = await sb.from('messages').select('*').or('and(sender_id.eq.' + me.id + ',receiver_id.eq.' + other + '),and(sender_id.eq.' + other + ',receiver_id.eq.' + me.id + ')').order('created_at',{ascending:false}).limit(500);
   if(error) return $('#view').innerHTML = '<div class="empty">' + esc(error.message) + '</div>';
   const msgs = (rawMsgs || []).slice().reverse();
@@ -2991,17 +2996,22 @@ async function loadChatView(){
     if(!content && !chatImgFile) return;
     const row = { sender_id: me.id, receiver_id: other, content: content || '' };
     if(chatReplyTo) row.reply_to = chatReplyTo;
+    // FIX #9: finally bloğu ile progress temizliği
     if(chatImgFile){
       chatInput.disabled = true;
+      const prog = document.createElement('div');
+      prog.className = 'prog-wrap';
+      prog.innerHTML = '<div class="prog-bar"><div class="prog-fill" style="width:30%"></div></div><div class="prog-text">Fotoğraf yükleniyor...</div>';
+      body.appendChild(prog);
       try{
-        const prog = document.createElement('div');
-        prog.className = 'prog-wrap';
-        prog.innerHTML = '<div class="prog-bar"><div class="prog-fill" style="width:30%"></div></div><div class="prog-text">Fotoğraf yükleniyor...</div>';
-        body.appendChild(prog);
         const path = await uploadChatImg(chatImgFile);
         row.image_path = path;
+      }catch(err){
+        chatInput.disabled = false;
+        return toast('Fotoğraf: ' + err.message, 'err');
+      }finally{
         prog.remove();
-      }catch(err){ chatInput.disabled = false; return toast('Fotoğraf: ' + err.message, 'err'); }
+      }
     }
     chatInput.value = '';
     chatImgFile = null;
@@ -3084,77 +3094,91 @@ async function loadChatView(){
   attachSwipeHandlers(body, other);
 }
 
-/* ============ SWIPE TO REPLY ============ */
+/* ============ SWIPE TO REPLY (v4.4 — event delegation, sızıntısız) ============ */
+let _swipeState = null;
+
+function handleSwipeStart(wrap, clientX, clientY){
+  _swipeState = {
+    wrap, startX: clientX, startY: clientY, curX: 0,
+    decided: false, horizontal: false,
+    mid: +wrap.dataset.mid,
+    mine: wrap.dataset.mine === '1',
+    content: wrap.dataset.content || ''
+  };
+  wrap.style.transition = 'none';
+}
+function handleSwipeMove(clientX, clientY){
+  if(!_swipeState) return;
+  const s = _swipeState;
+  const dx = clientX - s.startX;
+  const dy = clientY - s.startY;
+  if(!s.decided){
+    if(Math.abs(dx) > 8 || Math.abs(dy) > 8){
+      s.decided = true;
+      s.horizontal = Math.abs(dx) > Math.abs(dy);
+    } else return;
+  }
+  if(!s.horizontal) return;
+  const delta = s.mine ? -dx : dx;
+  if(delta > 0){
+    const off = Math.min(80, delta);
+    s.curX = off;
+    s.wrap.style.transform = 'translateX(' + (s.mine ? -off : off) + 'px)';
+    s.wrap.classList.add('swiping');
+  }
+}
+function handleSwipeEnd(){
+  if(!_swipeState) return;
+  const s = _swipeState;
+  s.wrap.style.transition = '';
+  if(s.curX > 55){
+    chatReplyTo = { id: s.mid, content: s.content, name: s.mine ? 'Kendi mesajın' : 'Karşı taraf' };
+    const rp = document.getElementById('replyPreview');
+    if(rp){
+      rp.innerHTML = '<div class="reply-preview"><div class="rp-txt"><b style="color:var(--ac)">Yanıt</b><br>' + esc(s.content) + '</div><button type="button">×</button></div>';
+      rp.querySelector('button').onclick = () => { chatReplyTo = null; rp.innerHTML = ''; };
+    }
+    document.getElementById('chatInput')?.focus();
+  }
+  s.wrap.style.transform = '';
+  s.wrap.classList.remove('swiping');
+  _swipeState = null;
+}
+// Tek seferlik global dinleyiciler (document seviyesi — sızıntı YOK)
+if(!window._swipeGlobalBound){
+  window._swipeGlobalBound = true;
+  document.addEventListener('mousemove', e => { if(_swipeState) handleSwipeMove(e.clientX, e.clientY); });
+  document.addEventListener('mouseup', handleSwipeEnd);
+}
 function attachSwipeHandlers(body, otherId){
-  const wraps = body.querySelectorAll('.msg-wrap');
-  wraps.forEach(wrap => {
-    if(wrap._swipeBound) return;
-    wrap._swipeBound = true;
-    let startX = 0, startY = 0, curX = 0, dragging = false, decided = false, horizontal = false;
-    const onStart = (e) => {
-      const t = e.touches ? e.touches[0] : e;
-      startX = t.clientX; startY = t.clientY; curX = startX;
-      dragging = true; decided = false; horizontal = false;
-      wrap.style.transition = 'none';
-    };
-    const onMove = (e) => {
-      if(!dragging) return;
-      const t = e.touches ? e.touches[0] : e;
-      const dx = t.clientX - startX;
-      const dy = t.clientY - startY;
-      if(!decided){
-        if(Math.abs(dx) > 8 || Math.abs(dy) > 8){
-          decided = true;
-          horizontal = Math.abs(dx) > Math.abs(dy);
-        } else return;
-      }
-      if(!horizontal) return;
-      const mine = wrap.dataset.mine === '1';
-      const delta = mine ? -dx : dx;
-      if(delta > 0){
-        const off = Math.min(80, delta);
-        curX = off;
-        wrap.style.transform = 'translateX(' + (mine ? -off : off) + 'px)';
-        wrap.classList.add('swiping');
-        if(e.cancelable) e.preventDefault();
-      }
-    };
-    const onEnd = () => {
-      if(!dragging) return;
-      dragging = false;
-      wrap.style.transition = '';
-      if(curX > 55){
-        const mid = +wrap.dataset.mid;
-        const content = wrap.dataset.content || '';
-        const mine = wrap.dataset.mine === '1';
-        chatReplyTo = { id: mid, content, name: mine ? 'Kendi mesajın' : 'Karşı taraf' };
-        const rp = document.getElementById('replyPreview');
-        if(rp){
-          rp.innerHTML = '<div class="reply-preview"><div class="rp-txt"><b style="color:var(--ac)">Yanıt</b><br>' + esc(content) + '</div><button type="button">×</button></div>';
-          rp.querySelector('button').onclick = () => { chatReplyTo = null; rp.innerHTML = ''; };
-        }
-        document.getElementById('chatInput')?.focus();
-      }
-      wrap.style.transform = '';
-      wrap.classList.remove('swiping');
-      curX = 0;
-    };
-    wrap.addEventListener('touchstart', onStart, { passive: true });
-    wrap.addEventListener('touchmove', onMove, { passive: false });
-    wrap.addEventListener('touchend', onEnd);
-    wrap.addEventListener('touchcancel', onEnd);
-    wrap.addEventListener('mousedown', onStart);
-    document.addEventListener('mousemove', onMove);
-    document.addEventListener('mouseup', onEnd);
+  if(body._swipeBound) return;
+  body._swipeBound = true;
+  body.addEventListener('touchstart', e => {
+    const wrap = e.target.closest('.msg-wrap'); if(!wrap) return;
+    const t = e.touches[0];
+    handleSwipeStart(wrap, t.clientX, t.clientY);
+  }, { passive: true });
+  body.addEventListener('touchmove', e => {
+    if(!_swipeState) return;
+    const t = e.touches[0];
+    if(e.cancelable && _swipeState.horizontal) e.preventDefault();
+    handleSwipeMove(t.clientX, t.clientY);
+  }, { passive: false });
+  body.addEventListener('touchend', handleSwipeEnd);
+  body.addEventListener('touchcancel', handleSwipeEnd);
+  body.addEventListener('mousedown', e => {
+    const wrap = e.target.closest('.msg-wrap'); if(!wrap) return;
+    handleSwipeStart(wrap, e.clientX, e.clientY);
   });
 }
 
+/* FIX #7: openMsgActions — "Yanıtla" butonu kaldırıldı, sadece bilgilendirme */
 function openMsgActions(mid, preview, mine, other){
   haptic(15);
   const el = openSheet(
     '<h4>Mesaj<button class="sheet-close" aria-label="Kapat">×</button></h4>' +
+    '<p style="font-size:12.5px;color:var(--mute);text-align:center;margin:-6px 0 10px">💡 Yanıtlamak için mesajı sağa kaydır</p>' +
     '<div class="msg-actions-sheet">' + REACTIONS.map(em => '<button data-em="' + em + '">' + em + '</button>').join('') + '</div>' +
-    '<button class="sheet-btn" data-x="reply">↩️ Yanıtla</button>' +
     '<button class="sheet-btn" data-x="copy">📋 Kopyala</button>' +
     (mine ? '<button class="sheet-btn danger" data-x="del">🗑️ Sil</button>' : '<button class="sheet-btn danger" data-x="report">🚩 Şikayet et</button>') +
     '<button class="sheet-btn cancel" data-x="cancel">Vazgeç</button>'
@@ -3165,13 +3189,6 @@ function openMsgActions(mid, preview, mine, other){
     if(em){ await toggleReaction(mid, em.dataset.em); el.remove(); if(chatWith) loadChatView(); return; }
     const b = e.target.closest('button[data-x]'); if(!b) return;
     const x = b.dataset.x;
-    if(x === 'reply'){
-      chatReplyTo = { id: mid, content: preview, name: 'Yanıt' };
-      $('#replyPreview').innerHTML = '<div class="reply-preview"><div class="rp-txt"><b style="color:var(--ac)">Yanıt</b><br>' + esc(preview) + '</div><button type="button">×</button></div>';
-      $('#replyPreview').querySelector('button').onclick = () => { chatReplyTo = null; $('#replyPreview').innerHTML = ''; };
-      $('#chatInput').focus();
-      el.remove();
-    }
     if(x === 'copy'){ try{ await navigator.clipboard.writeText(preview); toast('Kopyalandı', 'ok'); }catch(_){ toast('Kopyalanamadı', 'err'); } el.remove(); }
     if(x === 'del'){ if(!confirm('Silinsin mi?')) return; await sb.from('messages').delete().eq('id', mid).eq('sender_id', me.id); el.remove(); if(chatWith) loadChatView(); }
     if(x === 'report'){ el.remove(); report({ reason: 'Mesaj şikayeti', content: preview }); }
@@ -3424,10 +3441,12 @@ async function loadAdmin(){
   window._rep = {};
   if(adminView === 'dashboard') return loadAdminDashboard();
   const backBtn = '<button class="settings-back" data-admin-back>← Panele Dön</button>';
-  const titles = { reports:'🚩 Şikayetler', banned:'🚫 Yasaklılar', users:'👥 Kullanıcılar', ads:'📢 Reklamlar', requests:'📥 Talepler' };
+  // FIX: feedback sekmesi eklendi
+  const titles = { reports:'🚩 Şikayetler', feedback:'💡 Öneri & Şikayet', banned:'🚫 Yasaklılar', users:'👥 Kullanıcılar', ads:'📢 Reklamlar', requests:'📥 Talepler' };
   $('#view').innerHTML = backBtn + '<h2 style="margin:0 0 14px;font-size:20px">' + (titles[adminView] || 'Admin') + '</h2><div id="adminView"><div class="empty">Yükleniyor...</div></div>';
   $('#view').querySelector('[data-admin-back]').onclick = () => { adminView = 'dashboard'; loadAdmin(); };
-  const fns = { reports: loadAdminReports, banned: loadAdminBanned, users: loadAdminAllUsers, ads: loadAdminAds, requests: loadAdminRequests };
+  // FIX: feedback fonksiyonu eklendi
+  const fns = { reports: loadAdminReports, feedback: loadAdminFeedback, banned: loadAdminBanned, users: loadAdminAllUsers, ads: loadAdminAds, requests: loadAdminRequests };
   await (fns[adminView] || loadAdminDashboard)();
 }
 
@@ -3445,6 +3464,7 @@ async function loadAdminDashboard(){
       sb.from('messages').select('id', { count: 'exact', head: true }).gte('created_at', dayAgo)
     ]);
     const stat = (n, l) => '<div class="admin-stat"><div class="n">' + fmtNum(n) + '</div><div class="l">' + l + '</div></div>';
+    // FIX: Öneri/Şikayet kartı eklendi
     box.innerHTML = '<div class="admin-dash">' +
       stat(today.count||0, 'Bugün kayıt') +
       stat(week.count||0, 'Bu hafta kayıt') +
@@ -3456,6 +3476,7 @@ async function loadAdminDashboard(){
     '<h3 style="margin:18px 6px 10px;font-size:14px;color:var(--mute);font-weight:700">⚡ HIZLI AKSİYONLAR</h3>' +
     '<div class="admin-nav-grid">' +
       '<button class="admin-nav-card" data-go="reports"><span class="ico">🚩</span><span class="ttl">Şikayetler</span><span class="sub">' + (pending.count||0) + ' bekleyen</span></button>' +
+      '<button class="admin-nav-card" data-go="feedback"><span class="ico">💡</span><span class="ttl">Öneri/Şikayet</span><span class="sub">Öğrenci geri bildirimleri</span></button>' +
       '<button class="admin-nav-card" data-go="banned"><span class="ico">🚫</span><span class="ttl">Yasaklılar</span><span class="sub">Ban ve kısıtlamalar</span></button>' +
       '<button class="admin-nav-card" data-go="users"><span class="ico">👥</span><span class="ttl">Kullanıcılar</span><span class="sub">' + (totalUsers.count||0) + ' kayıtlı</span></button>' +
       '<button class="admin-nav-card" data-go="ads"><span class="ico">📢</span><span class="ttl">Reklamlar</span><span class="sub">Sponsor yönetimi</span></button>' +
@@ -3479,6 +3500,56 @@ async function loadAdminDashboard(){
   } catch(e){
     box.innerHTML = '<div class="empty">Panel yüklenemedi: ' + esc(e.message) + '</div>';
   }
+}
+
+/* FIX: Admin panelde öneri/şikayet görüntüleme */
+async function loadAdminFeedback(){
+  const box = $('#adminView');
+  const { data, error } = await sb.from('app_feedback')
+    .select('*,profiles(first_name,last_name,department)')
+    .order('created_at',{ascending:false})
+    .limit(200);
+  if(error){ box.innerHTML = '<div class="empty">' + esc(error.message) + '</div>'; return; }
+  if(!data || !data.length){
+    box.innerHTML = '<div class="empty"><span class="em-ic">💡</span><div class="em-t">Henüz geri bildirim yok</div>Öğrencilerden gelen öneriler burada görünecek.</div>';
+    return;
+  }
+  const oneriCount = data.filter(f => f.type === 'öneri').length;
+  const sikayetCount = data.filter(f => f.type !== 'öneri').length;
+
+  const rows = data.map(f => {
+    const prof = f.profiles || {first_name:'?',last_name:'',department:''};
+    const isOneri = f.type === 'öneri';
+    const color = isOneri ? 'var(--ac)' : 'var(--danger)';
+    const label = isOneri ? '💡 ÖNERİ' : '⚠️ ŞİKAYET';
+    return '<article class="card" data-fbid="' + f.id + '">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px">' +
+        '<span class="tag" style="background:color-mix(in srgb,' + (isOneri?'var(--ac)':'var(--danger)') + ' 14%,transparent);color:' + color + ';font-weight:800">' + label + '</span>' +
+        '<span class="time">' + ago(f.created_at) + '</span>' +
+      '</div>' +
+      '<div class="body">' + esc(f.content) + '</div>' +
+      (f.image_path ? '<img class="pimg" loading="lazy" decoding="async" src="' + imgUrl(f.image_path) + '" alt="">' : '') +
+      '<div class="dep" style="margin-top:6px">👤 <b>' + esc(prof.first_name) + ' ' + esc(prof.last_name) + '</b> · ' + esc(prof.department||'') + '</div>' +
+      '<div class="acts"><button data-fbdel="' + f.id + '" style="color:var(--danger)">🗑️ Sil</button></div>' +
+    '</article>';
+  }).join('');
+
+  box.innerHTML =
+    '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px">' +
+      '<div class="admin-stat"><div class="n">' + data.length + '</div><div class="l">Toplam</div></div>' +
+      '<div class="admin-stat"><div class="n">' + oneriCount + '</div><div class="l">Öneri</div></div>' +
+      '<div class="admin-stat"><div class="n">' + sikayetCount + '</div><div class="l">Şikayet</div></div>' +
+    '</div>' +
+    '<h3 style="margin:8px 6px;font-size:14px;color:var(--mute);font-weight:700">📥 TÜM GERİ BİLDİRİMLER</h3>' +
+    rows;
+
+  box.onclick = async e => {
+    const b = e.target.closest('button[data-fbdel]');
+    if(b && confirm('Geri bildirim silinsin mi?')){
+      await sb.from('app_feedback').delete().eq('id', +b.dataset.fbdel);
+      loadAdminFeedback();
+    }
+  };
 }
 
 async function loadAdminReports(){
@@ -3600,7 +3671,8 @@ async function loadAdminReports(){
         }catch(_){}
         try{ await sb.from('moderation_history').insert({ user_id: rep.uid, action: 'ban', admin_id: me.id, reason: 'Şikayet üzerine ban' }); }catch(_){}
         if(userEmail){
-          try{ await sb.from('banned_emails').insert({ email: userEmail, reason: 'Şikayet üzerine', banned_at: new Date().toISOString(), status: 'active' }); }catch(_){}
+          const { error: beErr } = await sb.from('banned_emails').insert({ email: userEmail, reason: 'Şikayet üzerine', banned_at: new Date().toISOString(), status: 'active' });
+          if(beErr) console.warn('[ban] banned_emails insert başarısız:', beErr.message);
         }
         const { data: { session } } = await sb.auth.getSession();
         const res = await fetch(SB_URL + '/functions/v1/' + EDGE_FN, {
@@ -3760,7 +3832,8 @@ async function loadAdminBanned(){
         }catch(_){}
         try{ await sb.from('moderation_history').insert({ user_id: uid, action: 'ban', admin_id: me.id, reason: 'Admin kararı' }); }catch(_){}
         if(userEmail){
-          try{ await sb.from('banned_emails').insert({ email: userEmail, reason: 'Admin kararı', banned_at: new Date().toISOString(), status: 'active' }); }catch(_){}
+          const { error: beErr } = await sb.from('banned_emails').insert({ email: userEmail, reason: 'Admin kararı', banned_at: new Date().toISOString(), status: 'active' });
+          if(beErr) console.warn('[ban] banned_emails insert başarısız:', beErr.message);
         }
 
         const { data: { session } } = await sb.auth.getSession();
@@ -4005,4 +4078,4 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 </body>
-  </html>
+</html>
