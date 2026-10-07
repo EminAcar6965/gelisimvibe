@@ -1057,7 +1057,96 @@ async function deleteStorageFile(bucket, path){
 }
 
 const haptic = (ms=8) => { try{ navigator.vibrate && navigator.vibrate(ms); }catch(_){} };
+/* ============== HATA MESAJI TÜRKÇELEŞTİRME ============== */
+function trMsg(m){
+  if(!m) return m;
+  let s = String(m).trim();
 
+  let prefix = '';
+  const pm = s.match(/^(Hata|Error|Uyarı|Warning)\s*:\s*/i);
+  if(pm){ prefix = 'Hata: '; s = s.slice(pm[0].length); }
+
+  const rules = [
+    // Özel constraint'ler
+    [/violates check constraint "posts_content_check"/i, 'Paylaşım boş olamaz veya çok kısa.'],
+    [/violates check constraint "confessions_content_check"/i, 'İtiraf boş olamaz.'],
+    [/violates check constraint "([^"]*)_content_check"/i, 'İçerik boş olamaz veya çok kısa.'],
+    [/violates check constraint "([^"]*)_title_check"/i, 'Başlık boş olamaz veya çok kısa.'],
+    [/violates check constraint "([^"]*)_price_check"/i, 'Fiyat geçersiz.'],
+    [/violates check constraint "([^"]*)"/i, 'Girilen değer kurallara uymuyor.'],
+    [/violates check constraint/i, 'Girilen değer kurallara uymuyor.'],
+
+    // Unique
+    [/duplicate key value violates unique constraint "([^"]*)"/i, 'Bu kayıt zaten mevcut.'],
+    [/duplicate key value/i, 'Bu kayıt zaten var.'],
+
+    // RLS / Yetki
+    [/new row violates row-level security policy for table "([^"]*)"/i, 'Bu işlem için yetkin yok.'],
+    [/row-level security policy/i, 'Bu işlem için yetkin yok.'],
+    [/permission denied for table/i, 'Bu tablo için yetkin yok.'],
+    [/permission denied/i, 'Yetkin yok.'],
+
+    // Foreign key
+    [/violates foreign key constraint/i, 'Bağlı kayıt bulunamadı.'],
+    [/insert or update on table "([^"]*)" violates foreign key/i, 'Bağlı kayıt bulunamadı.'],
+
+    // Not null
+    [/null value in column "([^"]+)" .* violates not-null/i, 'Zorunlu alan boş bırakılamaz.'],
+    [/not-null constraint/i, 'Zorunlu alan boş bırakılamaz.'],
+
+    // Uzunluk / tip
+    [/value too long for type/i, 'Girilen metin çok uzun.'],
+    [/invalid input syntax for type/i, 'Geçersiz değer girdin.'],
+    [/invalid input syntax/i, 'Geçersiz değer girdin.'],
+
+    // Auth — Supabase
+    [/email not confirmed/i, 'E-posta adresin doğrulanmamış. Gelen kutunu kontrol et.'],
+    [/invalid login credentials/i, 'E-posta veya şifre hatalı.'],
+    [/user already registered/i, 'Bu e-posta adresi zaten kayıtlı.'],
+    [/password should be at least (\d+) characters?/i, 'Şifre en az $1 karakter olmalı.'],
+    [/password is too short/i, 'Şifre çok kısa.'],
+    [/signup requires a valid password/i, 'Geçerli bir şifre gir.'],
+    [/unable to validate email address/i, 'Geçersiz e-posta adresi.'],
+    [/email address .* is invalid/i, 'Geçersiz e-posta adresi.'],
+    [/for security purposes, you can only request this after (\d+) seconds?/i, 'Güvenlik nedeniyle $1 saniye sonra tekrar dene.'],
+    [/jwt expired/i, 'Oturum süresi doldu, tekrar giriş yap.'],
+    [/invalid token/i, 'Geçersiz kod.'],
+    [/token has expired or is invalid/i, 'Kod hatalı veya süresi dolmuş.'],
+    [/user not found/i, 'Kullanıcı bulunamadı.'],
+    [/email rate limit exceeded/i, 'Çok fazla deneme yaptın, biraz bekle.'],
+    [/rate limit/i, 'Çok fazla istek gönderdin, biraz bekle.'],
+    [/email link is invalid or has expired/i, 'Bağlantı geçersiz veya süresi dolmuş.'],
+
+    // Storage
+    [/bucket not found/i, 'Dosya deposu bulunamadı.'],
+    [/payload too large/i, 'Dosya boyutu çok büyük.'],
+    [/the resource already exists/i, 'Bu dosya zaten mevcut.'],
+    [/mime type .* not supported/i, 'Bu dosya türü desteklenmiyor.'],
+    [/exceeded the maximum allowed size/i, 'İzin verilen maksimum boyut aşıldı.'],
+
+    // Ağ
+    [/failed to fetch/i, 'İnternet bağlantını kontrol et.'],
+    [/network ?error/i, 'Bağlantı hatası.'],
+    [/network request failed/i, 'Bağlantı hatası.'],
+    [/load failed/i, 'Yükleme başarısız.'],
+    [/timeout/i, 'Zaman aşımı, tekrar dene.'],
+    [/aborterror/i, 'İşlem iptal edildi.'],
+
+    // Generic
+    [/unknown error/i, 'Bilinmeyen hata.'],
+    [/something went wrong/i, 'Bir şeyler ters gitti.'],
+    [/internal server error/i, 'Sunucu hatası.'],
+    [/service unavailable/i, 'Sunucu şu an kullanılamıyor.']
+  ];
+
+  for(const [re, tr] of rules){
+    const r = s.match(re);
+    if(r){
+      return prefix + tr.replace(/\$(\d)/g, (_, i) => r[i] || '');
+    }
+  }
+  return prefix + s;
+}
 /* ============== TOAST ============== */
 function ensureToastContainer(){
   let c = document.getElementById('toast-container');
@@ -1077,7 +1166,7 @@ function toast(msg, type){
   const t = document.createElement('div');
   t.className = 'toast ' + type;
   t.setAttribute('role', type === 'err' ? 'alert' : 'status');
-  t.innerHTML = '<span class="t-ic" aria-hidden="true">' + (icons[type]||'ℹ️') + '</span><span>' + esc(msg) + '</span>';
+  t.innerHTML = '<span class="t-ic" aria-hidden="true">' + (icons[type]||'ℹ️') + '</span><span>' + esc(trMsg(msg)) + '</span>';
   c.appendChild(t);
   requestAnimationFrame(() => t.classList.add('show'));
   setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 250); }, 3200);
@@ -1420,7 +1509,7 @@ async function uploadChatImg(file, onProgress){
   if(file.size > 15e6) throw new Error('Max 15 MB.');
   return uploadImg(file, 'images', onProgress);
 }
-const say = (t, err) => { const m = $('#msg'); if(!m) return; m.textContent = t || ''; m.className = err ? 'err' : ''; };
+const say = (t, err) => { const m = $('#msg'); if(!m) return; m.textContent = trMsg(t) || ''; m.className = err ? 'err' : ''; };
 const GHOST = '<svg viewBox="0 0 24 24"><path d="M9 10h.01M15 10h.01M12 2a8 8 0 0 0-8 8v12l3-3 2.5 3 2.5-3 2.5 3 2.5-3 3 3V10a8 8 0 0 0-8-8z"/></svg>';
 
 /* ============== AUTH ============== */
@@ -2067,7 +2156,7 @@ async function loadList(t, append=false){
 
   const mainRes = await sb.from(table).select(selectCols).order('created_at',{ascending:false}).range(from, to);
   const newItems = mainRes.data || [], error = mainRes.error;
-  if(error) { $('#view').innerHTML = '<div class="empty">Yüklenemedi: ' + esc(error.message) + '</div>'; return; }
+  if(error) { $('#view').innerHTML = '<div class="empty">Yüklenemedi: ' + esc(trMsg(error.message)) + '</div>'; return; }
   if(newItems.length < pageSize) feedExhausted = true;
 
   if(append){
@@ -3324,7 +3413,7 @@ async function loadChat(){
   removeFab(); clearChatTimer(); clearChatChannel();
   if(chatWith) return loadChatView();
   const { data: msgs, error } = await sb.from('messages').select('id,sender_id,receiver_id,content,image_path,read_at,created_at').or('sender_id.eq.' + me.id + ',receiver_id.eq.' + me.id).order('created_at',{ascending:false}).limit(500);
-  if(error) return $('#view').innerHTML = '<div class="empty">' + esc(error.message) + '</div>';
+  if(error) return $('#view').innerHTML = '<div class="empty">' + esc(trMsg(error.message)) + '</div>';
   const partners = new Map();
   const sorted = (msgs || []);
   for(const m of sorted){
@@ -3422,7 +3511,7 @@ async function loadChatView(){
   chatReplyTo = null;
   chatImgFile = null;
   const { data: rawMsgs, error } = await sb.from('messages').select('*').or('and(sender_id.eq.' + me.id + ',receiver_id.eq.' + other + '),and(sender_id.eq.' + other + ',receiver_id.eq.' + me.id + ')').order('created_at',{ascending:false}).limit(500);
-  if(error) return $('#view').innerHTML = '<div class="empty">' + esc(error.message) + '</div>';
+  if(error) return $('#view').innerHTML = '<div class="empty">' + esc(trMsg(error.message)) + '</div>';
   const msgs = (rawMsgs || []).slice().reverse();
   await sb.from('messages').update({ read_at: new Date().toISOString() }).eq('receiver_id', me.id).eq('sender_id', other).is('read_at', null);
   const ini = (chatUser || '?').split(' ').map(x => x[0]).slice(0,2).join('').toUpperCase();
@@ -3722,7 +3811,7 @@ async function toggleReaction(mid, emoji){
 async function loadAnn(){
   removeFab();
   const { data, error } = await sb.from('announcements').select('*').order('created_at',{ascending:false}).limit(50);
-  if(error) return $('#view').innerHTML = '<div class="empty">Yüklenemedi: ' + esc(error.message) + '</div>';
+  if(error) return $('#view').innerHTML = '<div class="empty">Yüklenemedi: ' + esc(trMsg(error.message)) + '</div>';
 
   const ids = (data||[]).map(a => a.id);
   const [cmsRes, votesRes, viewsRes] = await Promise.all([
@@ -4021,7 +4110,7 @@ async function loadAdminFeedback(){
     .select('*,profiles(first_name,last_name,department)')
     .order('created_at',{ascending:false})
     .limit(200);
-  if(error){ box.innerHTML = '<div class="empty">' + esc(error.message) + '</div>'; return; }
+  if(error){ box.innerHTML = '<div class="empty">' + esc(trMsg(error.message)) + '</div>'; return; }
   if(!data || !data.length){
     box.innerHTML = '<div class="empty"><span class="em-ic">💡</span><div class="em-t">Henüz geri bildirim yok</div>Öğrencilerden gelen öneriler burada görünecek.</div>';
     return;
@@ -4067,7 +4156,7 @@ async function loadAdminFeedback(){
 async function loadAdminReports(){
   const box = $('#adminView');
   const { data: reports, error } = await sb.from('reports').select('*').eq('status', 'pending').order('created_at',{ascending:false}).limit(100);
-  if(error){ box.innerHTML = '<div class="empty">' + esc(error.message) + '</div>'; return; }
+  if(error){ box.innerHTML = '<div class="empty">' + esc(trMsg(error.message)) + '</div>'; return; }
   if(!reports || !reports.length){ box.innerHTML = '<div class="empty"><span class="em-ic">✅</span><div class="em-t">Bekleyen şikayet yok</div>Her şey temiz!</div>'; return; }
 
   const userIds = new Set();
@@ -4554,7 +4643,7 @@ async function loadAdminAds(){
     '</form>';
 
   const { data: ads, error } = await sb.from('ads').select('*').order('created_at',{ascending:false}).limit(50);
-  if(error){ box.innerHTML = freqSettings + '<div class="empty">' + esc(error.message) + '</div>'; return; }
+  if(error){ box.innerHTML = freqSettings + '<div class="empty">' + esc(trMsg(error.message)) + '</div>'; return; }
   const adsenseInfo = '<div class="card" style="border-left:4px solid ' + (ADSENSE_ENABLED ? 'var(--g)' : 'var(--mute)') + '"><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="ad-tag" style="background:var(--g);color:#fff">🔷 GOOGLE ADSENSE</span></div><div style="font-size:13px;color:var(--mute);line-height:1.5">' + (ADSENSE_ENABLED ? '✅ Aktif — Her ' + adSettings.adsense_every + ' postta bir reklam.' : '⚠️ ADSENSE_SLOT placeholder (0000...) olduğu için devre dışı. Client ID bağlı ama slot oluşturulmamış.') + '</div></div>';
   const form = '<form class="card" id="adf"><h3 style="margin:0 0 8px;font-size:15px;font-weight:800">📢 Yeni Sponsor Reklamı</h3><input id="adt" maxlength="100" placeholder="Reklam başlığı" required><textarea id="adb" maxlength="600" placeholder="Açıklama"></textarea><input id="adl" type="url" maxlength="500" placeholder="Link (https://...)"><div style="font-size:11.5px;color:var(--mute);background:color-mix(in srgb,#FFB020 12%,transparent);border:1px dashed color-mix(in srgb,#FFB020 40%,transparent);border-radius:8px;padding:8px 10px;margin:4px 0">📐 Görsel otomatik olarak <b>1:1 (kare)</b> kırpılır. Merkez odaklı bir görsel seç.</div><div id="adimgpv" class="pv hide"></div><label style="display:flex;align-items:center;gap:8px;padding:10px;border:1px solid var(--line);border-radius:10px;color:var(--ac);font-weight:600;cursor:pointer">📷 Görsel<input type="file" id="adimg" accept="image/*" hidden></label><button class="btn">Yayınla</button></form>';
   const list = (ads||[]).map(a => {
@@ -4617,7 +4706,7 @@ async function loadAdminAds(){
 async function loadAdminRequests(){
   const box = $('#adminView');
   const { data, error } = await sb.from('ad_requests').select('*,profiles(first_name,last_name,department)').order('created_at',{ascending:false}).limit(100);
-  if(error){ box.innerHTML = '<div class="empty">' + esc(error.message) + '</div>'; return; }
+  if(error){ box.innerHTML = '<div class="empty">' + esc(trMsg(error.message)) + '</div>'; return; }
   if(!data || !data.length){ box.innerHTML = '<div class="empty"><span class="em-ic">📭</span><div class="em-t">Henüz reklam talebi yok</div></div>'; return; }
   const rows = data.map(r => {
     const p = r.profiles || { first_name:'?', last_name:'', department:'' };
