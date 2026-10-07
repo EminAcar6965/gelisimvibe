@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://cdn.jsdelivr.net https://pagead2.googlesyndication.com https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net https://*.adtrafficquality.google; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https: wss:; frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://*.adtrafficquality.google https://www.google.com https://*.google.com; object-src 'none'; base-uri 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://cdn.jsdelivr.net https://pagead2.googlesyndication.com https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net https://*.adtrafficquality.google; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https: wss:; frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://*.adtrafficquality.google https://www.google.com; object-src 'none'; base-uri 'self'">
 <title>Gelişim Vibe — İGÜ Öğrenci Topluluğu | Paylaşım, İtiraf, Kitap Takası</title>
 <meta name="description" content="İGÜ öğrencileri için sosyal topluluk: anonim itiraf gönder, 2. el kitap sat veya takas yap, ders notlarını PDF olarak paylaş, öğrenci arkadaşlarınla mesajlaş. Okul mailinle saniyeler içinde ücretsiz kayıt ol.">
 <meta name="keywords" content="Gelişim Vibe, Gelişim Üniversitesi, İGÜ, İGÜ öğrenci, öğrenci topluluk, itiraf, anonim itiraf, kitap takası, ikinci el kitap, pdf ders notu, öğrenci uygulaması, gelisimvibe, gelisim vibe">
@@ -11,7 +11,8 @@
 <meta name="author" content="Emin Acar">
 <meta name="rating" content="general">
 <link rel="canonical" href="https://www.gelisimvibe.com.tr/">
-<meta name="theme-color" content="#2C4A8E">
+<meta name="theme-color" content="#2C4A8E" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0E1830" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Gelişim Vibe">
@@ -22,16 +23,17 @@
 <meta property="og:description" content="Anonim itiraf, 2. el kitap takası, ders notu PDF paylaşımı ve öğrenci mesajlaşması. İGÜ öğrencilerinin sosyal topluluğu.">
 <meta property="og:url" content="https://www.gelisimvibe.com.tr/">
 <meta property="og:locale" content="tr_TR">
-<meta property="og:image" content="logo.png">
+<meta property="og:image" content="https://www.gelisimvibe.com.tr/logo.png">
 <meta property="og:image:width" content="1024">
 <meta property="og:image:height" content="1024">
+<meta property="og:image:alt" content="Gelişim Vibe Logo">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Gelişim Vibe">
 <meta name="twitter:description" content="İGÜ öğrencileri için sosyal topluluk uygulaması.">
-<meta name="twitter:image" content="logo.png">
+<meta name="twitter:image" content="https://www.gelisimvibe.com.tr/logo.png">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" href="logo.png">
-<link rel="apple-touch-icon" href="logo.png">
+<link rel="apple-touch-icon" sizes="180x180" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
@@ -62,9 +64,9 @@
   "logo": "https://www.gelisimvibe.com.tr/logo.png",
   "image": "https://www.gelisimvibe.com.tr/logo.png",
   "description": "İstanbul Gelişim Üniversitesi öğrencileri için sosyal topluluk uygulaması.",
+  "sameAs": ["https://www.instagram.com/igugelisimvibe/"],
   "contactPoint": {
     "@type": "ContactPoint",
-    "telephone": "+90-552-115-21-06",
     "contactType": "customer service",
     "areaServed": "TR",
     "availableLanguage": "Turkish"
@@ -171,7 +173,7 @@ button{cursor:pointer}
 input,textarea,select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
 textarea{resize:none;min-height:84px}
 input:focus,textarea:focus,select:focus{outline:0;border-color:var(--ac);box-shadow:0 0 0 3px color-mix(in srgb,var(--ac) 18%,transparent)}
-.btn{background:var(--ac);color:var(--acink);border:0;border-radius:12px;padding:12px 16px;font-weight:600;transition:transform .12s ease,filter .15s ease}
+.btn{background:var(--ac);color:var(--acink);border:0;border-radius:12px;padding:12px 16px;font-weight:600;transition:transform .12s ease,filter .15s ease;text-decoration:none;display:inline-block;text-align:center}
 .btn.sm{padding:8px 14px;border-radius:999px}
 .btn:active{transform:scale(.97)}
 .btn[disabled]{opacity:.5}
@@ -712,6 +714,18 @@ body,.card,.btn,.composer-new,.search-box,.settings-item,.conv,.cm-item,.seg,.sh
 @keyframes pop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
 #splash b{display:block;margin-top:14px;font-size:18px;font-weight:800;text-align:center}
 #splash small{display:block;margin-top:4px;color:var(--mute);font-size:11px;text-align:center;letter-spacing:.5px}
+
+/* Developer section */
+.dev-hero{text-align:center;padding:22px 16px;border-radius:20px;background:linear-gradient(135deg,color-mix(in srgb,#833AB4 12%,var(--card)),color-mix(in srgb,#FCB045 10%,var(--card)));border:1px solid color-mix(in srgb,#833AB4 25%,var(--line));margin-bottom:12px;box-shadow:var(--sh)}
+.dev-avatar{width:84px;height:84px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:30px;color:#fff;margin:0 auto 12px;background:linear-gradient(135deg,#833AB4,#FD1D1D,#FCB045);box-shadow:0 8px 22px rgba(131,58,180,.4)}
+.dev-quote{font-style:italic;font-size:16px;font-weight:700;text-align:center;color:var(--ac);line-height:1.55;padding:16px;background:color-mix(in srgb,var(--ac) 6%,var(--card));border-left:4px solid var(--ac);border-radius:12px;margin:10px 0}
+.dev-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px;font-size:15px;font-weight:700;border-radius:14px;text-decoration:none;color:#fff;margin-bottom:10px;transition:transform .15s ease,box-shadow .15s ease}
+.dev-btn:active{transform:scale(.98)}
+.dev-btn.ig{background:linear-gradient(135deg,#833AB4,#FD1D1D,#FCB045);box-shadow:0 4px 14px rgba(253,29,29,.35)}
+.dev-btn.ig:hover{box-shadow:0 6px 20px rgba(253,29,29,.5)}
+.dev-btn.wa{background:linear-gradient(135deg,#25D366,#128C7E);box-shadow:0 4px 14px rgba(37,211,102,.35)}
+.dev-btn.wa:hover{box-shadow:0 6px 20px rgba(37,211,102,.5)}
+.dev-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 </style>
 <script type="application/ld+json">
 {
@@ -791,9 +805,9 @@ body,.card,.btn,.composer-new,.search-box,.settings-item,.conv,.cm-item,.seg,.sh
   <p class="note" id="regNote" style="display:none">Kayıt olduktan sonra mailine doğrulama kodu gelir.</p>
   <p class="note">Bu uygulama bir öğrenci tarafından öğrenciler için geliştirilmiştir, resmi bir üniversite uygulaması değildir.</p>
   <p class="auth-footer">Designed &amp; Developed by <b>Emin Acar</b></p>
-  <a href="https://instagram.com/gelisimvibe" target="_blank" rel="noopener" class="auth-instagram" aria-label="Instagram">
+  <a href="https://www.instagram.com/igugelisimvibe/" target="_blank" rel="noopener" class="auth-instagram" aria-label="Instagram">
     <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-    @gelisimvibe
+    @igugelisimvibe
   </a>
 
   <div class="seo-content" style="max-width:680px;margin:32px auto 0;padding:20px;text-align:left;color:var(--mute);font-size:13.5px;line-height:1.75">
@@ -869,7 +883,7 @@ body,.card,.btn,.composer-new,.search-box,.settings-item,.conv,.cm-item,.seg,.sh
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ============================================================
-   GELİŞİM VIBE — v4.4 (bugfix + features)
+   GELİŞİM VIBE — v4.5 (bugfix + IG/WA geliştirici bölümü)
    ============================================================ */
 const CONFIG = {
   SB_URL: 'https://ihkjmnogqhekvyroloeg.supabase.co',
@@ -877,15 +891,17 @@ const CONFIG = {
   ADSENSE_CLIENT: 'ca-pub-7174104301389071',
   ADSENSE_SLOT: '0000000000',
   ADSENSE_EVERY: 8,
-  CONTACT_PHONE: '05521152106',
-  CONTACT_PHONE_WA: '905521152106',
+  CONTACT_WA: '905521152106',
   CONTACT_EMAIL: 'reklam@gelisimvibe.com',
   DOMAIN: '@ogr.gelisim.edu.tr',
   EDGE_FN: 'clever-responder',
   FEED_MAX: 200,
-  NOTIF_ICON: 'logo.png'
+  NOTIF_ICON: 'logo.png',
+  COMMUNITY_IG: 'https://www.instagram.com/igugelisimvibe/',
+  DEV_IG: 'https://www.instagram.com/em1nacar/',
+  DEV_WA: '905051016965'
 };
-const { SB_URL, SB_KEY, ADSENSE_CLIENT, ADSENSE_SLOT, CONTACT_PHONE, CONTACT_PHONE_WA, CONTACT_EMAIL, DOMAIN, EDGE_FN, NOTIF_ICON } = CONFIG;
+const { SB_URL, SB_KEY, ADSENSE_CLIENT, ADSENSE_SLOT, CONTACT_WA, CONTACT_EMAIL, DOMAIN, EDGE_FN, NOTIF_ICON, COMMUNITY_IG, DEV_IG, DEV_WA } = CONFIG;
 const ADSENSE_ENABLED = !ADSENSE_SLOT.startsWith('0000');
 
 const sb = supabase.createClient(SB_URL, SB_KEY);
@@ -902,10 +918,14 @@ const safeUrl = u => {
 /* ============== REKLAM SIKLIĞI AYARLARI ============== */
 let adSettings = { sponsor_every: 4, adsense_every: 8 };
 const AD_SETTINGS_KEY = 'ad_settings';
+const AD_SETTINGS_TS_KEY = 'ad_settings_ts';
+const AD_SETTINGS_TTL = 60 * 60 * 1000;
 
 async function loadAdSettings(){
+  let needServerFetch = true;
   try{
     const cached = localStorage.getItem(AD_SETTINGS_KEY);
+    const cachedTs = parseInt(localStorage.getItem(AD_SETTINGS_TS_KEY) || '0', 10);
     if(cached){
       const p = JSON.parse(cached);
       if(p && typeof p === 'object'){
@@ -914,8 +934,11 @@ async function loadAdSettings(){
         if(s >= 1 && s <= 50) adSettings.sponsor_every = s;
         if(a >= 1 && a <= 50) adSettings.adsense_every = a;
       }
+      if(Date.now() - cachedTs < AD_SETTINGS_TTL) needServerFetch = false;
     }
   }catch(_){}
+
+  if(!needServerFetch) return;
 
   try{
     const { data, error } = await sb.from('app_settings').select('value').eq('key', 'ad_settings').maybeSingle();
@@ -924,7 +947,10 @@ async function loadAdSettings(){
       const a = parseInt(data.value.adsense_every, 10);
       if(s >= 1 && s <= 50) adSettings.sponsor_every = s;
       if(a >= 1 && a <= 50) adSettings.adsense_every = a;
-      try{ localStorage.setItem(AD_SETTINGS_KEY, JSON.stringify(adSettings)); }catch(_){}
+      try{
+        localStorage.setItem(AD_SETTINGS_KEY, JSON.stringify(adSettings));
+        localStorage.setItem(AD_SETTINGS_TS_KEY, String(Date.now()));
+      }catch(_){}
     }
   }catch(_){}
 }
@@ -934,7 +960,10 @@ async function saveAdSettings(next){
     sponsor_every: Math.max(1, Math.min(50, parseInt(next.sponsor_every, 10) || 4)),
     adsense_every: Math.max(1, Math.min(50, parseInt(next.adsense_every, 10) || 8))
   };
-  try{ localStorage.setItem(AD_SETTINGS_KEY, JSON.stringify(adSettings)); }catch(_){}
+  try{
+    localStorage.setItem(AD_SETTINGS_KEY, JSON.stringify(adSettings));
+    localStorage.setItem(AD_SETTINGS_TS_KEY, String(Date.now()));
+  }catch(_){}
   try{
     const { error } = await sb.from('app_settings').upsert(
       { key: 'ad_settings', value: adSettings, updated_at: new Date().toISOString() },
@@ -958,7 +987,6 @@ const ago = d => {
 const fullDate = d => new Date(d).toLocaleString('tr-TR', { day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
 
 const initials = (f,l) => ((f||'')[0]||'') + ((l||'')[0]||'');
-// FIX #5: Türkçe isim düzeltmesi — her kelimenin ilk harfi büyük
 const capFirst = s => {
   s = String(s||'').trim(); if(!s) return '';
   return s.split(/\s+/).map(w =>
@@ -970,7 +998,7 @@ const escapeLike = s => String(s||'').replace(/[\\%_]/g, '\\$&');
 
 let me = null, tab = 'feed', reg = false, libTab = 'books', chatWith = null, chatUser = null, chatTimer = null, pdfSearch = '', bookSearch = '';
 let currentHashtag = null;
-let feedPage = 0, feedLoading = false, feedExhausted = false, feedItems = [];
+let feedLoading = false, feedExhausted = false, feedItems = [];
 let adminShowRealConf = localStorage.getItem('adminShowRealConf') === '1';
 let lastNotifCheck = 0;
 let feedUnsub = null;
@@ -1047,10 +1075,16 @@ function linkify(text){
     .replace(HASHTAG_RE, (m, tag) => { const i = tags.push(tag) - 1; return PLACEHOLDER_MARK + 'H' + i + PLACEHOLDER_MARK; })
     .replace(MENTION_RE, (m, name) => { const i = mentions.push(name) - 1; return PLACEHOLDER_MARK + 'M' + i + PLACEHOLDER_MARK; });
   out = esc(out);
-  out = out.replace(new RegExp(PLACEHOLDER_MARK + 'H(\\d+)' + PLACEHOLDER_MARK, 'g'), (m, i) =>
-    '<a class="tag-link" data-hashtag="' + esc(tags[i].toLowerCase()) + '" href="#">#' + esc(tags[i]) + '</a>');
-  out = out.replace(new RegExp(PLACEHOLDER_MARK + 'M(\\d+)' + PLACEHOLDER_MARK, 'g'), (m, i) =>
-    '<a class="mention-link" data-mention="' + esc(mentions[i].toLowerCase()) + '" href="#">@' + esc(mentions[i]) + '</a>');
+  out = out.replace(new RegExp(PLACEHOLDER_MARK + 'H(\\d+)' + PLACEHOLDER_MARK, 'g'), (m, i) => {
+    const t = tags[+i];
+    if(t == null) return '';
+    return '<a class="tag-link" data-hashtag="' + esc(t.toLowerCase()) + '" href="#">#' + esc(t) + '</a>';
+  });
+  out = out.replace(new RegExp(PLACEHOLDER_MARK + 'M(\\d+)' + PLACEHOLDER_MARK, 'g'), (m, i) => {
+    const t = mentions[+i];
+    if(t == null) return '';
+    return '<a class="mention-link" data-mention="' + esc(t.toLowerCase()) + '" href="#">@' + esc(t) + '</a>';
+  });
   return out;
 }
 
@@ -1100,6 +1134,12 @@ function openSheet(html, opts){
 /* ============== PUSH NOTIFICATIONS ============== */
 async function requestPushPermission(){
   if(!('Notification' in window)) return false;
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  if(isIOS && !isStandalone){
+    toast("iOS'ta bildirimler için uygulamayı ana ekrana ekle (Paylaş → Ana Ekrana Ekle).", 'info');
+    return false;
+  }
   if(Notification.permission === 'granted') return true;
   if(Notification.permission === 'denied') return false;
   try{
@@ -1209,7 +1249,7 @@ function openLegalDoc(kind){
 <div style="line-height:1.85;font-size:14px;color:var(--mute);text-align:justify">
 <p style="margin:0 0 16px">İşbu Aydınlatma Metni, 6698 sayılı KVKK m.10 uyarınca hazırlanmıştır.</p>
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">1. Veri Sorumlusu</h3>
-<p>Gelişim Vibe · Tel: ${CONTACT_PHONE}</p>
+<p>Gelişim Vibe · WhatsApp: ${CONTACT_WA}</p>
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">2. İşlenen Veriler</h3>
 <p>Ad, soyad, e-posta, bölüm, paylaşımlar, mesajlar, medya, IP, çerez verisi.</p>
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">3. Amaçlar</h3>
@@ -1217,13 +1257,13 @@ function openLegalDoc(kind){
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">4. Aktarım</h3>
 <p>Supabase (ABD/AB), Google LLC (ABD), Cloudflare Inc. (ABD). SCC + açık rıza ile.</p>
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">5. Haklarınız</h3>
-<p>Erişme, düzeltme, silme, itiraz. Başvuru: <b>${CONTACT_PHONE}</b>.</p>
+<p>Erişme, düzeltme, silme, itiraz. Başvuru: WhatsApp üzerinden iletişime geçin.</p>
 <div style="background:var(--bg);border-radius:12px;padding:14px;margin-top:20px;border-left:3px solid var(--ac)"><p style="margin:0;font-size:13px"><b>Onay kutusunu işaretlemeniz bu metni okuduğunuzu gösterir.</b></p></div>
 </div>`},
     riza:{title:`✅ Açık Rıza Metni`,body:`
 <div style="line-height:1.85;font-size:14px;color:var(--mute);text-align:justify">
 <p>KVKK m.5 ve m.9 uyarınca; e-posta, ad-soyad, bölüm bilgimin işlenmesine; paylaşımlarımın saklanmasına; Google AdSense kişiselleştirilmiş reklam çerezlerine; ve yurt dışı aktarıma açık rıza veriyorum.</p>
-<p>Rızamı <b>${CONTACT_PHONE}</b> üzerinden geri çekebilirim.</p>
+<p>Rızamı WhatsApp üzerinden geri çekebilirim.</p>
 </div>`}
   };
   const d = docs[kind]; if(!d) return;
@@ -1547,13 +1587,18 @@ async function boot(session){
 
   const urlTab = new URLSearchParams(location.search).get('tab');
   if(urlTab && ['feed','chat','conf','library','ann','settings'].includes(urlTab)){
-    try { sessionStorage.setItem('gv_tab', urlTab); } catch(_){}
+    try { sessionStorage.setItem('gv_tab', urlTab); }catch(_){}
     tab = urlTab;
   }
   const { data: profile, error } = await sb.from('profiles').select('*').eq('id', session.user.id).maybeSingle();
   if(!profile){
     console.error('[boot] profil yüklenemedi', error);
     say('Profil yüklenemedi. Lütfen sayfayı yenile.', 1);
+    return;
+  }
+  if(profile.is_banned){
+    try{ await sb.auth.signOut(); }catch(_){}
+    say('🚫 Hesabın kalıcı olarak banlanmış. İtiraz için WhatsApp üzerinden iletişime geçebilirsin.', 1);
     return;
   }
   me = profile;
@@ -1663,7 +1708,8 @@ function subscribeAnnouncements(){
 }
 
 async function checkNotifications(){
-  if(Date.now() - lastNotifCheck < 45000) return;
+  if(!navigator.onLine) return;
+  if(Date.now() - lastNotifCheck < 120000) return;
   lastNotifCheck = Date.now();
   try{
     const now = Date.now();
@@ -1704,7 +1750,7 @@ async function checkNotifications(){
     }
   }catch(e){}
 }
-setInterval(() => { if(me) checkNotifications(); }, 60000);
+setInterval(() => { if(me) checkNotifications(); }, 120000);
 
 /* ============== ADS ============== */
 function renderAdCard(ad){
@@ -1718,7 +1764,6 @@ function renderAdSenseCard(){
   if(!hasAdConsent()) return '';
   return '<article class="ad-card adsense-card"><div class="ad-head"><span class="ad-tag" style="background:var(--g);color:#fff">🔷 GOOGLE</span><span style="color:var(--mute);font-size:10.5px">Sponsorlu içerik</span></div><div style="min-height:100px;margin-top:6px;overflow:hidden"><ins class="adsbygoogle" style="display:block" data-ad-client="' + ADSENSE_CLIENT + '" data-ad-slot="' + ADSENSE_SLOT + '" data-ad-format="auto" data-full-width-responsive="true"></ins></div></article>';
 }
-// FIX #8: initAdSense çift tetikleme koruması
 let _adsenseInitTimer = null;
 function initAdSense(){
   if(!ADSENSE_ENABLED || !hasAdConsent()) return;
@@ -1726,14 +1771,17 @@ function initAdSense(){
   clearTimeout(_adsenseInitTimer);
   _adsenseInitTimer = setTimeout(() => {
     document.querySelectorAll('.adsbygoogle').forEach(el => {
-      if(!el.dataset.adsbygoogleStatus){
-        try{ (window.adsbygoogle = window.adsbygoogle || []).push({}); el.dataset.adsbygoogleStatus = 'done'; }catch(e){}
+      if(!el.dataset.gvPushed){
+        try{
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+          el.dataset.gvPushed = '1';
+        }catch(e){}
       }
     });
   }, 400);
 }
 function renderAdvertiseCTA(){
-  return '<div class="advertise-cta"><div class="info"><b>📢 Burada reklam verebilirsiniz!</b><div class="dep">İGÜ öğrencilerine ulaşmak için tıkla · Tel: ' + CONTACT_PHONE + '</div></div><button class="btn sm" data-advertise>Reklam Ver</button></div>';
+  return '<div class="advertise-cta"><div class="info"><b>📢 Burada reklam verebilirsiniz!</b><div class="dep">İGÜ öğrencilerine ulaşmak için WhatsApp üzerinden iletişime geçin.</div></div><button class="btn sm" data-advertise>Reklam Ver</button></div>';
 }
 document.addEventListener('click', e => {
   if(e.target.closest('[data-advertise]')) openAdvertiseSheet();
@@ -1741,8 +1789,8 @@ document.addEventListener('click', e => {
 function openAdvertiseSheet(){
   const el = openSheet(
     '<h4>📢 Reklam Ver<button class="sheet-close" aria-label="Kapat">×</button></h4>' +
-    '<div style="background:linear-gradient(135deg,#FFB020 18%,transparent);border:1px dashed #FFB020;border-radius:12px;padding:12px;margin-bottom:14px"><b style="font-size:13.5px">📞 Hemen Ara:</b> <a href="tel:' + CONTACT_PHONE + '" style="color:var(--ac);font-weight:800;font-size:15px;text-decoration:none">' + CONTACT_PHONE + '</a></div>' +
-    '<p style="color:var(--mute);font-size:13.5px;line-height:1.5;margin:0 0 14px">Formu doldur, yönetici ekibimiz en kısa sürede sana ulaşsın.</p>' +
+    '<a href="https://wa.me/' + CONTACT_WA + '?text=' + encodeURIComponent('Merhaba, Gelişim Vibe\'da reklam vermek istiyorum.') + '" target="_blank" rel="noopener" class="dev-btn wa" style="margin-bottom:14px"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>WhatsApp ile Hemen İletişime Geç</a>' +
+    '<p style="color:var(--mute);font-size:13.5px;line-height:1.5;margin:0 0 14px">Ya da formu doldur, yönetici ekibimiz en kısa sürede sana ulaşsın.</p>' +
     '<form id="adreqForm">' +
     '<label style="font-size:13px;font-weight:600;color:var(--mute)">Ne reklamı vereceksin?</label>' +
     '<input id="adreqType" maxlength="120" placeholder="Örn: Kafeterya, kırtasiye, özel ders..." required>' +
@@ -1821,20 +1869,17 @@ async function loadList(t, append=false){
 
   if(!append){
     if(feedUnsub){ try{ feedUnsub(); }catch(_){} feedUnsub = null; }
-    feedPage = 0; feedItems = []; feedExhausted = false;
+    feedItems = []; feedExhausted = false;
   }
 
   const pageSize = 20;
-  // FIX #4: feedPage sorgudan ÖNCE kullanılır, arttırma başarı sonrası
-  const from = feedPage * pageSize, to = from + pageSize - 1;
+  const from = append ? feedItems.length : 0;
+  const to = from + pageSize - 1;
 
   const mainRes = await sb.from(table).select(selectCols).order('created_at',{ascending:false}).range(from, to);
   const newItems = mainRes.data || [], error = mainRes.error;
   if(error) { $('#view').innerHTML = '<div class="empty">Yüklenemedi: ' + esc(error.message) + '</div>'; return; }
   if(newItems.length < pageSize) feedExhausted = true;
-
-  // FIX: sayfa numarasını burada arttır
-  if(append) feedPage++;
 
   if(append){
     feedItems = feedItems.concat(newItems);
@@ -2064,7 +2109,6 @@ async function loadList(t, append=false){
     };
   }
 
-  // FIX #5: Observer sızıntısı — eskisini temizle
   if(!conf && !feedExhausted){
     const endEl = document.getElementById('feedEnd');
     if(endEl){
@@ -2566,7 +2610,7 @@ function removeFab(){ if(fabEl){ fabEl.remove(); fabEl = null; fabHandler = null
    ========================================================= */
 async function loadFeedback(){
   removeFab();
-  const form = '<form class="card composer" id="ff">' +
+  const form = '<form class="card" id="ff">' +
     '<div style="display:flex;gap:6px;margin-bottom:8px"><button type="button" class="btn sm" data-ft="öneri">💡 Öneri</button><button type="button" class="btn sm" data-ft="şikayet">⚠️ Şikayet</button></div>' +
     '<input type="hidden" id="ftype" value="öneri">' +
     '<textarea id="fc" maxlength="1200" placeholder="Uygulama hakkındaki öneri veya şikayetini yaz..." required></textarea>' +
@@ -2618,6 +2662,7 @@ async function loadFeedback(){
     $('#fc').value = '';
     fbImgFile = null; fbPv.classList.add('hide'); fbPv.innerHTML = '';
     toast('Geri bildirimin yöneticiye iletildi.', 'ok');
+    if(me.is_admin) loadFeedback();
   };
   if(me.is_admin){
     $('#view').onclick = async e => {
@@ -2643,6 +2688,7 @@ async function loadSettings(sub){
   if(sub === 'info') return loadInfo();
   if(sub === 'password') return loadPasswordChange();
   if(sub === 'notif') return loadNotificationSettings();
+  if(sub === 'developer') return loadDeveloper();
   const initials_ = initials(me.first_name, me.last_name).toUpperCase();
   const notifPerm = ('Notification' in window) ? Notification.permission : 'desteklenmiyor';
   const notifUser = notifEnabled();
@@ -2663,12 +2709,13 @@ async function loadSettings(sub){
       '<div class="settings-item" data-open="password"><div class="ico">🔑</div><div class="txt"><b>Şifre Değiştir</b><small>Hesabının şifresini güncelle</small></div><span class="arrow">›</span></div>' +
       '<div class="settings-item" data-open="notif"><div class="ico">🔔</div><div class="txt"><b>Bildirimler</b><small>' + notifLabel + '</small></div><span class="arrow">›</span></div>' +
       '<div class="settings-item" data-open="info"><div class="ico">ℹ️</div><div class="txt"><b>Bilgi</b><small>Hakkımızda, Gizlilik, İletişim</small></div><span class="arrow">›</span></div>' +
+      '<div class="settings-item" data-open="developer"><div class="ico">👨‍💻</div><div class="txt"><b>Yapımcı Hakkında</b><small>Emin Acar · Kurucu & Geliştirici</small></div><span class="arrow">›</span></div>' +
       '<div class="settings-item" data-open="feedback"><div class="ico">💡</div><div class="txt"><b>Öneri & Şikayet</b><small>Uygulamayı geliştirmemize yardımcı ol</small></div><span class="arrow">›</span></div>' +
-      '<div class="settings-item" data-open="advertise"><div class="ico">📢</div><div class="txt"><b>Reklam Ver</b><small>Tel: ' + CONTACT_PHONE + '</small></div><span class="arrow">›</span></div>' +
+      '<div class="settings-item" data-open="advertise"><div class="ico">📢</div><div class="txt"><b>Reklam Ver</b><small>WhatsApp ile iletişime geç</small></div><span class="arrow">›</span></div>' +
       '<div class="settings-item danger" data-open="delete"><div class="ico">🗑️</div><div class="txt"><b>Hesabımı Sil</b><small>Anında ve kalıcı olarak silinir</small></div><span class="arrow">›</span></div>' +
       '<div class="settings-item danger" data-open="logout"><div class="ico">🚪</div><div class="txt"><b>Çıkış Yap</b><small>Hesabından güvenli çıkış</small></div><span class="arrow">›</span></div>' +
     '</div>' +
-    '<div style="text-align:center;margin-top:22px;color:var(--mute);font-size:11px">Gelişim Vibe · v4.4<br>Designed &amp; Developed by <b style="color:var(--ac)">Emin Acar</b></div>';
+    '<div style="text-align:center;margin-top:22px;color:var(--mute);font-size:11px">Gelişim Vibe · v4.5<br>Designed &amp; Developed by <b style="color:var(--ac)">Emin Acar</b></div>';
   $('#view').onclick = async e => {
     const item = e.target.closest('[data-open]'); if(!item) return;
     const x = item.dataset.open;
@@ -2677,14 +2724,49 @@ async function loadSettings(sub){
     if(x === 'notif') loadSettings('notif');
     if(x === 'info') loadSettings('info');
     if(x === 'password') loadSettings('password');
+    if(x === 'developer') loadSettings('developer');
     if(x === 'feedback') show('feedback');
     if(x === 'advertise') openAdvertiseSheet();
   };
 }
 
+async function loadDeveloper(){
+  removeFab();
+  const html = settingsHeader('👨‍💻 Yapımcı Hakkında') +
+    '<div class="dev-hero">' +
+      '<div class="dev-avatar">EA</div>' +
+      '<div style="font-weight:800;font-size:22px">Emin Acar</div>' +
+      '<div style="color:var(--mute);font-size:13.5px;margin-top:4px">Kurucu & Geliştirici</div>' +
+      '<div style="margin-top:10px;display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--mute);background:color-mix(in srgb,var(--ac) 10%,transparent);padding:5px 12px;border-radius:999px">' +
+        '⚡ İGÜ · Elektrik-Elektronik Müh.' +
+      '</div>' +
+    '</div>' +
+    '<article class="card">' +
+      '<p style="line-height:1.8;font-size:14.5px;color:var(--ink);margin:0;text-align:justify">' +
+        'Merhaba, ben <b>Emin Acar</b>. İstanbul Gelişim Üniversitesi\'nde İngilizce Elektrik-Elektronik Mühendisliği okuyorum ve şu an hazırlık sınıfındayım. Mühendisliğin hemen hemen her alanına büyük bir ilgi duyuyorum. Teknoloji ve yazılım dünyasına olan merakımdan aldığım ilhamla, kampüsteki etkileşimi güçlendirmek ve <b>Gelişim Vibe</b> topluluğumuzu dijital bir çatı altında buluşturmak için tek başıma bu platformu geliştirdim. Bu platform, hep birlikte hem eğlenebileceğimiz hem de yardımlaşabileceğimiz bir uygulamadır.' +
+      '</p>' +
+    '</article>' +
+    '<div class="dev-quote">"Eğlencenin olduğu yerde Gelişim de gelir"</div>' +
+    '<a href="' + DEV_IG + '" target="_blank" rel="noopener" class="dev-btn ig">' +
+      '<svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>' +
+      'Instagram · @em1nacar' +
+    '</a>' +
+    '<a href="https://wa.me/' + DEV_WA + '?text=' + encodeURIComponent('Merhaba Emin, Gelişim Vibe hakkında konuşmak istiyorum.') + '" target="_blank" rel="noopener" class="dev-btn wa">' +
+      '<svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>' +
+      'WhatsApp ile Yaz' +
+    '</a>' +
+    '<div style="text-align:center;margin-top:18px;font-size:11.5px;color:var(--mute);line-height:1.6">' +
+      'Gelişim Vibe\'yi tek başıma geliştiriyorum.<br>Geri bildirimin benim için çok değerli. 💙' +
+    '</div>';
+  $('#view').innerHTML = html;
+}
+
 async function loadNotificationSettings(){
   const perm = ('Notification' in window) ? Notification.permission : 'desteklenmiyor';
   const userOn = notifEnabled();
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  const iosHint = (isIOS && !isStandalone) ? '<div style="margin-top:10px;padding:12px;background:color-mix(in srgb,#FF9900 12%,transparent);border:1px dashed #FF9900;border-radius:12px;font-size:12.5px;line-height:1.55;color:var(--ink)">📱 <b>iOS kullanıyorsun:</b> Bildirim alabilmek için önce Safari\'de <b>Paylaş → Ana Ekrana Ekle</b> yapıp uygulamayı oradan açman gerekiyor.</div>' : '';
   $('#view').innerHTML = settingsHeader('🔔 Bildirimler') +
     '<div class="card">' +
       '<p style="margin:0 0 12px;font-size:13.5px;line-height:1.6;color:var(--mute)">Yeni duyurular, mesajlar ve etkileşimler için bildirim al.</p>' +
@@ -2700,6 +2782,7 @@ async function loadNotificationSettings(){
         (perm !== 'granted' ? '<button class="btn" id="reqNotifBtn">🔔 Tarayıcı İzni Ver</button>' : '<button class="btn" id="testNotifBtn" style="background:var(--bg);color:var(--ink)">🔔 Test Bildirimi Gönder</button>') +
         (perm === 'denied' ? '<p style="font-size:12px;color:var(--mute);margin:0;line-height:1.5">İzin reddedilmiş. Tarayıcı ayarlarından sıfırlaman gerekebilir.</p>' : '') +
       '</div>' +
+      iosHint +
     '</div>';
   const sw = $('#notifSwitch');
   if(sw) sw.onclick = () => {
@@ -2713,7 +2796,7 @@ async function loadNotificationSettings(){
   const rb = $('#reqNotifBtn');
   if(rb) rb.onclick = async () => {
     const ok = await requestPushPermission();
-    toast(ok ? 'Bildirimler açıldı 🔔' : 'İzin verilmedi', ok ? 'ok' : 'warn');
+    if(ok) toast('Bildirimler açıldı 🔔', 'ok');
     loadNotificationSettings();
   };
   const tb = $('#testNotifBtn');
@@ -2789,9 +2872,9 @@ async function loadPasswordChange(){
 async function loadInfo(){
   removeFab();
   $('#view').innerHTML = settingsHeader('ℹ️ Bilgi') + '<div class="seg"><button data-it="about" class="on">ℹ️ Hakkımızda</button><button data-it="privacy">🔒 Gizlilik</button><button data-it="contact">📬 İletişim</button></div><div id="infoView"></div>';
-  const about = '<article class="card"><h2 style="margin:0 0 10px;font-size:20px">ℹ️ Hakkımızda</h2><p style="line-height:1.7;color:var(--mute);font-size:14.5px"><b style="color:var(--ink)">Gelişim Vibe</b>, İstanbul Gelişim Üniversitesi öğrencileri tarafından <b>öğrenciler için</b> geliştirilmiş bir topluluk uygulamasıdır.</p><div style="background:var(--bg);border-radius:12px;padding:14px;margin-top:14px"><div style="font-weight:800;margin-bottom:6px">📌 Neler Yapabilirsin?</div><ul style="margin:0;padding-left:20px;line-height:1.8;color:var(--mute);font-size:14px"><li>Akışta paylaşım yap (#etiket kullan)</li><li>Anonim itiraf gönder</li><li>2. el kitap sat / takas yap</li><li>Ders notlarını PDF olarak paylaş</li><li>Mesajlaş, emoji reaksiyon ver</li></ul></div><div style="background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 10%,transparent),transparent);border-radius:12px;padding:14px;margin-top:14px;border:1px dashed var(--ac)"><div style="font-weight:800;margin-bottom:6px">📜 Yasal Uyarı</div><p style="margin:0;color:var(--mute);font-size:13px;line-height:1.6">Bu uygulama <b>resmi bir üniversite uygulaması değildir</b>.</p></div></article>';
-  const privacy = '<article class="card"><h2 style="margin:0 0 10px;font-size:20px">🔒 Gizlilik Politikası</h2><div style="line-height:1.75;font-size:14.5px"><h3 style="font-size:15px;margin:16px 0 6px">1. Veri Sorumlusu</h3><p style="margin:0;color:var(--mute)">Gelişim Vibe · Tel: <b>' + CONTACT_PHONE + '</b></p><h3 style="font-size:15px;margin:16px 0 6px">2. Çerezler</h3><p style="margin:0;color:var(--mute)">Google AdSense kişiselleştirilmiş reklam için çerez kullanır; onay sonrası yüklenir.</p><h3 style="font-size:15px;margin:16px 0 6px">3. KVKK m.11 Haklarınız</h3><p style="margin:0;color:var(--mute)">Başvuru: <b>' + CONTACT_PHONE + '</b></p></div></article>';
-  const contact = '<article class="card"><h2 style="margin:0 0 10px;font-size:20px">📬 İletişim</h2><div style="display:flex;flex-direction:column;gap:10px;margin-top:16px"><a href="tel:' + CONTACT_PHONE + '" class="sheet-btn"><span style="font-size:22px">📞</span><div><div style="font-weight:700">Telefon</div><div style="color:var(--mute);font-size:13px">' + CONTACT_PHONE + '</div></div></a><a href="https://wa.me/' + CONTACT_PHONE_WA + '" target="_blank" rel="noopener" class="sheet-btn"><span style="font-size:22px">💬</span><div><div style="font-weight:700">WhatsApp</div><div style="color:var(--mute);font-size:13px">' + CONTACT_PHONE + '</div></div></a></div></article>';
+  const about = '<article class="card"><h2 style="margin:0 0 10px;font-size:20px">ℹ️ Hakkımızda</h2><p style="line-height:1.7;color:var(--mute);font-size:14.5px"><b style="color:var(--ink)">Gelişim Vibe</b>, İstanbul Gelişim Üniversitesi öğrencileri tarafından <b>öğrenciler için</b> geliştirilmiş bir topluluk uygulamasıdır.</p><div style="background:var(--bg);border-radius:12px;padding:14px;margin-top:14px"><div style="font-weight:800;margin-bottom:6px">📌 Neler Yapabilirsin?</div><ul style="margin:0;padding-left:20px;line-height:1.8;color:var(--mute);font-size:14px"><li>Akışta paylaşım yap (#etiket kullan)</li><li>Anonim itiraf gönder</li><li>2. el kitap sat / takas yap</li><li>Ders notlarını PDF olarak paylaş</li><li>Mesajlaş, emoji reaksiyon ver</li></ul></div><div style="background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 10%,transparent),transparent);border-radius:12px;padding:14px;margin-top:14px;border:1px dashed var(--ac)"><div style="font-weight:800;margin-bottom:6px">📜 Yasal Uyarı</div><p style="margin:0;color:var(--mute);font-size:13px;line-height:1.6">Bu uygulama <b>resmi bir üniversite uygulaması değildir</b>.</p></div><a href="' + COMMUNITY_IG + '" target="_blank" rel="noopener" class="dev-btn ig" style="margin-top:14px"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>@igugelisimvibe</a></article>';
+  const privacy = '<article class="card"><h2 style="margin:0 0 10px;font-size:20px">🔒 Gizlilik Politikası</h2><div style="line-height:1.75;font-size:14.5px"><h3 style="font-size:15px;margin:16px 0 6px">1. Veri Sorumlusu</h3><p style="margin:0;color:var(--mute)">Gelişim Vibe · WhatsApp üzerinden iletişime geçebilirsiniz.</p><h3 style="font-size:15px;margin:16px 0 6px">2. Çerezler</h3><p style="margin:0;color:var(--mute)">Google AdSense kişiselleştirilmiş reklam için çerez kullanır; onay sonrası yüklenir.</p><h3 style="font-size:15px;margin:16px 0 6px">3. KVKK m.11 Haklarınız</h3><p style="margin:0;color:var(--mute)">Başvuru WhatsApp üzerinden yapılabilir.</p></div></article>';
+  const contact = '<article class="card"><h2 style="margin:0 0 10px;font-size:20px">📬 İletişim</h2><p style="color:var(--mute);font-size:13.5px;margin:0 0 16px">Bizimle WhatsApp üzerinden iletişime geçebilirsin.</p><div style="display:flex;flex-direction:column;gap:10px"><a href="https://wa.me/' + CONTACT_WA + '" target="_blank" rel="noopener" class="dev-btn wa" style="margin:0"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>WhatsApp ile İletişime Geç</a></div></article>';
   const setView = v => {
     $('#view').querySelectorAll('.seg button').forEach(x => x.classList.toggle('on', x.dataset.it === v));
     $('#infoView').innerHTML = v === 'about' ? about : v === 'privacy' ? privacy : contact;
@@ -2996,7 +3079,6 @@ async function loadChatView(){
     if(!content && !chatImgFile) return;
     const row = { sender_id: me.id, receiver_id: other, content: content || '' };
     if(chatReplyTo) row.reply_to = chatReplyTo;
-    // FIX #9: finally bloğu ile progress temizliği
     if(chatImgFile){
       chatInput.disabled = true;
       const prog = document.createElement('div');
@@ -3094,7 +3176,7 @@ async function loadChatView(){
   attachSwipeHandlers(body, other);
 }
 
-/* ============ SWIPE TO REPLY (v4.4 — event delegation, sızıntısız) ============ */
+/* ============ SWIPE TO REPLY ============ */
 let _swipeState = null;
 
 function handleSwipeStart(wrap, clientX, clientY){
@@ -3144,7 +3226,6 @@ function handleSwipeEnd(){
   s.wrap.classList.remove('swiping');
   _swipeState = null;
 }
-// Tek seferlik global dinleyiciler (document seviyesi — sızıntı YOK)
 if(!window._swipeGlobalBound){
   window._swipeGlobalBound = true;
   document.addEventListener('mousemove', e => { if(_swipeState) handleSwipeMove(e.clientX, e.clientY); });
@@ -3167,12 +3248,12 @@ function attachSwipeHandlers(body, otherId){
   body.addEventListener('touchend', handleSwipeEnd);
   body.addEventListener('touchcancel', handleSwipeEnd);
   body.addEventListener('mousedown', e => {
+    if(e.sourceCapabilities && e.sourceCapabilities.firesTouchEvents) return;
     const wrap = e.target.closest('.msg-wrap'); if(!wrap) return;
     handleSwipeStart(wrap, e.clientX, e.clientY);
   });
 }
 
-/* FIX #7: openMsgActions — "Yanıtla" butonu kaldırıldı, sadece bilgilendirme */
 function openMsgActions(mid, preview, mine, other){
   haptic(15);
   const el = openSheet(
@@ -3191,7 +3272,7 @@ function openMsgActions(mid, preview, mine, other){
     const x = b.dataset.x;
     if(x === 'copy'){ try{ await navigator.clipboard.writeText(preview); toast('Kopyalandı', 'ok'); }catch(_){ toast('Kopyalanamadı', 'err'); } el.remove(); }
     if(x === 'del'){ if(!confirm('Silinsin mi?')) return; await sb.from('messages').delete().eq('id', mid).eq('sender_id', me.id); el.remove(); if(chatWith) loadChatView(); }
-    if(x === 'report'){ el.remove(); report({ reason: 'Mesaj şikayeti', content: preview }); }
+    if(x === 'report'){ el.remove(); report({ reason: 'Mesaj şikayeti: ' + String(preview).slice(0, 200) }); }
   };
 }
 
@@ -3441,11 +3522,9 @@ async function loadAdmin(){
   window._rep = {};
   if(adminView === 'dashboard') return loadAdminDashboard();
   const backBtn = '<button class="settings-back" data-admin-back>← Panele Dön</button>';
-  // FIX: feedback sekmesi eklendi
   const titles = { reports:'🚩 Şikayetler', feedback:'💡 Öneri & Şikayet', banned:'🚫 Yasaklılar', users:'👥 Kullanıcılar', ads:'📢 Reklamlar', requests:'📥 Talepler' };
   $('#view').innerHTML = backBtn + '<h2 style="margin:0 0 14px;font-size:20px">' + (titles[adminView] || 'Admin') + '</h2><div id="adminView"><div class="empty">Yükleniyor...</div></div>';
   $('#view').querySelector('[data-admin-back]').onclick = () => { adminView = 'dashboard'; loadAdmin(); };
-  // FIX: feedback fonksiyonu eklendi
   const fns = { reports: loadAdminReports, feedback: loadAdminFeedback, banned: loadAdminBanned, users: loadAdminAllUsers, ads: loadAdminAds, requests: loadAdminRequests };
   await (fns[adminView] || loadAdminDashboard)();
 }
@@ -3464,7 +3543,6 @@ async function loadAdminDashboard(){
       sb.from('messages').select('id', { count: 'exact', head: true }).gte('created_at', dayAgo)
     ]);
     const stat = (n, l) => '<div class="admin-stat"><div class="n">' + fmtNum(n) + '</div><div class="l">' + l + '</div></div>';
-    // FIX: Öneri/Şikayet kartı eklendi
     box.innerHTML = '<div class="admin-dash">' +
       stat(today.count||0, 'Bugün kayıt') +
       stat(week.count||0, 'Bu hafta kayıt') +
@@ -3502,7 +3580,6 @@ async function loadAdminDashboard(){
   }
 }
 
-/* FIX: Admin panelde öneri/şikayet görüntüleme */
 async function loadAdminFeedback(){
   const box = $('#adminView');
   const { data, error } = await sb.from('app_feedback')
@@ -3616,7 +3693,7 @@ async function loadAdminReports(){
     bulkBar.classList.toggle('hide', n === 0);
     $('#bulkCount').textContent = n + ' seçili';
   };
-  box.addEventListener('change', e => { if(e.target.classList.contains('report-check')) updateBulk(); });
+  box.onchange = e => { if(e.target.classList.contains('report-check')) updateBulk(); };
 
   box.onclick = async e => {
     const bulk = e.target.closest('button[data-bulk]');
@@ -3963,7 +4040,7 @@ async function loadAdminAds(){
   const box = $('#adminView');
 
   const freqSettings =
-    '<form class="card composer" id="adsetf" style="border-left:4px solid var(--ad)">' +
+    '<form class="card" id="adsetf" style="border-left:4px solid var(--ad)">' +
       '<h3 style="margin:0 0 10px;font-size:15px;font-weight:800">⚙️ Reklam Sıklığı</h3>' +
       '<div style="font-size:12.5px;color:var(--mute);line-height:1.55;margin-bottom:10px">' +
         'Akışta kaç paylaşımda bir reklam gösterilsin? (1–50 arası)' +
@@ -3984,7 +4061,7 @@ async function loadAdminAds(){
   const { data: ads, error } = await sb.from('ads').select('*').order('created_at',{ascending:false}).limit(50);
   if(error){ box.innerHTML = freqSettings + '<div class="empty">' + esc(error.message) + '</div>'; return; }
   const adsenseInfo = '<div class="card" style="border-left:4px solid ' + (ADSENSE_ENABLED ? 'var(--g)' : 'var(--mute)') + '"><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="ad-tag" style="background:var(--g);color:#fff">🔷 GOOGLE ADSENSE</span></div><div style="font-size:13px;color:var(--mute);line-height:1.5">' + (ADSENSE_ENABLED ? '✅ Aktif — Her ' + adSettings.adsense_every + ' postta bir reklam.' : '⚠️ ADSENSE_SLOT placeholder (0000...) olduğu için devre dışı. Client ID bağlı ama slot oluşturulmamış.') + '</div></div>';
-  const form = '<form class="card composer" id="adf"><h3 style="margin:0 0 8px;font-size:15px;font-weight:800">📢 Yeni Sponsor Reklamı</h3><input id="adt" maxlength="100" placeholder="Reklam başlığı" required><textarea id="adb" maxlength="600" placeholder="Açıklama"></textarea><input id="adl" type="url" maxlength="500" placeholder="Link (https://...)"><div style="font-size:11.5px;color:var(--mute);background:color-mix(in srgb,#FFB020 12%,transparent);border:1px dashed color-mix(in srgb,#FFB020 40%,transparent);border-radius:8px;padding:8px 10px;margin:4px 0">📐 Görsel otomatik olarak <b>1:1 (kare)</b> kırpılır. Merkez odaklı bir görsel seç.</div><div id="adimgpv" class="pv hide"></div><label style="display:flex;align-items:center;gap:8px;padding:10px;border:1px solid var(--line);border-radius:10px;color:var(--ac);font-weight:600;cursor:pointer">📷 Görsel<input type="file" id="adimg" accept="image/*" hidden></label><button class="btn">Yayınla</button></form>';
+  const form = '<form class="card" id="adf"><h3 style="margin:0 0 8px;font-size:15px;font-weight:800">📢 Yeni Sponsor Reklamı</h3><input id="adt" maxlength="100" placeholder="Reklam başlığı" required><textarea id="adb" maxlength="600" placeholder="Açıklama"></textarea><input id="adl" type="url" maxlength="500" placeholder="Link (https://...)"><div style="font-size:11.5px;color:var(--mute);background:color-mix(in srgb,#FFB020 12%,transparent);border:1px dashed color-mix(in srgb,#FFB020 40%,transparent);border-radius:8px;padding:8px 10px;margin:4px 0">📐 Görsel otomatik olarak <b>1:1 (kare)</b> kırpılır. Merkez odaklı bir görsel seç.</div><div id="adimgpv" class="pv hide"></div><label style="display:flex;align-items:center;gap:8px;padding:10px;border:1px solid var(--line);border-radius:10px;color:var(--ac);font-weight:600;cursor:pointer">📷 Görsel<input type="file" id="adimg" accept="image/*" hidden></label><button class="btn">Yayınla</button></form>';
   const list = (ads||[]).map(a => {
     const img = a.image_path ? '<img src="' + adImgUrl(a.image_path) + '" style="width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:10px;margin-bottom:6px">' : '';
     const status = a.active ? '<span style="color:#2ecc71;font-weight:700">● Aktif</span>' : '<span style="color:var(--mute)">● Pasif</span>';
