@@ -917,8 +917,9 @@ const CONFIG = {
   COMMUNITY_IG: 'https://www.instagram.com/igugelisimvibe/',
   DEV_IG: 'https://www.instagram.com/em1nacar/',
   DEV_WA: '905051016965'
+  R2_BUCKET_URL: 'https://cdn.gelisimvibe.com.tr',
 };
-const { SB_URL, SB_KEY, ADSENSE_CLIENT, ADSENSE_SLOT, CONTACT_WA, CONTACT_EMAIL, DOMAIN, EDGE_FN, NOTIF_ICON, COMMUNITY_IG, DEV_IG, DEV_WA } = CONFIG;
+const { SB_URL, SB_KEY, ADSENSE_CLIENT, ADSENSE_SLOT, CONTACT_WA, CONTACT_EMAIL, DOMAIN, EDGE_FN, NOTIF_ICON, COMMUNITY_IG, DEV_IG, DEV_WA, R2_BUCKET_URL } = CONFIG;
 const ADSENSE_ENABLED = !ADSENSE_SLOT.startsWith('0000');
 
 const sb = supabase.createClient(SB_URL, SB_KEY);
@@ -1044,16 +1045,27 @@ function clearNewPostPill(){
 const notifEnabled = () => localStorage.getItem('notif_enabled') !== '0';
 const setNotifEnabled = (v) => localStorage.setItem('notif_enabled', v ? '1' : '0');
 
-const imgUrl   = p => p ? sb.storage.from('images').getPublicUrl(p).data.publicUrl : '';
-const bookUrl  = p => p ? sb.storage.from('books').getPublicUrl(p).data.publicUrl : '';
-const pdfUrl   = p => p ? sb.storage.from('pdfs').getPublicUrl(p).data.publicUrl : '';
-const videoUrl = p => p ? sb.storage.from('videos').getPublicUrl(p).data.publicUrl : '';
-const adImgUrl = p => p ? sb.storage.from('ads').getPublicUrl(p).data.publicUrl : '';
-const avatarUrl = p => p ? sb.storage.from('images').getPublicUrl(p).data.publicUrl : '';
+const imgUrl    = p => p ? `${R2_BUCKET_URL}/${p}` : '';
+const bookUrl   = p => p ? `${R2_BUCKET_URL}/${p}` : '';
+const pdfUrl    = p => p ? `${R2_BUCKET_URL}/${p}` : '';
+const videoUrl  = p => p ? `${R2_BUCKET_URL}/${p}` : '';
+const adImgUrl  = p => p ? `${R2_BUCKET_URL}/${p}` : '';
+const avatarUrl = p => p ? `${R2_BUCKET_URL}/${p}` : '';
 
 async function deleteStorageFile(bucket, path){
   if(!path) return;
-  try{ await sb.storage.from(bucket).remove([path]); }catch(_){}
+  try{
+    const { data: { session } } = await sb.auth.getSession();
+    if(!session) return;
+    await fetch(`${SB_URL}/functions/v1/r2-upload`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${session.access_token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ action: 'delete', key: path }),
+    });
+  }catch(_){}
 }
 
 const haptic = (ms=8) => { try{ navigator.vibrate && navigator.vibrate(ms); }catch(_){} };
@@ -1421,27 +1433,40 @@ function loadBitmapInfo(file){
     img.src = url;
   });
 }
-async function getToken(){
+async function uploadToR2(blob, contentType, fileName, folder, onProgress){
   const { data: { session } } = await sb.auth.getSession();
   if(!session || !session.access_token) throw new Error('Oturum bulunamadı.');
-  return session.access_token;
-}
-function xhrUpload(bucket, path, blob, contentType, onProgress){
-  return new Promise(async function(resolve, reject){
-    let token;
-    try{ token = await getToken(); }catch(e){ return reject(e); }
+
+  // 1. Edge Function'dan presigned URL al
+  const res = await fetch(`${SB_URL}/functions/v1/r2-upload`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${session.access_token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      fileName: fileName || 'file',
+      contentType: contentType || 'application/octet-stream',
+      folder: folder || 'uploads',
+    }),
+  });
+
+  let json;
+  try{ json = await res.json(); }catch(_){ throw new Error('Sunucu yanıtı okunamadı.'); }
+  if(json.error) throw new Error(json.error);
+  if(!json.uploadUrl || !json.key) throw new Error('Presigned URL alınamadı.');
+
+  // 2. Dosyayı doğrudan R2'ye yükle
+  return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', SB_URL + '/storage/v1/object/' + bucket + '/' + path, true);
-    xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-    xhr.setRequestHeader('apikey', SB_KEY);
+    xhr.open('PUT', json.uploadUrl, true);
     xhr.setRequestHeader('Content-Type', contentType || 'application/octet-stream');
-    xhr.setRequestHeader('x-upsert', 'false');
-    xhr.upload.onprogress = e => { if(e.lengthComputable && onProgress) onProgress(e.loaded / e.total); };
+    xhr.upload.onprogress = e => {
+      if(e.lengthComputable && onProgress) onProgress(e.loaded / e.total);
+    };
     xhr.onload = () => {
-      if(xhr.status >= 200 && xhr.status < 300) return resolve(path);
-      let msg = 'Yükleme hatası (' + xhr.status + ')';
-      try{ const j = JSON.parse(xhr.responseText); msg = j.message || j.error || msg; }catch(_){}
-      reject(new Error(msg));
+      if(xhr.status >= 200 && xhr.status < 300) resolve(json.key);
+      else reject(new Error('R2 yükleme başarısız (' + xhr.status + ')'));
     };
     xhr.onerror = () => reject(new Error('Ağ hatası'));
     xhr.send(blob);
@@ -1474,15 +1499,15 @@ async function uploadImg(file, bucket, onProgress, square){
     const j = await new Promise((r, jj) => c.toBlob(b => b ? r(b) : jj(new Error('Canvas dönüşümü başarısız')), 'image/jpeg', 0.85));
     if(j){ blob = j; ext = 'jpg'; ct = 'image/jpeg'; }
   }catch(e){ /* resize başarısız olduysa orijinali yükle */ }
-  const path = uid() + '.' + ext;
-  return xhrUpload(bucket, path, blob, ct, onProgress);
+  const fileName = uid() + '.' + ext;
+  return uploadToR2(blob, ct, fileName, bucket || 'images', onProgress);
 }
 async function uploadVideo(file, onProgress){
   if(!file.type.startsWith('video/')) throw new Error('Sadece video.');
   if(file.size > 200e6) throw new Error('Video max 200 MB.');
   const ext = (file.name.split('.').pop() || 'mp4').toLowerCase();
-  const path = uid() + '.' + ext;
-  return xhrUpload('videos', path, file, file.type || 'video/mp4', onProgress);
+  const fileName = uid() + '.' + ext;
+  return uploadToR2(file, file.type || 'video/mp4', fileName, 'videos', onProgress);
 }
 async function uploadPdf(file, onProgress){
   const lower = (file.name || '').toLowerCase();
@@ -1498,8 +1523,8 @@ async function uploadPdf(file, onProgress){
     if(err.message.includes('PDF')) throw err;
     throw new Error('PDF doğrulanamadı.');
   }
-  const path = uid() + '.pdf';
-  return xhrUpload('pdfs', path, file, 'application/pdf', onProgress);
+  const fileName = uid() + '.pdf';
+  return uploadToR2(file, 'application/pdf', fileName, 'pdfs', onProgress);
 }
 async function uploadAvatar(file, onProgress){
   return uploadImg(file, 'images', onProgress, true);
