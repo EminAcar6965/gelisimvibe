@@ -718,7 +718,7 @@ body,.card,.btn,.composer-new,.search-box,.settings-item,.conv,.cm-item,.seg,.sh
 /* Developer section */
 .dev-hero{text-align:center;padding:22px 16px;border-radius:20px;background:linear-gradient(135deg,color-mix(in srgb,#833AB4 12%,var(--card)),color-mix(in srgb,#FCB045 10%,var(--card)));border:1px solid color-mix(in srgb,#833AB4 25%,var(--line));margin-bottom:12px;box-shadow:var(--sh)}
 .dev-avatar{width:84px;height:84px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:30px;color:#fff;margin:0 auto 12px;background:linear-gradient(135deg,#833AB4,#FD1D1D,#FCB045);box-shadow:0 8px 22px rgba(131,58,180,.4)}
-.dev-quote{font-style:italic;font-size:16px;font-weight:700;text-align:center;color:var(--ac);line-height:1.55;padding:16px;background:color-mix(in srgb,var(--ac) 6%,var(--card));border-left:4px solid var(--ac);border-radius:12px;margin:10px 0}
+.dev-quote{font-style:italic;font-size:clamp(11px,3.6vw,16px);font-weight:700;text-align:center;color:var(--ac);line-height:1.5;padding:14px 10px;background:color-mix(in srgb,var(--ac) 6%,var(--card));border-left:4px solid var(--ac);border-radius:12px;margin:10px 0;white-space:nowrap;letter-spacing:-0.2px;overflow:visible}
 .dev-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px;font-size:15px;font-weight:700;border-radius:14px;text-decoration:none;color:#fff;margin-bottom:10px;transition:transform .15s ease,box-shadow .15s ease}
 .dev-btn:active{transform:scale(.98)}
 .dev-btn.ig{background:linear-gradient(135deg,#833AB4,#FD1D1D,#FCB045);box-shadow:0 4px 14px rgba(253,29,29,.35)}
@@ -1399,7 +1399,7 @@ updateOnlineBanner();
 function openLegalDoc(kind){
   const docs = {
     aydinlatma:{title:`📋 Aydınlatma Metni`,body:`
-<div style="line-height:1.85;font-size:14px;color:var(--mute);text-align:justify">
+<div style="line-height:1.85;font-size:14px;color:var(--mute);text-align:left">
 <p style="margin:0 0 16px">İşbu Aydınlatma Metni, 6698 sayılı KVKK m.10 uyarınca hazırlanmıştır.</p>
 <h3 style="font-size:15px;margin:22px 0 10px;color:var(--ink)">1. Veri Sorumlusu</h3>
 <p>Gelişim Vibe · WhatsApp: ${CONTACT_WA}</p>
@@ -1414,7 +1414,7 @@ function openLegalDoc(kind){
 <div style="background:var(--bg);border-radius:12px;padding:14px;margin-top:20px;border-left:3px solid var(--ac)"><p style="margin:0;font-size:13px"><b>Onay kutusunu işaretlemeniz bu metni okuduğunuzu gösterir.</b></p></div>
 </div>`},
     riza:{title:`✅ Açık Rıza Metni`,body:`
-<div style="line-height:1.85;font-size:14px;color:var(--mute);text-align:justify">
+<div style="line-height:1.85;font-size:14px;color:var(--mute);text-align:left">
 <p>KVKK m.5 ve m.9 uyarınca; e-posta, ad-soyad, bölüm bilgimin işlenmesine; paylaşımlarımın saklanmasına; Google AdSense kişiselleştirilmiş reklam çerezlerine; ve yurt dışı aktarıma açık rıza veriyorum.</p>
 <p>Rızamı WhatsApp üzerinden geri çekebilirim.</p>
 </div>`}
@@ -3155,7 +3155,7 @@ async function loadDeveloper(){
       '</div>' +
     '</div>' +
     '<article class="card">' +
-      '<p style="line-height:1.8;font-size:14.5px;color:var(--ink);margin:0;text-align:justify">' +
+      '<p style="line-height:1.8;font-size:14.5px;color:var(--ink);margin:0;text-align:left">' +
         'Merhaba, ben <b>Emin Acar</b>. İstanbul Gelişim Üniversitesi\'nde İngilizce Elektrik-Elektronik Mühendisliği okuyorum ve şu an hazırlık sınıfındayım. Mühendisliğin hemen hemen her alanına büyük bir ilgi duyuyorum. Teknoloji ve yazılım dünyasına olan merakımdan aldığım ilhamla, kampüsteki etkileşimi güçlendirmek ve <b>Gelişim Vibe</b> topluluğumuzu dijital bir çatı altında buluşturmak için tek başıma bu platformu geliştirdim. Bu platform, hep birlikte hem eğlenebileceğimiz hem de yardımlaşabileceğimiz bir uygulamadır.' +
       '</p>' +
     '</article>' +
@@ -3346,7 +3346,7 @@ async function loadInfo(){
 
   const privacy = '<article class="card">' +
     '<h2 style="margin:0 0 14px;font-size:20px">🔒 Gizlilik Politikası ve KVKK Aydınlatma</h2>' +
-    '<div style="line-height:1.8;font-size:14px;color:var(--mute);text-align:justify">' +
+    '<div style="line-height:1.8;font-size:14px;color:var(--mute);text-align:left">' +
       '<p style="margin:0 0 14px">Bu Gizlilik Politikası ve KVKK Aydınlatma Metni, 6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") m.10 uyarınca, Gelişim Vibe uygulamasını kullanan öğrencileri bilgilendirmek amacıyla hazırlanmıştır.</p>' +
       '<h3 style="font-size:15.5px;margin:20px 0 8px;color:var(--ink)">1. Veri Sorumlusu</h3>' +
       '<p style="margin:0 0 14px">Gelişim Vibe, İstanbul Gelişim Üniversitesi öğrencileri için bağımsız bir öğrenci projesi olarak geliştirilmiştir. Veri sorumlusu sıfatıyla iletişim için WhatsApp: <b style="color:var(--ink)">' + CONTACT_WA + '</b> numarası kullanılabilir. Uygulama, resmi bir üniversite uygulaması değildir.</p>' +
