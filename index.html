@@ -767,6 +767,13 @@ body,.card,.btn,.composer-new,.search-box,.settings-item,.conv,.cm-item,.seg,.sh
   opacity: .6 !important;
   cursor: not-allowed !important;
 }
+a.pdf-download-btn,
+a.pdf-download-btn:visited,
+a.pdf-download-btn:hover,
+a.pdf-download-btn:active {
+  color: var(--acink) !important;
+  text-decoration: none !important;
+}
 </style>
 <script type="application/ld+json">
 {
@@ -924,7 +931,7 @@ body,.card,.btn,.composer-new,.search-box,.settings-item,.conv,.cm-item,.seg,.sh
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ============================================================
-   GELİŞİM VIBE — v4.7 (PDF düzeltme + parıltı artırma)
+   GELİŞİM VIBE — v4.8 (PDF fix final)
    ============================================================ */
 const CONFIG = {
   SB_URL: 'https://ihkjmnogqhekvyroloeg.supabase.co',
@@ -1089,121 +1096,8 @@ async function deleteStorageFile(bucket, path){
   }catch(_){}
 }
 
-async function downloadFile(url, filename, btnEl){
-  const origText = btnEl ? (btnEl.dataset.orig || btnEl.textContent) : '';
-  const fname = filename || 'dosya.pdf';
-
-  if(btnEl){
-    btnEl.disabled = true;
-    btnEl.dataset.orig = origText;
-    btnEl.textContent = '⏳ Açılıyor...';
-  }
-  toast('⏳ PDF hazırlanıyor...', 'info');
-
-  // ---- YÖNTEM 1: Native indirme (CORS'a takılmaz) ----
-  try {
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = fname;
-    a.target = '_blank';
-    a.rel = 'noopener';
-    a.style.display = 'none';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-
-    haptic(6);
-    toast('✅ PDF yeni sekmede açıldı', 'ok');
-
-    setTimeout(() => {
-      if(btnEl){
-        btnEl.disabled = false;
-        btnEl.textContent = origText || '📄 Aç/İndir';
-      }
-    }, 1200);
-    return;
-  } catch(nativeErr){
-    console.warn('[pdf] native yöntem başarısız:', nativeErr);
-  }
-
-  // ---- YÖNTEM 2: Fetch + Blob (paylaş/dosya oluştur) ----
-  try {
-    let authHeader = {};
-    try {
-      const { data: { session } } = await sb.auth.getSession();
-      if(session?.access_token){
-        authHeader = { 'Authorization': 'Bearer ' + session.access_token };
-      }
-    } catch(_){}
-
-    const res = await fetch(url, {
-      method: 'GET',
-      headers: authHeader,
-      mode: 'cors',
-      credentials: 'omit',
-      cache: 'no-store'
-    });
-
-    if(!res.ok){
-      // Sunucudan hata gövdesini okumaya çalış
-      let detail = '';
-      try{
-        const txt = await res.text();
-        try{
-          const j = JSON.parse(txt);
-          detail = j.error || j.message || '';
-        }catch(_){
-          detail = txt.replace(/<[^>]+>/g, ' ').trim().slice(0, 150);
-        }
-      }catch(_){}
-      throw new Error(
-        'Sunucu dosyayı vermedi (HTTP ' + res.status + ')' +
-        (detail ? ' — ' + detail : '')
-      );
-    }
-
-    const ctype = res.headers.get('content-type') || '';
-    const blob = await res.blob();
-
-    // PDF yerine HTML/JSON döndüyse hata ver
-    if(blob.size < 100){
-      throw new Error('Dosya boş veya geçersiz.');
-    }
-    if(ctype.includes('text/html') || ctype.includes('application/json')){
-      const txt = await blob.text();
-      throw new Error('Sunucu PDF yerine hata sayfası döndürdü: ' + txt.slice(0, 150));
-    }
-
-    const file = new File([blob], fname, { type: 'application/pdf' });
-
-    if(navigator.canShare && navigator.canShare({ files: [file] })){
-      await navigator.share({ files: [file], title: fname });
-    } else {
-      const blobUrl = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = blobUrl;
-      a.download = fname;
-      a.target = '_blank';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
-    }
-
-    haptic(6);
-    toast('✅ PDF indirildi', 'ok');
-  } catch(err){
-    if(err.name === 'AbortError') return;
-    toast('❌ ' + (err.message || 'PDF açılamadı'), 'err');
-  } finally {
-    if(btnEl){
-      btnEl.disabled = false;
-      btnEl.textContent = origText || '📄 Aç/İndir';
-    }
-  }
-}
-
 const haptic = (ms=8) => { try{ navigator.vibrate && navigator.vibrate(ms); }catch(_){} };
+
 /* ============== HATA MESAJI TÜRKÇELEŞTİRME ============== */
 function trMsg(m){
   if(!m) return m;
@@ -1214,7 +1108,6 @@ function trMsg(m){
   if(pm){ prefix = 'Hata: '; s = s.slice(pm[0].length); }
 
   const rules = [
-    // Özel constraint'ler
     [/violates check constraint "posts_content_check"/i, 'Paylaşım boş olamaz veya çok kısa.'],
     [/violates check constraint "confessions_content_check"/i, 'İtiraf boş olamaz.'],
     [/violates check constraint "([^"]*)_content_check"/i, 'İçerik boş olamaz veya çok kısa.'],
@@ -1222,31 +1115,19 @@ function trMsg(m){
     [/violates check constraint "([^"]*)_price_check"/i, 'Fiyat geçersiz.'],
     [/violates check constraint "([^"]*)"/i, 'Girilen değer kurallara uymuyor.'],
     [/violates check constraint/i, 'Girilen değer kurallara uymuyor.'],
-
-    // Unique
     [/duplicate key value violates unique constraint "([^"]*)"/i, 'Bu kayıt zaten mevcut.'],
     [/duplicate key value/i, 'Bu kayıt zaten var.'],
-
-    // RLS / Yetki
     [/new row violates row-level security policy for table "([^"]*)"/i, 'Bu işlem için yetkin yok.'],
     [/row-level security policy/i, 'Bu işlem için yetkin yok.'],
     [/permission denied for table/i, 'Bu tablo için yetkin yok.'],
     [/permission denied/i, 'Yetkin yok.'],
-
-    // Foreign key
     [/violates foreign key constraint/i, 'Bağlı kayıt bulunamadı.'],
     [/insert or update on table "([^"]*)" violates foreign key/i, 'Bağlı kayıt bulunamadı.'],
-
-    // Not null
     [/null value in column "([^"]+)" .* violates not-null/i, 'Zorunlu alan boş bırakılamaz.'],
     [/not-null constraint/i, 'Zorunlu alan boş bırakılamaz.'],
-
-    // Uzunluk / tip
     [/value too long for type/i, 'Girilen metin çok uzun.'],
     [/invalid input syntax for type/i, 'Geçersiz değer girdin.'],
     [/invalid input syntax/i, 'Geçersiz değer girdin.'],
-
-    // Auth — Supabase
     [/email not confirmed/i, 'E-posta adresin doğrulanmamış. Gelen kutunu kontrol et.'],
     [/invalid login credentials/i, 'E-posta veya şifre hatalı.'],
     [/user already registered/i, 'Bu e-posta adresi zaten kayıtlı.'],
@@ -1263,23 +1144,17 @@ function trMsg(m){
     [/email rate limit exceeded/i, 'Çok fazla deneme yaptın, biraz bekle.'],
     [/rate limit/i, 'Çok fazla istek gönderdin, biraz bekle.'],
     [/email link is invalid or has expired/i, 'Bağlantı geçersiz veya süresi dolmuş.'],
-
-    // Storage
     [/bucket not found/i, 'Dosya deposu bulunamadı.'],
     [/payload too large/i, 'Dosya boyutu çok büyük.'],
     [/the resource already exists/i, 'Bu dosya zaten mevcut.'],
     [/mime type .* not supported/i, 'Bu dosya türü desteklenmiyor.'],
     [/exceeded the maximum allowed size/i, 'İzin verilen maksimum boyut aşıldı.'],
-
-    // Ağ
     [/failed to fetch/i, 'İnternet bağlantını kontrol et.'],
     [/network ?error/i, 'Bağlantı hatası.'],
     [/network request failed/i, 'Bağlantı hatası.'],
     [/load failed/i, 'Yükleme başarısız.'],
     [/timeout/i, 'Zaman aşımı, tekrar dene.'],
     [/aborterror/i, 'İşlem iptal edildi.'],
-
-    // Generic
     [/unknown error/i, 'Bilinmeyen hata.'],
     [/something went wrong/i, 'Bir şeyler ters gitti.'],
     [/internal server error/i, 'Sunucu hatası.'],
@@ -1369,7 +1244,6 @@ function avatarStyle(id){
 }
 const avHtml = (id, f, l, cls='') => `<span class="av ${cls}" style="${avatarStyle(id)}">${esc(initials(f,l).toUpperCase()||'?')}</span>`;
 
-/* renderAvatar: avatar_path varsa resmi gösterir */
 function renderAvatar(id, f, l, avatarPath, cls){
   const ini = esc(initials(f,l).toUpperCase()||'?');
   const c = cls ? ' ' + cls : '';
@@ -1623,7 +1497,7 @@ async function uploadImg(file, bucket, onProgress, square){
     }
     const j = await new Promise((r, jj) => c.toBlob(b => b ? r(b) : jj(new Error('Canvas dönüşümü başarısız')), 'image/jpeg', 0.85));
     if(j){ blob = j; ext = 'jpg'; ct = 'image/jpeg'; }
-  }catch(e){ /* resize başarısız olduysa orijinali yükle */ }
+  }catch(e){ }
   const fileName = uid() + '.' + ext;
   return uploadToR2(blob, ct, fileName, bucket || 'images', onProgress);
 }
@@ -1977,7 +1851,6 @@ async function show(t, opts){
   await doLoad();
 }
 
-/* ============== DUYURU REALTIME ============== */
 /* ============== REKLAM REALTIME ============== */
 function subscribeAdsChannel(){
   if(adsChannel){ try{ adsChannel.unsubscribe(); }catch(_){} adsChannel = null; }
@@ -2165,7 +2038,6 @@ function attachHashtagSuggest(textarea, maxLength){
 /* =========================================================
    FEED / CONFESSIONS
    ========================================================= */
-/* ============== REALTIME: FEED ============== */
 function subscribeFeedChannel(t, conf, postHtml){
   clearFeedChannel();
   const table = conf ? 'confessions' : 'posts';
@@ -2229,7 +2101,6 @@ function subscribeFeedChannel(t, conf, postHtml){
   }catch(e){ console.warn('[feed-realtime]', e); }
 }
 
-/* ============== REALTIME: COMMENTS ============== */
 function buildCommentItemHtml(c, isConf){
   let nameHtml;
   if(isConf && c._anonNo) nameHtml = '<span class="cm-name"><span class="anon">👻 Anonim ' + c._anonNo + '</span></span>';
@@ -2971,7 +2842,11 @@ async function loadPdfs(){
   const list = (filtered||[]).map(p => {
     const canDel = p.user_id === me.id || me.is_admin;
     const prof = p.profiles || {first_name:'?',last_name:''};
-    return '<article class="pcard" data-id="' + p.id + '"><div class="pico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div><div class="pmeta"><div class="pt">' + esc(p.title) + '</div>' + (p.category ? '<span class="pcat">' + esc(p.category) + '</span>' : '') + (p.description ? '<div class="pd" style="margin-top:6px">' + esc(p.description) + '</div>' : '') + '<div class="pd" style="margin-top:6px"><span class="who" data-uid="' + p.user_id + '" data-name="' + esc(prof.first_name + ' ' + prof.last_name) + '">' + esc(prof.first_name) + ' ' + esc(prof.last_name) + '</span> · ' + ago(p.created_at) + '</div><div class="pactions"><a class="pdf-download-btn" href="' + pdfUrl(p.file_path) + '" target="_blank" rel="noopener" download="' + esc(p.title) + '.pdf">📄 Aç/İndir</a>' + (canDel ? '<button data-pdel="' + p.id + '" style="color:var(--danger)">Sil</button>' : '') + '</div></div></article>';
+    const hasFile = !!(p.file_path && String(p.file_path).trim());
+    const dlBtn = hasFile
+      ? '<a class="pdf-download-btn" href="' + pdfUrl(p.file_path) + '" target="_blank" rel="noopener" download="' + esc(p.title) + '.pdf">📄 Aç/İndir</a>'
+      : '<span class="pdf-download-btn" style="opacity:.5;cursor:not-allowed">⚠️ Dosya yok</span>';
+    return '<article class="pcard" data-id="' + p.id + '"><div class="pico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div><div class="pmeta"><div class="pt">' + esc(p.title) + '</div>' + (p.category ? '<span class="pcat">' + esc(p.category) + '</span>' : '') + (p.description ? '<div class="pd" style="margin-top:6px">' + esc(p.description) + '</div>' : '') + '<div class="pd" style="margin-top:6px"><span class="who" data-uid="' + p.user_id + '" data-name="' + esc(prof.first_name + ' ' + prof.last_name) + '">' + esc(prof.first_name) + ' ' + esc(prof.last_name) + '</span> · ' + ago(p.created_at) + '</div><div class="pactions">' + dlBtn + (canDel ? '<button data-pdel="' + p.id + '" style="color:var(--danger)">Sil</button>' : '') + '</div></div></article>';
   }).join('');
   $('#libView').innerHTML = search + '<div id="pdfListWrap">' + (list || (q ? '<div class="empty"><span class="em-ic">🔍</span><div class="em-t">Sonuç bulunamadı</div></div>' : '<div class="empty"><span class="em-ic">📄</span><div class="em-t">Henüz PDF yok</div>Sağ alttaki + butonuna bas.</div>')) + '</div>';
   const sb_ = document.getElementById('psearch');
@@ -2983,7 +2858,11 @@ async function loadPdfs(){
       const list2 = (filtered2||[]).map(p => {
         const canDel = p.user_id === me.id || me.is_admin;
         const prof = p.profiles || {first_name:'?',last_name:''};
-        return '<article class="pcard" data-id="' + p.id + '"><div class="pico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div><div class="pmeta"><div class="pt">' + esc(p.title) + '</div>' + (p.category ? '<span class="pcat">' + esc(p.category) + '</span>' : '') + (p.description ? '<div class="pd" style="margin-top:6px">' + esc(p.description) + '</div>' : '') + '<div class="pd" style="margin-top:6px"><span class="who" data-uid="' + p.user_id + '" data-name="' + esc(prof.first_name + ' ' + prof.last_name) + '">' + esc(prof.first_name) + ' ' + esc(prof.last_name) + '</span> · ' + ago(p.created_at) + '</div><div class="pactions"><a class="pdf-download-btn" href="' + pdfUrl(p.file_path) + '" target="_blank" rel="noopener" download="' + esc(p.title) + '.pdf">📄 Aç/İndir</a>' + (canDel ? '<button data-pdel="' + p.id + '" style="color:var(--danger)">Sil</button>' : '') + '</div></div></article>';
+        const hasFile = !!(p.file_path && String(p.file_path).trim());
+        const dlBtn = hasFile
+          ? '<a class="pdf-download-btn" href="' + pdfUrl(p.file_path) + '" target="_blank" rel="noopener" download="' + esc(p.title) + '.pdf">📄 Aç/İndir</a>'
+          : '<span class="pdf-download-btn" style="opacity:.5;cursor:not-allowed">⚠️ Dosya yok</span>';
+        return '<article class="pcard" data-id="' + p.id + '"><div class="pico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div><div class="pmeta"><div class="pt">' + esc(p.title) + '</div>' + (p.category ? '<span class="pcat">' + esc(p.category) + '</span>' : '') + (p.description ? '<div class="pd" style="margin-top:6px">' + esc(p.description) + '</div>' : '') + '<div class="pd" style="margin-top:6px"><span class="who" data-uid="' + p.user_id + '" data-name="' + esc(prof.first_name + ' ' + prof.last_name) + '">' + esc(prof.first_name) + ' ' + esc(prof.last_name) + '</span> · ' + ago(p.created_at) + '</div><div class="pactions">' + dlBtn + (canDel ? '<button data-pdel="' + p.id + '" style="color:var(--danger)">Sil</button>' : '') + '</div></div></article>';
       }).join('');
       const wrap = document.getElementById('pdfListWrap');
       if(wrap) wrap.innerHTML = list2 || '<div class="empty"><span class="em-ic">🔍</span><div class="em-t">Sonuç bulunamadı</div></div>';
@@ -2991,14 +2870,20 @@ async function loadPdfs(){
   }
   addFab(() => openPdfForm());
   $('#libView').onclick = async e => {
-  const dlLink = e.target.closest('a.pdf-download-btn');
-  if(dlLink){
-  // Native <a download> çalışır, ama istersen JS fallback:
-  // e.preventDefault(); downloadFile(dlLink.href, dlLink.getAttribute('download'), dlLink);
-  return;
-}
-  const u = e.target.closest('[data-uid]');
-  if(u && u.dataset.uid !== me.id){ openUserMenu(u.dataset.uid, u.dataset.name); return; }
+    const dlLink = e.target.closest('a.pdf-download-btn');
+    if(dlLink){
+      haptic(6);
+      const href = dlLink.getAttribute('href');
+      if(!href || href === 'null' || href === 'undefined' || href.trim() === ''){
+        e.preventDefault();
+        toast('❌ PDF dosyası bulunamadı.', 'err');
+        return;
+      }
+      toast('📄 PDF açılıyor...', 'info');
+      return;
+    }
+    const u = e.target.closest('[data-uid]');
+    if(u && u.dataset.uid !== me.id){ openUserMenu(u.dataset.uid, u.dataset.name); return; }
     const d = e.target.closest('button[data-pdel]');
     if(d && confirm('PDF silinsin mi?')){
       const { data: pf } = await sb.from('pdfs').select('file_path').eq('id', +d.dataset.pdel).maybeSingle();
@@ -3167,7 +3052,7 @@ async function loadSettings(sub){
       '<div class="settings-item danger" data-open="logout"><div class="ico">🚪</div><div class="txt"><b>Çıkış Yap</b><small>Hesabından güvenli çıkış</small></div><span class="arrow">›</span></div>' +
       '<div class="settings-item danger" data-open="delete"><div class="ico">🗑️</div><div class="txt"><b>Hesabımı Sil</b><small>Anında ve kalıcı olarak silinir</small></div><span class="arrow">›</span></div>' +
     '</div>' +
-    '<div style="text-align:center;margin-top:22px;color:var(--mute);font-size:11px">Gelişim Vibe · v4.7<br>Designed &amp; Developed by <b style="color:var(--ac)">Emin Acar</b></div>';
+    '<div style="text-align:center;margin-top:22px;color:var(--mute);font-size:11px">Gelişim Vibe · v4.8<br>Designed &amp; Developed by <b style="color:var(--ac)">Emin Acar</b></div>';
   $('#view').onclick = async e => {
     const item = e.target.closest('[data-open]'); if(!item) return;
     const x = item.dataset.open;
@@ -3183,7 +3068,6 @@ async function loadSettings(sub){
   };
 }
 
-/* ============== AVATAR CHANGE ============== */
 async function loadAvatarChange(){
   removeFab();
   const hasAvatar = !!me.avatar_path;
@@ -3410,7 +3294,7 @@ async function loadPasswordChange(){
   };
 }
 
-/* ============== INFO (Gelişim Vibe Hakkında) ============== */
+/* ============== INFO ============== */
 async function loadInfo(){
   removeFab();
   $('#view').innerHTML = settingsHeader('ℹ️ Gelişim Vibe Hakkında') +
@@ -3464,10 +3348,8 @@ async function loadInfo(){
     '<h2 style="margin:0 0 14px;font-size:20px">🔒 Gizlilik Politikası ve KVKK Aydınlatma</h2>' +
     '<div style="line-height:1.8;font-size:14px;color:var(--mute);text-align:justify">' +
       '<p style="margin:0 0 14px">Bu Gizlilik Politikası ve KVKK Aydınlatma Metni, 6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") m.10 uyarınca, Gelişim Vibe uygulamasını kullanan öğrencileri bilgilendirmek amacıyla hazırlanmıştır.</p>' +
-
       '<h3 style="font-size:15.5px;margin:20px 0 8px;color:var(--ink)">1. Veri Sorumlusu</h3>' +
       '<p style="margin:0 0 14px">Gelişim Vibe, İstanbul Gelişim Üniversitesi öğrencileri için bağımsız bir öğrenci projesi olarak geliştirilmiştir. Veri sorumlusu sıfatıyla iletişim için WhatsApp: <b style="color:var(--ink)">' + CONTACT_WA + '</b> numarası kullanılabilir. Uygulama, resmi bir üniversite uygulaması değildir.</p>' +
-
       '<h3 style="font-size:15.5px;margin:20px 0 8px;color:var(--ink)">2. İşlenen Kişisel Veriler</h3>' +
       '<p style="margin:0 0 10px">Uygulamayı kullanırken aşağıdaki veriler işlenebilir:</p>' +
       '<ul style="margin:0 0 14px;padding-left:22px">' +
@@ -3478,7 +3360,6 @@ async function loadInfo(){
         '<li><b style="color:var(--ink)">Teknik Veriler:</b> IP adresi, cihaz bilgisi, çerez verileri</li>' +
         '<li><b style="color:var(--ink)">İşlem Güvenliği Verileri:</b> Şikayet kayıtları, moderasyon geçmişi</li>' +
       '</ul>' +
-
       '<h3 style="font-size:15.5px;margin:20px 0 8px;color:var(--ink)">3. Kişisel Verilerin İşlenme Amaçları</h3>' +
       '<ul style="margin:0 0 14px;padding-left:22px">' +
         '<li>Üyelik kaydı ve doğrulama işlemleri</li>' +
@@ -3488,7 +3369,6 @@ async function loadInfo(){
         '<li>Hizmet kalitesinin iyileştirilmesi ve hata tespiti</li>' +
         '<li>Kullanıcı onayı ile kişiselleştirilmiş reklam gösterimi</li>' +
       '</ul>' +
-
       '<h3 style="font-size:15.5px;margin:20px 0 8px;color:var(--ink)">4. Kişisel Verilerin Aktarımı</h3>' +
       '<p style="margin:0 0 10px">Kişisel verileriniz aşağıdaki hizmet sağlayıcıları aracılığıyla işlenmektedir:</p>' +
       '<ul style="margin:0 0 14px;padding-left:22px">' +
@@ -3497,7 +3377,6 @@ async function loadInfo(){
         '<li><b style="color:var(--ink)">Cloudflare Inc. (ABD):</b> CDN ve güvenlik hizmetleri</li>' +
       '</ul>' +
       '<p style="margin:0 0 14px">Yurt dışına aktarım, KVKK m.9 kapsamında <b style="color:var(--ink)">açık rızanıza</b> dayanılarak ve Standart Sözleşme Hükümleri (SCC) ile güvence altına alınarak yapılmaktadır.</p>' +
-
       '<h3 style="font-size:15.5px;margin:20px 0 8px;color:var(--ink)">5. Çerezler ve Reklam</h3>' +
       '<p style="margin:0 0 10px">Uygulamamızda üç tür çerez kullanılır:</p>' +
       '<ul style="margin:0 0 14px;padding-left:22px">' +
@@ -3505,13 +3384,10 @@ async function loadInfo(){
         '<li><b style="color:var(--ink)">Tercih Çerezleri:</b> Tema, dil gibi kişisel tercihlerinizi saklar</li>' +
         '<li><b style="color:var(--ink)">Reklam Çerezleri (Google AdSense):</b> Yalnızca onay verdiğinizde yüklenir. Google\'ın reklam politikalarına <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener" style="color:var(--ac)">buradan</a> ulaşabilirsiniz.</li>' +
       '</ul>' +
-
       '<h3 style="font-size:15.5px;margin:20px 0 8px;color:var(--ink)">6. Veri Saklama Süresi</h3>' +
       '<p style="margin:0 0 14px">Verileriniz, hesabınızı silene kadar veya işleme amacının gerektirdiği süre boyunca saklanır. Hesabınızı sildiğinizde tüm kişisel verileriniz <b style="color:var(--ink)">anında ve kalıcı olarak</b> silinir. Yasal zorunluluk gerektiren kayıtlar (moderasyon geçmişi gibi) ise yalnızca yönetici tarafından görülebilir şekilde anonim tutulabilir.</p>' +
-
       '<h3 style="font-size:15.5px;margin:20px 0 8px;color:var(--ink)">7. Veri Güvenliği</h3>' +
       '<p style="margin:0 0 14px">Verileriniz SSL/TLS şifrelemesi ile korunur. Supabase üzerinde Row Level Security (RLS) politikaları ile erişim kontrolü sağlanır. Şifreler hashlenerek saklanır ve hiçbir zaman düz metin olarak tutulmaz. Yöneticiler dahil hiç kimse itirafların gerçek sahiplerini göremez.</p>' +
-
       '<h3 style="font-size:15.5px;margin:20px 0 8px;color:var(--ink)">8. Haklarınız (KVKK m.11)</h3>' +
       '<p style="margin:0 0 10px">KVKK m.11 uyarınca aşağıdaki haklara sahipsiniz:</p>' +
       '<ul style="margin:0 0 14px;padding-left:22px">' +
@@ -3526,10 +3402,8 @@ async function loadInfo(){
         '<li>Kanuna aykırı işleme sebebiyle zarara uğramanız hâlinde zararın giderilmesini talep etme</li>' +
       '</ul>' +
       '<p style="margin:0 0 14px">Haklarınızı kullanmak için WhatsApp üzerinden bizimle iletişime geçebilirsiniz.</p>' +
-
       '<h3 style="font-size:15.5px;margin:20px 0 8px;color:var(--ink)">9. Yaş Sınırı</h3>' +
       '<p style="margin:0 0 14px">Uygulama, 18 yaş ve üzeri üniversite öğrencilerine yöneliktir. 18 yaşından küçük kullanıcıların ebeveyn onayı ile kullanması önerilir.</p>' +
-
       '<div style="background:color-mix(in srgb,var(--ac) 8%,transparent);border-left:3px solid var(--ac);border-radius:10px;padding:14px;margin-top:20px">' +
         '<p style="margin:0;color:var(--ink);font-size:13.5px;line-height:1.6"><b>Önemli Not:</b> Gelişim Vibe, İstanbul Gelişim Üniversitesi\'nin <b>resmî bir uygulaması değildir</b>. Bağımsız bir öğrenci projesi olarak yürütülmektedir. Üniversitenin kurumsal veri işleme faaliyetlerinden ayrı değerlendirilmelidir.</p>' +
       '</div>' +
@@ -3853,7 +3727,6 @@ async function loadChatView(){
   attachSwipeHandlers(body, other);
 }
 
-/* ============ SWIPE TO REPLY ============ */
 let _swipeState = null;
 
 function handleSwipeStart(wrap, clientX, clientY){
@@ -4698,7 +4571,6 @@ function openEditUserSheet(u){
   );
   el.onclick = e => { if(e.target === el || e.target.classList.contains('sheet-close') || e.target.dataset.x === 'cancel') el.remove(); };
 
-  /* --- Admin avatar upload --- */
   const setAvP = p => {
     el.querySelector('#ueAvatarProg').classList.remove('hide');
     el.querySelector('#ueAvatarFill').style.width = Math.round(p*100) + '%';
