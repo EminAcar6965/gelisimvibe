@@ -743,6 +743,30 @@ body,.card,.btn,.composer-new,.search-box,.settings-item,.conv,.cm-item,.seg,.sh
   animation:up .25s ease both;cursor:pointer;
 }
 .new-post-pill:active{transform:translateX(-50%) scale(.95)}
+
+/* === PDF DÜZELTME === */
+.pdf-download-btn {
+  background: var(--ac) !important;
+  color: var(--acink) !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  padding: 8px 18px !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  text-decoration: none !important;
+  transition: transform .12s ease, filter .15s ease !important;
+}
+.pdf-download-btn:active {
+  transform: scale(.96) !important;
+}
+.pdf-download-btn:disabled {
+  opacity: .6 !important;
+  cursor: not-allowed !important;
+}
 </style>
 <script type="application/ld+json">
 {
@@ -900,7 +924,7 @@ body,.card,.btn,.composer-new,.search-box,.settings-item,.conv,.cm-item,.seg,.sh
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ============================================================
-   GELİŞİM VIBE — v4.6 (profil fotoğrafı + ayarlar revizyonu)
+   GELİŞİM VIBE — v4.7 (PDF düzeltme + parıltı artırma)
    ============================================================ */
 const CONFIG = {
   SB_URL: 'https://ihkjmnogqhekvyroloeg.supabase.co',
@@ -1095,7 +1119,7 @@ async function downloadFile(url, filename, btnEl){
       btnEl.textContent = '✅ Açıldı';
       setTimeout(() => {
         btnEl.disabled = false;
-        btnEl.textContent = btnEl.dataset.orig || '📄 Aç';
+        btnEl.textContent = btnEl.dataset.orig || '📄 Aç/İndir';
       }, 1500);
     }
   }catch(err){
@@ -1103,7 +1127,7 @@ async function downloadFile(url, filename, btnEl){
     toast('❌ Hata: ' + err.message, 'err');
     if(btnEl){
       btnEl.disabled = false;
-      btnEl.textContent = btnEl.dataset.orig || '📄 Aç';
+      btnEl.textContent = btnEl.dataset.orig || '📄 Aç/İndir';
     }
   }
 }
@@ -1804,9 +1828,6 @@ async function boot(session){
     tab = savedTab;
     if(tab === 'admin' && !me.is_admin) tab = 'feed';
   }
-  show(tab);
-  checkNotifications();
-  subscribeAnnouncements();
   show(tab);
   checkNotifications();
   subscribeAnnouncements();
@@ -2879,7 +2900,7 @@ async function loadPdfs(){
   const list = (filtered||[]).map(p => {
     const canDel = p.user_id === me.id || me.is_admin;
     const prof = p.profiles || {first_name:'?',last_name:''};
-    return '<article class="pcard" data-id="' + p.id + '"><div class="pico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div><div class="pmeta"><div class="pt">' + esc(p.title) + '</div>' + (p.category ? '<span class="pcat">' + esc(p.category) + '</span>' : '') + (p.description ? '<div class="pd" style="margin-top:6px">' + esc(p.description) + '</div>' : '') + '<div class="pd" style="margin-top:6px"><span class="who" data-uid="' + p.user_id + '" data-name="' + esc(prof.first_name + ' ' + prof.last_name) + '">' + esc(prof.first_name) + ' ' + esc(prof.last_name) + '</span> · ' + ago(p.created_at) + '</div><div class="pactions"><a href="' + pdfUrl(p.file_path) + '" target="_blank" rel="noopener"><button type="button" data-pdfdl="' + pdfUrl(p.file_path) + '" data-fname="' + esc(p.title) + '.pdf">📄 Aç</button>' + (canDel ? '<button data-pdel="' + p.id + '" style="color:var(--danger)">Sil</button>' : '') + '</div></div></article>';
+    return '<article class="pcard" data-id="' + p.id + '"><div class="pico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div><div class="pmeta"><div class="pt">' + esc(p.title) + '</div>' + (p.category ? '<span class="pcat">' + esc(p.category) + '</span>' : '') + (p.description ? '<div class="pd" style="margin-top:6px">' + esc(p.description) + '</div>' : '') + '<div class="pd" style="margin-top:6px"><span class="who" data-uid="' + p.user_id + '" data-name="' + esc(prof.first_name + ' ' + prof.last_name) + '">' + esc(prof.first_name) + ' ' + esc(prof.last_name) + '</span> · ' + ago(p.created_at) + '</div><div class="pactions"><button type="button" class="pdf-download-btn" data-pdfdl="' + pdfUrl(p.file_path) + '" data-fname="' + esc(p.title) + '.pdf">📄 Aç/İndir</button>' + (canDel ? '<button data-pdel="' + p.id + '" style="color:var(--danger)">Sil</button>' : '') + '</div></div></article>';
   }).join('');
   $('#libView').innerHTML = search + '<div id="pdfListWrap">' + (list || (q ? '<div class="empty"><span class="em-ic">🔍</span><div class="em-t">Sonuç bulunamadı</div></div>' : '<div class="empty"><span class="em-ic">📄</span><div class="em-t">Henüz PDF yok</div>Sağ alttaki + butonuna bas.</div>')) + '</div>';
   const sb_ = document.getElementById('psearch');
@@ -2891,7 +2912,7 @@ async function loadPdfs(){
       const list2 = (filtered2||[]).map(p => {
         const canDel = p.user_id === me.id || me.is_admin;
         const prof = p.profiles || {first_name:'?',last_name:''};
-        return '<article class="pcard" data-id="' + p.id + '"><div class="pico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div><div class="pmeta"><div class="pt">' + esc(p.title) + '</div>' + (p.category ? '<span class="pcat">' + esc(p.category) + '</span>' : '') + (p.description ? '<div class="pd" style="margin-top:6px">' + esc(p.description) + '</div>' : '') + '<div class="pd" style="margin-top:6px"><span class="who" data-uid="' + p.user_id + '" data-name="' + esc(prof.first_name + ' ' + prof.last_name) + '">' + esc(prof.first_name) + ' ' + esc(prof.last_name) + '</span> · ' + ago(p.created_at) + '</div><div class="pactions"><a href="' + pdfUrl(p.file_path) + '" target="_blank" rel="noopener"><button type="button" data-pdfdl="' + pdfUrl(p.file_path) + '" data-fname="' + esc(p.title) + '.pdf">📄 Aç</button>' + (canDel ? '<button data-pdel="' + p.id + '" style="color:var(--danger)">Sil</button>' : '') + '</div></div></article>';
+        return '<article class="pcard" data-id="' + p.id + '"><div class="pico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div><div class="pmeta"><div class="pt">' + esc(p.title) + '</div>' + (p.category ? '<span class="pcat">' + esc(p.category) + '</span>' : '') + (p.description ? '<div class="pd" style="margin-top:6px">' + esc(p.description) + '</div>' : '') + '<div class="pd" style="margin-top:6px"><span class="who" data-uid="' + p.user_id + '" data-name="' + esc(prof.first_name + ' ' + prof.last_name) + '">' + esc(prof.first_name) + ' ' + esc(prof.last_name) + '</span> · ' + ago(p.created_at) + '</div><div class="pactions"><button type="button" class="pdf-download-btn" data-pdfdl="' + pdfUrl(p.file_path) + '" data-fname="' + esc(p.title) + '.pdf">📄 Aç/İndir</button>' + (canDel ? '<button data-pdel="' + p.id + '" style="color:var(--danger)">Sil</button>' : '') + '</div></div></article>';
       }).join('');
       const wrap = document.getElementById('pdfListWrap');
       if(wrap) wrap.innerHTML = list2 || '<div class="empty"><span class="em-ic">🔍</span><div class="em-t">Sonuç bulunamadı</div></div>';
@@ -2902,7 +2923,7 @@ async function loadPdfs(){
   const dlBtn = e.target.closest('button[data-pdfdl]');
   if(dlBtn){
     e.preventDefault();
-    downloadFile(dlBtn.dataset.pdfdl, dlBtn.dataset.fname);
+    downloadFile(dlBtn.dataset.pdfdl, dlBtn.dataset.fname, dlBtn);
     return;
   }
   const u = e.target.closest('[data-uid]');
@@ -3075,7 +3096,7 @@ async function loadSettings(sub){
       '<div class="settings-item danger" data-open="logout"><div class="ico">🚪</div><div class="txt"><b>Çıkış Yap</b><small>Hesabından güvenli çıkış</small></div><span class="arrow">›</span></div>' +
       '<div class="settings-item danger" data-open="delete"><div class="ico">🗑️</div><div class="txt"><b>Hesabımı Sil</b><small>Anında ve kalıcı olarak silinir</small></div><span class="arrow">›</span></div>' +
     '</div>' +
-    '<div style="text-align:center;margin-top:22px;color:var(--mute);font-size:11px">Gelişim Vibe · v4.6<br>Designed &amp; Developed by <b style="color:var(--ac)">Emin Acar</b></div>';
+    '<div style="text-align:center;margin-top:22px;color:var(--mute);font-size:11px">Gelişim Vibe · v4.7<br>Designed &amp; Developed by <b style="color:var(--ac)">Emin Acar</b></div>';
   $('#view').onclick = async e => {
     const item = e.target.closest('[data-open]'); if(!item) return;
     const x = item.dataset.open;
@@ -3193,7 +3214,7 @@ async function loadDeveloper(){
       'WhatsApp ile Yaz' +
     '</a>' +
     '<div style="text-align:center;margin-top:18px;font-size:11.5px;color:var(--mute);line-height:1.6">' +
-      'Glişim Vibe' +
+      'Gelişim Vibe' +
     '</div>';
   $('#view').innerHTML = html;
 }
